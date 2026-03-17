@@ -31,3 +31,18 @@ MechRoute provides a location based platform that connects vehicle users with ne
 - HTML  
 - CSS  
 - JavaScript
+
+## Note
+
+This is a frontend prototype developed as part of a college project.
+
+- GPS tracking is simulated  
+- Payment system is simulated  
+- Backend is not implemented  
+
+## Future Enhancements
+
+- Backend integration using Node.js and database  
+- Real time GPS tracking using APIs  
+- Payment gateway integration  
+- Mobile application development 
