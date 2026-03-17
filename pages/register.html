@@ -1,1 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join MechRoute | Sign Up</title>
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 2rem 0;
+        }
+        .register-container {
+            width: 100%;
+            max-width: 500px;
+            padding: 1rem;
+        }
+    </style>
+</head>
+<body>
 
+    <div class="register-container">
+        <div class="text-center" style="margin-bottom: 2rem;">
+            <a href="../index.html" class="logo" style="font-size: 2rem;">MechRoute</a>
+        </div>
+
+        <div class="card">
+            <h2 style="margin-bottom: 0.5rem;">Create Account</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">
+                Join thousands of drivers who trust MechRoute.
+            </p>
+
+            <form action="dashboard.html">
+                <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 0;">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" placeholder="John" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" placeholder="Doe" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="john@example.com" required>
+                </div>
+
+                <div class="form-group" style="background: var(--brand-soft); padding: 1rem; border-radius: 8px; margin-top: 1rem;">
+                    <label style="color: var(--brand); font-weight: 700;">🚗 Vehicle Details (For Emergency Matching)</label>
+                    <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.5rem;">
+                        <select required>
+                            <option value="">Make</option>
+                            <option>Tesla</option>
+                            <option>Toyota</option>
+                            <option>Ford</option>
+                            <option>BMW</option>
+                        </select>
+                        <input type="text" placeholder="Model (e.g. Model 3)" required>
+                    </div>
+                </div>
+
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <label>Create Password</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Complete Registration</button>
+            </form>
+
+            <div class="text-center" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                <p style="font-size: 0.9rem; color: var(--text-muted);">
+                    Already have an account? <a href="login.html" style="color: var(--brand); font-weight: 600; text-decoration: none;">Log In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
