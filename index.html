@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MechRoute | The Full Spectrum of Automotive Care</title>
     <link rel="stylesheet" href="assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand-blue: #2563eb;
             --deep-slate: #0f172a;
             --soft-slate: #64748b;
+            --bg-glass: rgba(255, 255, 255, 0.9);
         }
 
         body {
@@ -35,7 +36,7 @@
         }
 
         .logo {
-            font-size: 2.2rem;
+            font-size: 2.2rem; /* LARGE & COMMANDING */
             font-weight: 800;
             letter-spacing: -1.5px;
             color: var(--deep-slate);
@@ -44,16 +45,21 @@
 
         .logo span { color: var(--brand-blue); }
 
-        .nav-link {
+        /* ENHANCED SIGN IN LINK */
+        .nav-link-signin {
             text-decoration: none;
-            color: var(--soft-slate);
-            font-weight: 600;
-            font-size: 1rem;
-            transition: color 0.3s ease;
+            color: var(--deep-slate);
+            font-weight: 700;
+            font-size: 1.2rem; /* INCREASED SIZE PER REQUEST */
+            letter-spacing: -0.5px;
+            padding: 12px 24px;
+            border-radius: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .nav-link:hover {
+        .nav-link-signin:hover {
             color: var(--brand-blue);
+            background-color: #f8fafc;
         }
 
         /* --- ELITE HERO SECTION --- */
@@ -74,7 +80,7 @@
         }
 
         .hero h1 {
-            font-size: 5.5rem;
+            font-size: 5.5rem; /* CINEMATIC SCALE */
             font-weight: 800;
             line-height: 1;
             letter-spacing: -4px;
@@ -108,18 +114,18 @@
         .btn-elite {
             background: var(--deep-slate);
             color: white;
-            padding: 20px 48px;
-            border-radius: 16px;
+            padding: 22px 50px;
+            border-radius: 18px;
             font-weight: 700;
             text-decoration: none;
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
             display: inline-block;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
         }
 
         .btn-elite:hover {
-            transform: translateY(-4px);
+            transform: translateY(-5px);
             background: var(--brand-blue);
             box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
         }
@@ -127,18 +133,19 @@
         .btn-philosophy {
             background: none;
             border: none;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--deep-slate);
             cursor: pointer;
             display: flex;
             align-items: center;
             gap: 12px;
-            transition: gap 0.3s ease;
+            transition: all 0.3s ease;
         }
 
         .btn-philosophy:hover {
             gap: 18px;
+            color: var(--brand-blue);
         }
 
         /* --- SPECTRUM REVEAL --- */
@@ -162,7 +169,7 @@
             background: #fcfdfe;
             border: 1px solid #f1f5f9;
             padding: 50px;
-            border-radius: 32px;
+            border-radius: 36px;
             transition: all 0.4s ease;
         }
 
@@ -174,9 +181,9 @@
         }
 
         .bento-card h3 {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             margin: 24px 0 12px;
-            font-weight: 700;
+            font-weight: 800;
             color: var(--brand-blue);
         }
     </style>
@@ -186,7 +193,7 @@
     <nav>
         <a href="index.html" class="logo">Mech<span>Route.</span></a>
         <div>
-            <a href="pages/login.html" class="nav-link">Sign In</a>
+            <a href="pages/login.html" class="nav-link-signin">Sign In</a>
         </div>
     </nav>
 
@@ -210,32 +217,32 @@
 
     <section id="spectrum-section">
         <div style="text-align: center; max-width: 700px; margin: 0 auto;">
-            <h2 style="font-size: 3.2rem; letter-spacing: -2px; line-height: 1.1;">Complete Lifecycle Management.</h2>
-            <p style="color: var(--soft-slate); font-size: 1.2rem; margin-top: 20px;">Redefining how the world interacts with the road.</p>
+            <h2 style="font-size: 3.5rem; letter-spacing: -2px; line-height: 1.1; font-weight: 800;">Complete Lifecycle Management.</h2>
+            <p style="color: var(--soft-slate); font-size: 1.3rem; margin-top: 24px;">Redefining how the world interacts with the road.</p>
         </div>
 
         <div class="bento-grid">
             <div class="bento-card">
-                <div style="font-size: 2.5rem;">🚨</div>
+                <div style="font-size: 3rem;">🚨</div>
                 <h3>Reactive</h3>
-                <p style="color: var(--soft-slate);">Emergency response protocols for breakdowns, recoveries, and on-spot diagnostics.</p>
+                <p style="color: var(--soft-slate); font-size: 1.1rem;">Emergency response protocols for breakdowns, recoveries, and on-spot diagnostics.</p>
             </div>
             <div class="bento-card">
-                <div style="font-size: 2.5rem;">📅</div>
+                <div style="font-size: 3rem;">📅</div>
                 <h3>Proactive</h3>
-                <p style="color: var(--soft-slate);">Scheduled maintenance, fluid management, and routine optimization at your convenience.</p>
+                <p style="color: var(--soft-slate); font-size: 1.1rem;">Scheduled maintenance, fluid management, and routine optimization at your convenience.</p>
             </div>
             <div class="bento-card">
-                <div style="font-size: 2.5rem;">🛡️</div>
+                <div style="font-size: 3rem;">🛡️</div>
                 <h3>Predictive</h3>
-                <p style="color: var(--soft-slate);">Advanced health tracking and digital service logs to ensure long-term vehicle integrity.</p>
+                <p style="color: var(--soft-slate); font-size: 1.1rem;">Advanced health tracking and digital service logs to ensure long-term vehicle integrity.</p>
             </div>
         </div>
     </section>
 
     <footer style="padding: 120px 8% 60px; text-align: center; border-top: 1px solid #f1f5f9; margin-top: 100px;">
-        <span class="logo" style="font-size: 1.6rem; opacity: 0.3;">MechRoute.</span>
-        <p style="color: var(--soft-slate); font-size: 0.9rem; margin-top: 24px;">&copy; 2026 Engineering safety for every journey.</p>
+        <span class="logo" style="font-size: 1.8rem; opacity: 0.3;">MechRoute.</span>
+        <p style="color: var(--soft-slate); font-size: 1rem; margin-top: 24px; font-weight: 600;">&copy; 2026 Engineering safety for every journey.</p>
     </footer>
 
     <script>
