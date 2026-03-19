@@ -1,0 +1,28 @@
+<table class="log-table" id="logTable">
+    </table>
+
+<script>
+    window.onload = function() {
+        const email = localStorage.getItem('mech_user_email');
+        document.getElementById('displayID').innerText = email;
+
+        const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+        const table = document.getElementById('logTable');
+
+        if(logs.length === 0) {
+            table.innerHTML = "<p style='padding:20px; color:#94a3b8;'>No service history found yet.</p>";
+        }
+
+        logs.reverse().forEach(entry => {
+            const row = `
+                <tr class="log-row">
+                    <td><strong>${entry.date}</strong></td>
+                    <td><span style="color: ${entry.type === 'PROACTIVE' ? '#2563eb' : '#0f172a'}; font-weight: 700;">${entry.type}</span></td>
+                    <td>${entry.service}</td>
+                    <td><span class="status-pill completed">COMPLETED</span></td>
+                </tr>
+            `;
+            table.innerHTML += row;
+        });
+    }
+</script>
