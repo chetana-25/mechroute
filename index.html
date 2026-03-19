@@ -3,172 +3,239 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MechRoute | Roadside Assistance</title>
+    <title>MechRoute | The Future of Roadside Mobility</title>
     <link rel="stylesheet" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        /* --- PREMIUM WHITE THEME INTERACTIVITY --- */
-        body {
-            background-color: #ffffff;
-            color: #1e293b;
-            transition: all 0.3s ease;
+        :root {
+            --brand-blue: #2563eb;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --glass: rgba(255, 255, 255, 0.8);
         }
 
+        body {
+            background-color: #ffffff;
+            color: var(--deep-slate);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* --- SOPHISTICATED NAV --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 8%;
+            backdrop-filter: blur(10px);
+            background: var(--glass);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--deep-slate);
+            text-decoration: none;
+        }
+
+        /* --- MODERN HERO --- */
         .hero {
-            padding: 120px 5%;
-            background: radial-gradient(circle at top right, #eff6ff 0%, #ffffff 100%);
+            padding: 160px 5% 100px;
             text-align: center;
+            background: radial-gradient(circle at 50% -20%, #eff6ff 0%, #ffffff 80%);
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            background: #eff6ff;
+            color: var(--brand-blue);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 24px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -3px;
+            margin-bottom: 24px;
+        }
+
+        .hero h1 span {
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- HIDDEN BENTO GRID SECTION --- */
+        #how-it-works-section {
+            display: none;
+            opacity: 0;
+            padding: 120px 8%;
+            background: #ffffff;
+            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .section-header {
+            max-width: 600px;
+            margin: 0 auto 80px;
+            text-align: center;
+        }
+
+        .section-header h2 {
+            font-size: 3rem;
             font-weight: 800;
             letter-spacing: -2px;
-            margin-bottom: 20px;
-            color: #0f172a;
+            color: var(--deep-slate);
         }
 
-        /* THE SECTION TO HIDE/SHOW */
-        #how-it-works-section {
-            display: none; /* Initially Hidden */
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            padding: 100px 5%;
-            background-color: #f8fafc;
-        }
-
-        #how-it-works-section.visible {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* INTERACTIVE CARDS */
-        .card {
-            background: white;
-            padding: 40px;
-            border-radius: 20px;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-10px);
-            border-color: #3b82f6;
-            box-shadow: 0 20px 40px -15px rgba(59, 130, 246, 0.15);
-        }
-
-        .grid {
+        /* --- BENTO STYLE CARDS --- */
+        .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 24px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        /* BUTTONS */
-        .btn-primary {
-            background: #2563eb;
+        .bento-card {
+            grid-column: span 4;
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            padding: 48px;
+            border-radius: 32px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bento-card:hover {
+            background: #ffffff;
+            border-color: var(--brand-blue);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.08);
+            transform: translateY(-8px);
+        }
+
+        .bento-card h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 20px 0 12px;
+            color: var(--brand-blue); /* Your blue */
+        }
+
+        .bento-card p {
+            color: var(--soft-slate);
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+
+        /* --- BUTTONS --- */
+        .btn-black {
+            background: var(--deep-slate);
             color: white;
-            padding: 15px 35px;
-            border-radius: 12px;
+            padding: 18px 36px;
+            border-radius: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+
+        .btn-black:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .btn-text {
+            color: var(--deep-slate);
             font-weight: 700;
             text-decoration: none;
-            display: inline-block;
-            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 30px -10px rgba(37, 99, 235, 0.5);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid #2563eb;
-            color: #2563eb;
-            padding: 15px 35px;
-            border-radius: 12px;
-            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
             cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .btn-outline:hover {
-            background: #eff6ff;
-            transform: scale(1.05);
+            border: none;
+            background: none;
+            font-size: 1.1rem;
         }
     </style>
 </head>
 <body>
 
-    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; background: white; border-bottom: 1px solid #f1f5f9;">
-        <a href="index.html" style="font-size: 1.8rem; font-weight: 900; color: #2563eb; text-decoration: none; letter-spacing: -1px;">MechRoute</a>
-        <div style="display: flex; align-items: center; gap: 30px;">
-            <a href="pages/login.html" style="text-decoration: none; color: #475569; font-weight: 600;">Login</a>
-            <a href="pages/register.html" class="btn-primary" style="padding: 10px 25px;">Join Now</a>
+    <nav>
+        <a href="#" class="logo">MechRoute.</a>
+        <div style="display: flex; gap: 40px; align-items: center;">
+            <a href="pages/login.html" style="text-decoration: none; color: var(--soft-slate); font-weight: 600;">Sign In</a>
+            <a href="pages/register.html" class="btn-black" style="padding: 12px 24px;">Get Started</a>
         </div>
     </nav>
 
     <section class="hero">
-        <h1>Your On-Demand <br><span style="color: #2563eb;">Mechanic Fleet</span></h1>
-        <p style="font-size: 1.25rem; color: #64748b; max-width: 700px; margin: 0 auto 40px; line-height: 1.8;">
-            The road can be unpredictable. We aren't. Access verified mechanics at your exact location with a single click.
+        <div class="hero-tag">Platform v2.0 Live</div>
+        <h1>Built for the <span>Road.</span></h1>
+        <p style="font-size: 1.4rem; color: var(--soft-slate); max-width: 650px; margin: 0 auto 48px;">
+            The intelligent fleet for immediate roadside recovery. Engineering safety into every mile.
         </p>
         
-        <div style="display: flex; gap: 20px; justify-content: center;">
-            <a href="pages/register.html" class="btn-primary">Get Started</a>
-            <button class="btn-outline" onclick="revealContent()">How it Works</button>
+        <div style="display: flex; gap: 32px; justify-content: center; align-items: center;">
+            <a href="pages/register.html" class="btn-black">Deploy Mechanic</a>
+            <button class="btn-text" onclick="showEnterpriseDetails()">
+                See How It Works <span>→</span>
+            </button>
         </div>
     </section>
 
     <section id="how-it-works-section">
-        <div style="text-align: center; margin-bottom: 60px;">
-            <h2 style="font-size: 2.5rem; font-weight: 800; color: #0f172a;">Built for the Road</h2>
-            <div style="width: 60px; height: 5px; background: #2563eb; margin: 20px auto; border-radius: 10px;"></div>
+        <div class="section-header">
+            <h2>Modern Infrastructure for the Roadside.</h2>
         </div>
 
-        <div class="grid">
-            <div class="card">
-                <div style="background: #eff6ff; width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 25px;">📍</div>
-                <h3 style="margin-bottom: 15px;">Precision GPS</h3>
-                <p style="color: #64748b; line-height: 1.6;">Our smart algorithm pinpoints your coordinates to connect you with mechanics within a 5-mile radius instantly.</p>
+        <div class="bento-grid">
+            <div class="bento-card">
+                <div style="font-size: 2rem;">🛰️</div>
+                <h3>Precision GPS</h3>
+                <p>Proprietary location mapping ensures a 98% accuracy in mechanic dispatching within 5 miles.</p>
             </div>
-
-            <div class="card">
-                <div style="background: #f0fdf4; width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 25px;">🛡️</div>
-                <h3 style="margin-bottom: 15px;">Verified Pros</h3>
-                <p style="color: #64748b; line-height: 1.6;">Safety first. Every technician in our network is background-checked and professionally certified.</p>
+            <div class="bento-card">
+                <div style="font-size: 2rem;">🛡️</div>
+                <h3>Verified Fleet</h3>
+                <p>Every technician is subjected to a multi-point certification and background verification protocol.</p>
             </div>
-
-            <div class="card">
-                <div style="background: #fff7ed; width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 25px;">💎</div>
-                <h3 style="margin-bottom: 15px;">Fair Pricing</h3>
-                <p style="color: #64748b; line-height: 1.6;">No more roadside haggling. Transparent, fixed-rate pricing so you know what you pay before we arrive.</p>
+            <div class="bento-card">
+                <div style="font-size: 2rem;">⚡</div>
+                <h3>Fixed Pricing</h3>
+                <p>Algorithmic pricing models eliminate negotiation. You pay exactly what the platform quotes.</p>
             </div>
         </div>
     </section>
 
-    <footer style="text-align: center; padding: 80px 0; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid #f1f5f9; background: white;">
-        <p>&copy; 2026 MechRoute Fleet Systems. Engineering safety for every journey.</p>
+    <footer style="padding: 100px 8%; border-top: 1px solid #f1f5f9;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="logo" style="opacity: 0.5;">MechRoute.</span>
+            <p style="color: var(--soft-slate); font-size: 0.9rem;">&copy; 2026 MechRoute Systems. Built for the future of mobility.</p>
+        </div>
     </footer>
 
     <script>
-        function revealContent() {
-            const section = document.getElementById('how-it-works-section');
-            
-            // Show the section layout
-            section.style.display = 'block';
-            
-            // Trigger the animation after a tiny delay
+        function showEnterpriseDetails() {
+            const el = document.getElementById('how-it-works-section');
+            el.style.display = 'block';
             setTimeout(() => {
-                section.classList.add('visible');
-                section.scrollIntoView({ behavior: 'smooth' });
+                el.style.opacity = '1';
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }, 10);
         }
     </script>
-
 </body>
 </html>
