@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MechRoute | Precision Fleet Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <title>MechRoute | Precision Vehicle Care</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand: #2563eb;
@@ -15,121 +15,100 @@
 
         body {
             margin: 0;
-            padding: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg);
             color: var(--slate);
-            line-height: 1.6;
         }
 
-        /* --- NAVIGATION / LOGO AREA --- */
-        nav {
-            padding: 40px 8%;
+        /* --- SOPHISTICATED NAVBAR --- */
+        .navbar {
             display: flex;
-            justify-content: flex-start;
+            justify-content: space-between;
             align-items: center;
+            padding: 30px 8%;
+            background: white;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         .logo {
-            font-size: 3.5rem; /* Massive & Bold */
+            font-size: 3.5rem; /* Large & Bold Branding */
             font-weight: 800;
-            letter-spacing: -3.5px; /* Tight, premium kerning */
-            color: var(--slate);
+            letter-spacing: -3.5px;
             text-decoration: none;
-            transition: 0.3s;
+            color: var(--slate);
         }
+        .logo span { color: var(--brand); }
 
-        .logo span {
-            color: var(--brand);
+        .nav-links { display: flex; gap: 40px; align-items: center; }
+        .nav-links a { text-decoration: none; color: var(--soft-slate); font-weight: 700; font-size: 0.95rem; }
+        
+        .btn-signin {
+            background: var(--slate);
+            color: white;
+            padding: 14px 32px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        .btn-signin:hover { background: var(--brand); transform: translateY(-1px); }
 
-        .logo:hover {
-            transform: scale(0.98);
-        }
-
-        /* --- HERO SECTION --- */
+        /* --- ORIGINAL HERO LAYOUT --- */
         .hero {
-            padding: 80px 8% 120px;
+            padding: 120px 8%;
             max-width: 1200px;
         }
 
         .hero h1 {
-            font-size: 5.5rem; /* Large Headline */
-            line-height: 0.95;
-            letter-spacing: -5px;
+            font-size: 5rem;
+            line-height: 1;
+            letter-spacing: -4px;
             margin: 0 0 30px 0;
             font-weight: 800;
         }
 
         .hero p {
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             color: var(--soft-slate);
             max-width: 600px;
             margin-bottom: 50px;
             font-weight: 500;
+            line-height: 1.5;
         }
 
-        /* --- ACTION BUTTON --- */
-        .cta-container {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .btn-primary {
-            background-color: var(--slate);
-            color: white;
-            padding: 24px 48px;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
-        }
-
-        .btn-primary:hover {
+        .btn-main {
             background-color: var(--brand);
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
-        }
-
-        /* --- SUBTLE DECORATION --- */
-        .badge-new {
-            display: inline-block;
-            background: #eff6ff;
-            color: var(--brand);
-            padding: 8px 16px;
-            border-radius: 100px;
+            color: white;
+            padding: 24px 50px;
+            border-radius: 20px;
+            text-decoration: none;
             font-weight: 800;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
+            font-size: 1.15rem;
+            display: inline-block;
+            transition: 0.3s;
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
         }
-
-        @media (max-width: 768px) {
-            .hero h1 { font-size: 3.5rem; letter-spacing: -2px; }
-            .logo { font-size: 2.5rem; }
-        }
+        .btn-main:hover { transform: translateY(-4px); box-shadow: 0 25px 50px rgba(37, 99, 235, 0.25); }
     </style>
 </head>
 <body>
 
-    <nav>
+    <nav class="navbar">
         <a href="index.html" class="logo">MechRoute<span>.</span></a>
+        <div class="nav-links">
+            <a href="#">Fleet</a>
+            <a href="#">Services</a>
+            <a href="#">Support</a>
+            <a href="#" class="btn-signin">Sign In</a>
+        </div>
     </nav>
 
     <main class="hero">
-        <span class="badge-new">Now Live in India</span>
-        <h1>The New Standard <br> in Fleet Care.</h1>
+        <h1>Precision Care <br> For Your Drive.</h1>
         <p>
-            Experience a digital-first approach to vehicle maintenance. Proactive, transparent, and built for the elite driver.
+            The digital command centre for your vehicle maintenance. Professional, transparent, and built for the modern Indian road.
         </p>
-
-        <div class="cta-container">
-            <a href="pages/dashboard.html" class="btn-primary">Enter Command Centre</a>
-        </div>
+        <a href="pages/dashboard.html" class="btn-main">Go to Command Centre</a>
     </main>
 
 </body>
