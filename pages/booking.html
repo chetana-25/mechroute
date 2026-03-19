@@ -168,10 +168,23 @@
         }
 
         function processBooking() {
+            const serviceName = document.querySelector('.service-card.active h3')?.innerText || "Standard Service";
             const date = document.getElementById('dateInput').value;
-            if(!date) { alert("Please pick a date for your service."); return; }
-            alert("Success! Your service is booked. Keeping your car reliable is our priority.");
-            window.location.href = 'dashboard.html';
+            const time = document.getElementById('timeInput').value;
+
+            if(!date || !time) {
+                alert("Please select a date and time.");
+                return;
+            }
+
+            // SAVE DATA TEMPORARILY FOR THE BILL & LOGS
+            localStorage.setItem('pending_service', serviceName);
+            localStorage.setItem('pending_date', date);
+            localStorage.setItem('pending_time', time);
+            localStorage.setItem('pending_price', "£85.00"); // Standard middle-class value tier price
+
+            // REDIRECT TO BILLING/CHECKOUT
+            window.location.href = 'checkout.html';
         }
     </script>
 </body>
