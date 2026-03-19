@@ -3,98 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MechRoute | Professional Roadside Assistance</title>
+    <title>MechRoute | Roadside Assistance</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
-        /* Specific Home Page Animations */
-        .hero {
-            padding: 100px 5%;
-            background: linear-gradient(180deg, var(--brand-soft) 0%, #ffffff 100%);
-            text-align: center;
+        /* Essential styles for the white theme and hidden section */
+        body {
+            background-color: #ffffff;
+            color: #0f172a;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
         }
-        .hero h1 { font-size: 3rem; margin-bottom: 1.5rem; color: #0f172a; }
-        .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin: 0 auto 2rem; }
-        
-        .how-it-works-hidden { display: none; }
-        
-        .feature-card { text-align: center; padding: 3rem 2rem; }
-        .feature-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+        /* The hidden section styling */
+        #how-it-works-section {
+            display: none; /* Hidden by default */
+            padding: 60px 20px;
+            background-color: #f8fafc; /* Light grey for contrast */
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .hero {
+            padding: 80px 20px;
+            text-align: center;
+            background: #ffffff;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #2563eb;
+            color: #2563eb;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 600;
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <a href="index.html" class="logo">MechRoute</a>
-        <div style="display: flex; gap: 15px; align-items: center;">
-            <a href="pages/login.html" style="text-decoration: none; color: var(--text-main); font-weight: 600;">Login</a>
-            <a href="pages/register.html" class="btn btn-primary">Join the Fleet</a>
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; border-bottom: 1px solid #e2e8f0;">
+        <a href="index.html" style="font-size: 1.5rem; font-weight: 800; color: #2563eb; text-decoration: none;">MechRoute</a>
+        <div>
+            <a href="pages/login.html" style="margin-right: 20px; text-decoration: none; color: #0f172a;">Login</a>
+            <a href="pages/register.html" class="btn btn-primary">Join Now</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="container">
-            <span class="badge-success" style="margin-bottom: 1rem; display: inline-block;">Reliable 24/7 Service</span>
-            <h1>Your On-Demand Mechanic Fleet</h1>
-            <p>From flat tires to engine diagnostics, get professional help to your GPS location in under 15 minutes.</p>
+        <h1>Your On-Demand Mechanic Fleet</h1>
+        <p style="color: #475569; max-width: 600px; margin: 0 auto 30px;">Professional help to your GPS location in minutes.</p>
+        
+        <div style="display: flex; gap: 15px; justify-content: center;">
+            <a href="pages/register.html" class="btn btn-primary">Get Started</a>
+            <button class="btn-outline" onclick="revealHowItWorks()">How it Works</button>
+        </div>
+    </section>
+
+    <div id="how-it-works-section">
+        <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
+            <h2 style="font-size: 2rem; margin-bottom: 40px;">Built for the Road</h2>
             
-            <div style="display: flex; gap: 15px; justify-content: center;">
-                <a href="pages/register.html" class="btn btn-primary">Get Started</a>
-                <button class="btn btn-outline" onclick="revealHowItWorks()">How it Works</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="how-it-works-section" class="how-it-works-hidden">
-        <div class="container" style="padding: 80px 0;">
-            <div style="text-align: center; margin-bottom: 4rem;">
-                <h2 style="font-size: 2.2rem;">Built for the Road</h2>
-                <p style="color: var(--text-muted);">A smarter way to handle automotive emergencies.</p>
-            </div>
-
-            <div class="grid">
-                <div class="card feature-card">
-                    <div class="feature-icon">📍</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
+                <div style="background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">📍</div>
                     <h3>Precision GPS</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Our system identifies your exact coordinates to dispatch the closest available certified technician.</p>
+                    <p style="color: #475569;">We find mechanics within a 5-mile radius of your exact location.</p>
                 </div>
 
-                <div class="card feature-card">
-                    <div class="feature-icon">🛠️</div>
+                <div style="background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">🛠️</div>
                     <h3>Verified Pros</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Every mechanic in our fleet undergoes a background check and certification verification.</p>
+                    <p style="color: #475569;">Every mechanic is certified and background-checked for your safety.</p>
                 </div>
 
-                <div class="card feature-card">
-                    <div class="feature-icon">💳</div>
+                <div style="background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+                    <div style="font-size: 2rem; margin-bottom: 15px;">💳</div>
                     <h3>Fair Pricing</h3>
-                    <p style="color: var(--text-muted); font-size: 0.9rem;">Transparent service fees with secure payment processing. No hidden roadside surcharges.</p>
+                    <p style="color: #475569;">Transparent fees with secure payment. No hidden roadside costs.</p>
                 </div>
             </div>
         </div>
-    </section>
+    </div>
 
-    <footer style="background: var(--surface); padding: 60px 5%; border-top: 1px solid var(--border);">
-        <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
-            <div>
-                <a href="#" class="logo">MechRoute</a>
-                <p style="color: var(--text-muted); font-size: 0.8rem; margin-top: 10px;">Engineering safety for every journey.</p>
-            </div>
-            <div style="display: flex; gap: 30px;">
-                <a href="#" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Privacy Policy</a>
-                <a href="#" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Terms of Service</a>
-                <a href="#" style="color: var(--text-muted); text-decoration: none; font-size: 0.9rem;">Contact Support</a>
-            </div>
-        </div>
+    <footer style="text-align: center; padding: 50px 0; border-top: 1px solid #e2e8f0; margin-top: 50px;">
+        <p style="color: #94a3b8;">&copy; 2026 MechRoute. Engineering safety for every journey.</p>
     </footer>
 
     <script>
         function revealHowItWorks() {
             const section = document.getElementById('how-it-works-section');
-            
-            // Remove the hidden class
-            section.classList.remove('how-it-works-hidden');
-            
-            // Smoothly scroll down to the revealed section
+            // Show the section
+            section.style.display = 'block';
+            // Smooth scroll to it
             section.scrollIntoView({ behavior: 'smooth' });
         }
     </script>
