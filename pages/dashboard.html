@@ -3,128 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Member Dashboard | MechRoute</title>
+    <title>Fleet Dashboard | MechRoute</title>
     <link rel="stylesheet" href="../assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Specific enhancements for the Dashboard layout */
-        .service-card {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-        .service-card:hover {
-            transform: translateY(-8px);
-            border-color: var(--brand);
-            box-shadow: 0 12px 20px -5px rgba(59, 130, 246, 0.3);
-        }
-        .status-table { width: 100%; border-collapse: collapse; }
-        .status-table th, .status-table td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border); }
-        .status-table th { color: var(--brand); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; }
-        .status-table tr:last-child td { border-bottom: none; }
+        :root { --brand: #2563eb; --slate: #0f172a; --muted: #64748b; }
+        body { background: #fcfdfe; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; display: flex; min-height: 100vh; }
+        
+        /* Sidebar Navigation */
+        .sidebar { width: 280px; background: white; border-right: 1px solid #f1f5f9; padding: 40px; display: flex; flex-direction: column; }
+        .main-content { flex: 1; padding: 60px 8%; }
+        
+        .nav-item { padding: 15px 20px; border-radius: 12px; color: var(--muted); text-decoration: none; font-weight: 600; margin-bottom: 10px; transition: 0.3s; }
+        .nav-item.active { background: #eff6ff; color: var(--brand); }
+        .nav-item:hover:not(.active) { background: #f8fafc; color: var(--slate); }
+
+        /* Identity Card */
+        .identity-card { background: white; border: 1px solid #f1f5f9; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between; }
+        .user-avatar { width: 60px; height: 60px; background: var(--brand); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; }
+        
+        .badge { background: #f0fdf4; color: #166534; padding: 6px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
     </style>
 </head>
-<body style="background: var(--bg);">
+<body>
 
-    <nav>
-        <a href="../index.html" class="logo">MechRoute</a>
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <div class="badge badge-success">Fleet Member</div>
-            <a href="login.html" class="btn btn-secondary" style="padding: 0.5rem 1rem; font-size: 0.8rem;">Logout</a>
+    <div class="sidebar">
+        <a href="../index.html" style="font-size: 1.6rem; font-weight: 800; color: var(--slate); text-decoration: none; margin-bottom: 60px;">Mech<span>Route.</span></a>
+        <a href="#" class="nav-item active">Overview</a>
+        <a href="#" class="nav-item">Service History</a>
+        <a href="#" class="nav-item">Fleet Health</a>
+        <a href="#" class="nav-item">Settings</a>
+        <div style="margin-top: auto;">
+            <a href="../index.html" class="nav-item" style="color: #ef4444;">Sign Out</a>
         </div>
-    </nav>
-
-    <div class="container" style="max-width: 1000px; padding-top: 3rem;">
-        
-        <header class="card" style="display: flex; align-items: center; gap: 25px; margin-bottom: 3rem; border-left: 6px solid var(--brand);">
-            <div style="width: 75px; height: 75px; background: var(--brand-soft); border: 2px solid var(--brand); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 2rem;">👤</div>
-            <div>
-                <h1 id="user-welcome" style="margin: 0; font-size: 1.8rem;">Welcome back, Driver</h1>
-                <p id="user-official-id" style="color: var(--text-muted); font-family: 'Courier New', monospace; font-size: 0.95rem;">loading.id@mechroute.com</p>
-            </div>
-        </header>
-
-        <h2 style="margin-bottom: 1.5rem; font-size: 1.2rem; color: var(--text-muted);">Choose Your Service</h2>
-        <div class="grid" style="margin-bottom: 4rem;">
-            
-            <div class="card service-card" onclick="window.location.href='service.html'">
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🚨</div>
-                    <h3 style="margin-bottom: 0.5rem;">On-Spot Emergency</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
-                        Instant breakdown assistance. We'll track your GPS and dispatch the nearest mechanic immediately.
-                    </p>
-                </div>
-                <span class="btn btn-primary" style="display: block; text-align: center; width: 100%;">Request Mechanic</span>
-            </div>
-
-            <div class="card service-card" onclick="window.location.href='booking.html'">
-                <div>
-                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">📅</div>
-                    <h3 style="margin-bottom: 0.5rem;">Pre-Booking</h3>
-                    <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1.5rem;">
-                        Schedule routine maintenance, oil changes, or inspections for a time that fits your schedule.
-                    </p>
-                </div>
-                <span class="btn btn-secondary" style="display: block; text-align: center; width: 100%;">Schedule Now</span>
-            </div>
-
-        </div>
-
-        <h2 style="margin-bottom: 1.5rem; font-size: 1.2rem; color: var(--text-muted);">Service History</h2>
-        <div class="card" style="padding: 0; overflow: hidden;">
-            <table class="status-table">
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Type</th>
-                        <th>Status</th>
-                        <th>ID Reference</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td style="font-size: 0.9rem;">Mar 19, 2026</td>
-                        <td style="font-size: 0.9rem;">Emergency Jumpstart</td>
-                        <td><span class="badge badge-success">Completed</span></td>
-                        <td style="color: var(--text-muted); font-size: 0.8rem;">#MR-7721</td>
-                    </tr>
-                    <tr>
-                        <td style="font-size: 0.9rem;">Feb 10, 2026</td>
-                        <td style="font-size: 0.9rem;">Brake Inspection</td>
-                        <td><span class="badge badge-success">Completed</span></td>
-                        <td style="color: var(--text-muted); font-size: 0.8rem;">#MR-6504</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
     </div>
 
-    <footer style="text-align: center; padding: 4rem 0; color: var(--text-muted); font-size: 0.75rem; letter-spacing: 1px;">
-        MECHROUTE SECURE PORTAL &copy; 2026 | ALL RIGHTS RESERVED
-    </footer>
+    <div class="main-content">
+        <div class="identity-card">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <div class="user-avatar" id="avatarLetter">U</div>
+                <div>
+                    <h2 style="margin: 0; font-size: 1.4rem; letter-spacing: -0.5px;">Welcome, <span id="displayName">Driver</span></h2>
+                    <p style="margin: 5px 0 0; color: var(--muted); font-family: monospace; font-size: 0.9rem;" id="displayEmail">loading.id@mechroute.com</p>
+                </div>
+            </div>
+            <span class="badge">Verified Member</span>
+        </div>
+
+        <h1 style="font-size: 2.5rem; letter-spacing: -2px; margin-bottom: 40px;">Fleet Overview</h1>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+            <div style="background: var(--slate); color: white; padding: 40px; border-radius: 24px;">
+                <h3 style="margin-top: 0;">Emergency Response</h3>
+                <p style="opacity: 0.7;">Instant deployment for breakdowns and critical failures.</p>
+                <button style="background: var(--brand); border: none; color: white; padding: 12px 24px; border-radius: 10px; font-weight: 700; margin-top: 20px; cursor: pointer;">Request Now</button>
+            </div>
+            <div style="background: white; border: 1px solid #f1f5f9; padding: 40px; border-radius: 24px;">
+                <h3 style="margin-top: 0;">Scheduled Maintenance</h3>
+                <p style="color: var(--muted);">Pre-book routine care and preserve vehicle longevity.</p>
+                <button style="background: white; border: 1px solid var(--slate); color: var(--slate); padding: 12px 24px; border-radius: 10px; font-weight: 700; margin-top: 20px; cursor: pointer;">Book Service</button>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // Professional greeting logic based on the generated MechRoute ID
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedEmail = sessionStorage.getItem('mechEmail');
-            
-            if (savedEmail) {
-                // Display the full ID in the profile header
-                document.getElementById('user-official-id').innerText = savedEmail;
-                
-                // Extract the name part (e.g., "chetana" from "chetana.mr@mechroute.com")
-                const namePart = savedEmail.split('.')[0];
-                const capitalized = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-                document.getElementById('user-welcome').innerText = "Welcome back, " + capitalized;
-            } else {
-                // Safety fallback if the session was cleared
-                document.getElementById('user-official-id').innerText = "guest.mr@mechroute.com";
-            }
-        });
+        // Extracting the data generated during registration
+        const name = localStorage.getItem('userName') || 'Driver';
+        const email = localStorage.getItem('userEmail') || 'member@mechroute.com';
+
+        document.getElementById('displayName').innerText = name;
+        document.getElementById('displayEmail').innerText = email;
+        document.getElementById('avatarLetter').innerText = name.charAt(0);
     </script>
 </body>
 </html>
