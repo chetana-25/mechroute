@@ -2,75 +2,34 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Tracking | MechRoute</title>
+    <title>Tracking & Payment | MechRoute</title>
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
-<body>
-
-    <nav>
-        <a href="dashboard.html" class="logo">MechRoute</a>
-        <div class="badge badge-success">Live Request</div>
-    </nav>
-
-    <div class="container" style="max-width: 600px; margin-top: 3rem;">
+<body style="background: var(--bg);">
+    <div class="container" style="max-width: 600px; padding-top: 50px;">
         
-        <div id="tracking-section">
-            <div class="card text-center">
-                <div style="font-size: 3rem; margin-bottom: 1rem;">🚛</div>
-                <h2 id="status-update">Initializing Tracking...</h2>
-                <p style="color: var(--text-muted); margin-bottom: 2rem;">Connecting to Mechanic's GPS</p>
-                
-                <div class="progress-container">
-                    <div id="progress-fill" class="progress-fill"></div>
-                </div>
-
-                <div style="text-align: left; background: var(--bg); padding: 1rem; border-radius: 8px;">
-                    <p style="font-size: 0.9rem;"><strong>Mechanic:</strong> Mike's Heavy Duty</p>
-                    <p style="font-size: 0.9rem;"><strong>ETA:</strong> Calculating...</p>
-                </div>
-                
-                <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--danger);">
-                    ⚠️ Please stay with your vehicle and turn on hazard lights.
-                </p>
+        <div id="tracking-section" class="card text-center">
+            <h2 style="color: var(--brand);">Mechanic is En Route</h2>
+            <p>Estimated arrival: 8 minutes</p>
+            <div style="background: #eee; height: 10px; border-radius: 5px; margin: 2rem 0; overflow: hidden;">
+                <div id="progress-fill" style="background: var(--brand); height: 100%; width: 0%; transition: width 0.1s linear;"></div>
             </div>
+            <p style="font-size: 0.9rem; color: var(--text-muted);">Please stay with your vehicle.</p>
         </div>
 
-        <div id="payment-section" class="hidden">
-            <div class="card">
-                <div class="text-center" style="margin-bottom: 2rem;">
-                    <div style="font-size: 3rem; color: var(--success);">✅</div>
-                    <h2>Job Completed</h2>
-                    <p style="color: var(--text-muted);">Service provided by Mike's Heavy Duty</p>
+        <div id="payment-section" class="card hidden">
+            <h2 class="text-center">Service Complete</h2>
+            <p class="text-center">Confirm payment to finalize the session.</p>
+            <div style="margin: 2rem 0; padding: 1rem; background: var(--brand-soft); border-radius: 8px;">
+                <div style="display: flex; justify-content: space-between;">
+                    <span>Service Fee</span>
+                    <strong>$45.00</strong>
                 </div>
-
-                <div style="border-top: 1px dashed var(--border); border-bottom: 1px dashed var(--border); padding: 1.5rem 0; margin-bottom: 2rem;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Roadside Diagnostics</span>
-                        <span>$25.00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
-                        <span>Labor (Battery Jump)</span>
-                        <span>$20.00</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.2rem; margin-top: 1rem; color: var(--brand);">
-                        <span>Total Amount</span>
-                        <span>$45.00</span>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary btn-pay" style="width: 100%;" onclick="processPayment()">
-                    Pay Securely with Card
-                </button>
-                
-                <p class="text-center" style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-muted);">
-                    🔒 Transactions are secured by Stripe
-                </p>
             </div>
+            <button class="btn btn-primary" style="width: 100%;" onclick="alert('Payment Successful!')">Pay with Card</button>
         </div>
 
     </div>
-
     <script src="../assets/js/script.js"></script>
 </body>
 </html>
