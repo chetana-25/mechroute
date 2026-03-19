@@ -1,28 +1,59 @@
-<table class="log-table" id="logTable">
-    </table>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Service Ledger | MechRoute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body { background: #fcfdfe; font-family: 'Plus Jakarta Sans', sans-serif; padding: 60px 8%; }
+        .log-container { max-width: 900px; margin: 0 auto; }
+        .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+        .log-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+        .log-row { background: white; border: 1px solid #f1f5f9; box-shadow: 0 2px 4px rgba(0,0,0,0.01); }
+        td { padding: 25px; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-weight: 600; }
+        td:first-child { border-left: 1px solid #f1f5f9; border-radius: 20px 0 0 20px; color: #64748b; }
+        td:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 20px 20px 0; text-align: right; }
+        .badge { padding: 6px 14px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; }
+        .badge-proactive { background: #eff6ff; color: #2563eb; }
+    </style>
+</head>
+<body>
+    <div class="log-container">
+        <div class="header-flex">
+            <div>
+                <h1 style="font-size: 2.5rem; letter-spacing: -2px; margin: 0;">Service Ledger</h1>
+                <p style="color: #64748b; margin-top: 5px;">Verified maintenance history for your Fleet ID.</p>
+            </div>
+            <a href="dashboard.html" style="text-decoration: none; font-weight: 700; color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 4px;">Dashboard</a>
+        </div>
 
-<script>
-    window.onload = function() {
-        const email = localStorage.getItem('mech_user_email');
-        document.getElementById('displayID').innerText = email;
+        <table class="log-table" id="ledgerTable">
+            </table>
+    </div>
 
-        const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-        const table = document.getElementById('logTable');
+    <script>
+        window.onload = function() {
+            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+            const table = document.getElementById('ledgerTable');
 
-        if(logs.length === 0) {
-            table.innerHTML = "<p style='padding:20px; color:#94a3b8;'>No service history found yet.</p>";
+            if(logs.length === 0) {
+                table.innerHTML = "<tr><td colspan='4' style='text-align:center; color:#94a3b8;'>No service history found for this vehicle.</td></tr>";
+                return;
+            }
+
+            // Show latest first
+            logs.reverse().forEach(entry => {
+                const row = `
+                    <tr class="log-row">
+                        <td>${entry.date}</td>
+                        <td><span class="badge badge-proactive">${entry.type}</span></td>
+                        <td style="color: #0f172a;">${entry.service}</td>
+                        <td style="color: #166534; font-weight: 800;">${entry.price}</td>
+                    </tr>
+                `;
+                table.innerHTML += row;
+            });
         }
-
-        logs.reverse().forEach(entry => {
-            const row = `
-                <tr class="log-row">
-                    <td><strong>${entry.date}</strong></td>
-                    <td><span style="color: ${entry.type === 'PROACTIVE' ? '#2563eb' : '#0f172a'}; font-weight: 700;">${entry.type}</span></td>
-                    <td>${entry.service}</td>
-                    <td><span class="status-pill completed">COMPLETED</span></td>
-                </tr>
-            `;
-            table.innerHTML += row;
-        });
-    }
-</script>
+    </script>
+</body>
+</html>
