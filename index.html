@@ -6,106 +6,167 @@
     <title>MechRoute | Roadside Assistance</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <style>
-        /* Essential styles for the white theme and hidden section */
+        /* --- PREMIUM WHITE THEME INTERACTIVITY --- */
         body {
             background-color: #ffffff;
-            color: #0f172a;
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-        }
-
-        /* The hidden section styling */
-        #how-it-works-section {
-            display: none; /* Hidden by default */
-            padding: 60px 20px;
-            background-color: #f8fafc; /* Light grey for contrast */
-            border-top: 1px solid #e2e8f0;
+            color: #1e293b;
+            transition: all 0.3s ease;
         }
 
         .hero {
-            padding: 80px 20px;
+            padding: 120px 5%;
+            background: radial-gradient(circle at top right, #eff6ff 0%, #ffffff 100%);
             text-align: center;
-            background: #ffffff;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
+
+        /* THE SECTION TO HIDE/SHOW */
+        #how-it-works-section {
+            display: none; /* Initially Hidden */
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 100px 5%;
+            background-color: #f8fafc;
+        }
+
+        #how-it-works-section.visible {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* INTERACTIVE CARDS */
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: #3b82f6;
+            box-shadow: 0 20px 40px -15px rgba(59, 130, 246, 0.15);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* BUTTONS */
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px -10px rgba(37, 99, 235, 0.5);
         }
 
         .btn-outline {
             background: transparent;
             border: 2px solid #2563eb;
             color: #2563eb;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 15px 35px;
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
-            font-weight: 600;
+            transition: all 0.3s ease;
         }
 
-        .btn-primary {
-            background: #2563eb;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            display: inline-block;
-            font-weight: 600;
+        .btn-outline:hover {
+            background: #eff6ff;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
 
-    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; border-bottom: 1px solid #e2e8f0;">
-        <a href="index.html" style="font-size: 1.5rem; font-weight: 800; color: #2563eb; text-decoration: none;">MechRoute</a>
-        <div>
-            <a href="pages/login.html" style="margin-right: 20px; text-decoration: none; color: #0f172a;">Login</a>
-            <a href="pages/register.html" class="btn btn-primary">Join Now</a>
+    <nav style="display: flex; justify-content: space-between; align-items: center; padding: 25px 8%; background: white; border-bottom: 1px solid #f1f5f9;">
+        <a href="index.html" style="font-size: 1.8rem; font-weight: 900; color: #2563eb; text-decoration: none; letter-spacing: -1px;">MechRoute</a>
+        <div style="display: flex; align-items: center; gap: 30px;">
+            <a href="pages/login.html" style="text-decoration: none; color: #475569; font-weight: 600;">Login</a>
+            <a href="pages/register.html" class="btn-primary" style="padding: 10px 25px;">Join Now</a>
         </div>
     </nav>
 
     <section class="hero">
-        <h1>Your On-Demand Mechanic Fleet</h1>
-        <p style="color: #475569; max-width: 600px; margin: 0 auto 30px;">Professional help to your GPS location in minutes.</p>
+        <h1>Your On-Demand <br><span style="color: #2563eb;">Mechanic Fleet</span></h1>
+        <p style="font-size: 1.25rem; color: #64748b; max-width: 700px; margin: 0 auto 40px; line-height: 1.8;">
+            The road can be unpredictable. We aren't. Access verified mechanics at your exact location with a single click.
+        </p>
         
-        <div style="display: flex; gap: 15px; justify-content: center;">
-            <a href="pages/register.html" class="btn btn-primary">Get Started</a>
-            <button class="btn-outline" onclick="revealHowItWorks()">How it Works</button>
+        <div style="display: flex; gap: 20px; justify-content: center;">
+            <a href="pages/register.html" class="btn-primary">Get Started</a>
+            <button class="btn-outline" onclick="revealContent()">How it Works</button>
         </div>
     </section>
 
-    <div id="how-it-works-section">
-        <div style="max-width: 1100px; margin: 0 auto; text-align: center;">
-            <h2 style="font-size: 2rem; margin-bottom: 40px;">Built for the Road</h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px;">
-                <div style="background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div style="font-size: 2rem; margin-bottom: 15px;">📍</div>
-                    <h3>Precision GPS</h3>
-                    <p style="color: #475569;">We find mechanics within a 5-mile radius of your exact location.</p>
-                </div>
+    <section id="how-it-works-section">
+        <div style="text-align: center; margin-bottom: 60px;">
+            <h2 style="font-size: 2.5rem; font-weight: 800; color: #0f172a;">Built for the Road</h2>
+            <div style="width: 60px; height: 5px; background: #2563eb; margin: 20px auto; border-radius: 10px;"></div>
+        </div>
 
-                <div style="background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div style="font-size: 2rem; margin-bottom: 15px;">🛠️</div>
-                    <h3>Verified Pros</h3>
-                    <p style="color: #475569;">Every mechanic is certified and background-checked for your safety.</p>
-                </div>
+        <div class="grid">
+            <div class="card">
+                <div style="background: #eff6ff; width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 25px;">📍</div>
+                <h3 style="margin-bottom: 15px;">Precision GPS</h3>
+                <p style="color: #64748b; line-height: 1.6;">Our smart algorithm pinpoints your coordinates to connect you with mechanics within a 5-mile radius instantly.</p>
+            </div>
 
-                <div style="background: white; padding: 30px; border-radius: 12px; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-                    <div style="font-size: 2rem; margin-bottom: 15px;">💳</div>
-                    <h3>Fair Pricing</h3>
-                    <p style="color: #475569;">Transparent fees with secure payment. No hidden roadside costs.</p>
-                </div>
+            <div class="card">
+                <div style="background: #f0fdf4; width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 25px;">🛡️</div>
+                <h3 style="margin-bottom: 15px;">Verified Pros</h3>
+                <p style="color: #64748b; line-height: 1.6;">Safety first. Every technician in our network is background-checked and professionally certified.</p>
+            </div>
+
+            <div class="card">
+                <div style="background: #fff7ed; width: 60px; height: 60px; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 25px;">💎</div>
+                <h3 style="margin-bottom: 15px;">Fair Pricing</h3>
+                <p style="color: #64748b; line-height: 1.6;">No more roadside haggling. Transparent, fixed-rate pricing so you know what you pay before we arrive.</p>
             </div>
         </div>
-    </div>
+    </section>
 
-    <footer style="text-align: center; padding: 50px 0; border-top: 1px solid #e2e8f0; margin-top: 50px;">
-        <p style="color: #94a3b8;">&copy; 2026 MechRoute. Engineering safety for every journey.</p>
+    <footer style="text-align: center; padding: 80px 0; color: #94a3b8; font-size: 0.9rem; border-top: 1px solid #f1f5f9; background: white;">
+        <p>&copy; 2026 MechRoute Fleet Systems. Engineering safety for every journey.</p>
     </footer>
 
     <script>
-        function revealHowItWorks() {
+        function revealContent() {
             const section = document.getElementById('how-it-works-section');
-            // Show the section
+            
+            // Show the section layout
             section.style.display = 'block';
-            // Smooth scroll to it
-            section.scrollIntoView({ behavior: 'smooth' });
+            
+            // Trigger the animation after a tiny delay
+            setTimeout(() => {
+                section.classList.add('visible');
+                section.scrollIntoView({ behavior: 'smooth' });
+            }, 10);
         }
     </script>
 
