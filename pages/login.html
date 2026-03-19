@@ -2,71 +2,24 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | MechRoute</title>
     <link rel="stylesheet" href="../assets/css/style.css">
-    <style>
-        /* Specific layout for the login screen to center the card */
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-        }
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 1rem;
-        }
-    </style>
 </head>
-<body>
-
-    <div class="login-container">
-        <div class="text-center" style="margin-bottom: 2rem;">
-            <a href="../index.html" class="logo" style="font-size: 2rem;">MechRoute</a>
-        </div>
-
-        <div class="card">
-            <h2 style="margin-bottom: 0.5rem;">Welcome Back</h2>
-            <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem;">
-                Enter your credentials to access your dashboard.
-            </p>
-
-            <form action="dashboard.html">
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="name@company.com" required>
-                </div>
-
-                <div class="form-group">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <label for="password">Password</label>
-                        <a href="#" style="font-size: 0.75rem; color: var(--brand); text-decoration: none;">Forgot?</a>
-                    </div>
-                    <input type="password" id="password" placeholder="••••••••" required>
-                </div>
-
-                <div style="margin-bottom: 1.5rem; display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="remember" style="width: auto;">
-                    <label for="remember" style="margin-bottom: 0; font-weight: 400; font-size: 0.85rem;">Remember me</label>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
-            </form>
-
-            <div class="text-center" style="margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
-                <p style="font-size: 0.9rem; color: var(--text-muted);">
-                    Don't have an account? <a href="register.html" style="color: var(--brand); font-weight: 600; text-decoration: none;">Join MechRoute</a>
-                </p>
+<body style="background: var(--bg); display: flex; align-items: center; justify-content: center; min-height: 100vh;">
+    <div class="card" style="width: 100%; max-width: 400px;">
+        <h2 class="text-center">MechRoute Portal</h2>
+        <form onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label>MechRoute ID</label>
+                <input type="email" id="email" placeholder="name.mr@mechroute.com" required>
             </div>
-        </div>
-        
-        <p class="text-center" style="margin-top: 2rem; font-size: 0.8rem; color: var(--text-muted);">
-            Securely encrypted by MechRoute Auth Service
-        </p>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">Sign In</button>
+        </form>
     </div>
-
+    <script src="../assets/js/script.js"></script>
 </body>
 </html>
