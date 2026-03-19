@@ -2,101 +2,241 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fleet Command | MechRoute</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --brand: #2563eb; --slate: #0f172a; --bg: #f8fafc; }
-        body { margin: 0; display: flex; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); height: 100vh; }
-        
+        :root {
+            --brand-blue: #2563eb;
+            --sidebar-bg: #0f172a;
+            --main-bg: #ffffff;
+            --text-slate: #0f172a;
+            --soft-slate: #64748b;
+            --border-light: #f1f5f9;
+        }
+
+        body {
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--main-bg);
+            overflow: hidden;
+        }
+
         /* --- SIDEBAR --- */
-        .sidebar { width: 260px; background: var(--slate); color: white; padding: 40px 20px; display: flex; flex-direction: column; }
-        .sidebar h2 { font-size: 1.5rem; letter-spacing: -1px; margin-bottom: 50px; padding-left: 15px; }
-        .nav-item { color: #94a3b8; text-decoration: none; padding: 15px; border-radius: 12px; margin-bottom: 10px; font-weight: 600; cursor: pointer; transition: 0.3s; }
-        .nav-item:hover, .nav-item.active { background: rgba(255,255,255,0.1); color: white; }
+        .sidebar {
+            width: 300px;
+            background-color: var(--sidebar-bg);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 50px 30px;
+            justify-content: space-between;
+        }
+
+        .logo { 
+            font-size: 2.2rem; 
+            font-weight: 800; 
+            letter-spacing: -1.5px;
+            margin-bottom: 60px;
+        }
+
+        .nav-menu { flex-grow: 1; }
+        
+        .nav-item {
+            padding: 18px 24px;
+            border-radius: 14px;
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item.active { 
+            background: rgba(255, 255, 255, 0.1); 
+            color: white; 
+        }
+
+        .nav-item:hover:not(.active) { 
+            color: white; 
+            background: rgba(255, 255, 255, 0.05); 
+        }
+
+        .btn-book {
+            background: var(--brand-blue);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            text-align: center;
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 1.1rem;
+            transition: 0.3s;
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-book:hover {
+            transform: translateY(-3px);
+            background: #1d4ed8;
+        }
 
         /* --- MAIN CONTENT --- */
-        .main-content { flex: 1; padding: 60px; overflow-y: auto; }
-        .view-section { display: none; }
-        .view-section.active { display: block; }
+        .main-content {
+            flex-grow: 1;
+            padding: 80px 100px;
+            overflow-y: auto;
+        }
 
-        /* STATS VIEW */
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        .stat-card { background: white; padding: 30px; border-radius: 24px; border: 1px solid #e2e8f0; }
-        
-        /* HISTORY VIEW */
-        .history-card { background: white; border-radius: 24px; padding: 30px; border: 1px solid #e2e8f0; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th { text-align: left; color: #94a3b8; font-size: 0.75rem; padding: 15px; border-bottom: 2px solid #f1f5f9; }
-        td { padding: 20px 15px; border-bottom: 1px solid #f1f5f9; }
+        /* WELCOME & ID SECTION */
+        .welcome-section {
+            margin-bottom: 60px;
+        }
+
+        .welcome-section h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin: 0;
+            color: var(--text-slate);
+        }
+
+        .id-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .fleet-badge {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--brand-blue);
+            background: #eff6ff;
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-dot {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #10b981; /* Success Green */
+        }
+
+        .dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10b981;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* STAT CARDS */
+        .stats-grid {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            flex: 1;
+            padding: 45px;
+            border-radius: 36px;
+            border: 1px solid var(--border-light);
+            background: #ffffff;
+            transition: all 0.4s ease;
+        }
+
+        .stat-card:hover {
+            border-color: var(--brand-blue);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
+        }
+
+        .stat-card h2 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            margin: 0;
+            color: var(--text-slate);
+        }
+
+        .stat-card p {
+            color: var(--soft-slate);
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-top: 12px;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h2>MechRoute.</h2>
-        <div class="nav-item active" onclick="showView('overview', this)">Overview</div>
-        <div class="nav-item" onclick="showView('history', this)">Service History</div>
-        <a href="booking.html" class="nav-item" style="margin-top: auto; background: var(--brand); color: white; text-align: center;">+ Book Service</a>
-    </div>
+    <aside class="sidebar">
+        <div>
+            <div class="logo">MechRoute.</div>
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">Overview</a>
+                <a href="history.html" class="nav-item">Service History</a>
+            </nav>
+        </div>
+        <a href="booking.html" class="btn-book">+ Book Service</a>
+    </aside>
 
-    <div class="main-content">
-        
-        <div id="overview" class="view-section active">
-            <h1>Vehicle Overview</h1>
-            <div class="stats-grid">
-                <div class="stat-card"><h3>94%</h3><p>Engine Health</p></div>
-                <div class="stat-card"><h3 id="statCount">0</h3><p>Total Services</p></div>
-                <div class="stat-card"><h3>₹0</h3><p>Total Spent</p></div>
+    <main class="main-content">
+        <header class="welcome-section">
+            <h1 id="userNameDisplay">Welcome back, Scout</h1>
+            <div class="id-container">
+                <div class="fleet-badge">Fleet ID: <span id="fleetID">MR-LOAD-01</span></div>
+                <div class="status-dot"><span class="dot"></span> Online</div>
+            </div>
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h2>94%</h2>
+                <p>Engine Health</p>
+            </div>
+            <div class="stat-card">
+                <h2 id="serviceCount">2</h2>
+                <p>Total Services</p>
+            </div>
+            <div class="stat-card">
+                <h2>₹0</h2>
+                <p>Total Spent</p>
             </div>
         </div>
-
-        <div id="history" class="view-section">
-            <h1>Service Ledger</h1>
-            <div class="history-card">
-                <table>
-                    <thead>
-                        <tr><th>Date</th><th>Service</th><th>Amount</th><th>Status</th></tr>
-                    </thead>
-                    <tbody id="logBody">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
+    </main>
 
     <script>
-        function showView(viewId, element) {
-            // Toggle Views
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.getElementById(viewId).classList.add('active');
-
-            // Toggle Sidebar Active State
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            element.classList.add('active');
-        }
-
         window.onload = function() {
-            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            document.getElementById('statCount').innerText = logs.length;
+            // 1. Fetch User Name from LocalStorage (saved during registration)
+            // Default to 'Scout' if not found
+            const savedName = localStorage.getItem('user_name') || 'Scout';
+            document.getElementById('userNameDisplay').innerText = `Welcome back, ${savedName}`;
 
-            const tbody = document.getElementById('logBody');
-            if(logs.length === 0) {
-                tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:40px;'>No history found.</td></tr>";
-                return;
+            // 2. Handle Unique Fleet ID
+            let savedID = localStorage.getItem('fleet_id');
+            if (!savedID) {
+                // Generate a random 5-digit number
+                const randomNum = Math.floor(10000 + Math.random() * 90000);
+                savedID = `MR-${randomNum}`;
+                localStorage.setItem('fleet_id', savedID);
             }
+            document.getElementById('fleetID').innerText = savedID;
 
-            logs.reverse().forEach(log => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="font-weight:700;">${log.date}</td>
-                        <td>${log.service}</td>
-                        <td style="color:var(--brand); font-weight:800;">${log.price}</td>
-                        <td><span style="background:#dcfce7; color:#166534; padding:5px 10px; border-radius:8px; font-size:0.7rem; font-weight:800;">VERIFIED</span></td>
-                    </tr>
-                `;
-            });
-        }
+            // 3. Dynamic Service Count
+            // Assuming you store history in an array called 'service_history'
+            const history = JSON.parse(localStorage.getItem('service_history')) || [];
+            if(history.length > 0) {
+                document.getElementById('serviceCount').innerText = history.length;
+            }
+        };
     </script>
 </body>
 </html>
