@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MechRoute | The Future of Roadside Mobility</title>
+    <title>MechRoute | The Full Spectrum of Automotive Care</title>
     <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -11,7 +11,6 @@
             --brand-blue: #2563eb;
             --deep-slate: #0f172a;
             --soft-slate: #64748b;
-            --glass: rgba(255, 255, 255, 0.8);
         }
 
         body {
@@ -19,221 +18,183 @@
             color: var(--deep-slate);
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
-            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* --- SOPHISTICATED NAV --- */
+        /* --- NAVIGATION --- */
         nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 8%;
-            backdrop-filter: blur(10px);
-            background: var(--glass);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            padding: 30px 8%;
+            background: #ffffff;
             border-bottom: 1px solid #f1f5f9;
         }
 
         .logo {
-            font-size: 1.4rem;
+            font-size: 2.2rem;
             font-weight: 800;
-            letter-spacing: -1px;
+            letter-spacing: -1.5px;
             color: var(--deep-slate);
             text-decoration: none;
         }
 
-        /* --- MODERN HERO --- */
+        .logo span { color: var(--brand-blue); }
+
+        /* --- HERO SECTION --- */
         .hero {
             padding: 160px 5% 100px;
             text-align: center;
             background: radial-gradient(circle at 50% -20%, #eff6ff 0%, #ffffff 80%);
         }
 
-        .hero-tag {
-            display: inline-block;
-            padding: 6px 16px;
-            background: #eff6ff;
-            color: var(--brand-blue);
-            border-radius: 100px;
-            font-size: 0.85rem;
-            font-weight: 700;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-        }
-
         .hero h1 {
-            font-size: 4.5rem;
+            font-size: 5rem;
             font-weight: 800;
             line-height: 1.1;
             letter-spacing: -3px;
             margin-bottom: 24px;
+            color: var(--deep-slate);
         }
 
-        .hero h1 span {
+        .hero h1 .highlight {
             background: linear-gradient(90deg, #2563eb, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- HIDDEN BENTO GRID SECTION --- */
-        #how-it-works-section {
-            display: none;
-            opacity: 0;
-            padding: 120px 8%;
-            background: #ffffff;
-            transition: opacity 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .section-header {
-            max-width: 600px;
-            margin: 0 auto 80px;
-            text-align: center;
-        }
-
-        .section-header h2 {
-            font-size: 3rem;
-            font-weight: 800;
-            letter-spacing: -2px;
-            color: var(--deep-slate);
-        }
-
-        /* --- BENTO STYLE CARDS --- */
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: 24px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .bento-card {
-            grid-column: span 4;
-            background: #f8fafc;
-            border: 1px solid #f1f5f9;
-            padding: 48px;
-            border-radius: 32px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .bento-card:hover {
-            background: #ffffff;
-            border-color: var(--brand-blue);
-            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.08);
-            transform: translateY(-8px);
-        }
-
-        .bento-card h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin: 20px 0 12px;
-            color: var(--brand-blue); /* Your blue */
-        }
-
-        .bento-card p {
+        .hero p {
+            font-size: 1.4rem;
             color: var(--soft-slate);
+            max-width: 750px;
+            margin: 0 auto 48px;
             line-height: 1.6;
-            font-size: 1rem;
         }
 
         /* --- BUTTONS --- */
-        .btn-black {
+        .btn-elite {
             background: var(--deep-slate);
             color: white;
-            padding: 18px 36px;
+            padding: 18px 40px;
             border-radius: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-
-        .btn-black:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-
-        .btn-text {
-            color: var(--deep-slate);
             font-weight: 700;
             text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            border: none;
-            background: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-block;
             font-size: 1.1rem;
+        }
+
+        .btn-elite:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1);
+        }
+
+        /* --- SPECTRUM REVEAL SECTION --- */
+        #spectrum-section {
+            display: none;
+            opacity: 0;
+            padding: 100px 8%;
+            background: #ffffff;
+            transition: opacity 1s ease;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 60px auto 0;
+        }
+
+        .bento-card {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            padding: 40px;
+            border-radius: 28px;
+            transition: 0.4s;
+        }
+
+        .bento-card:hover {
+            border-color: var(--brand-blue);
+            background: white;
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px -12px rgba(0,0,0,0.05);
+        }
+
+        .bento-card h3 {
+            font-size: 1.4rem;
+            margin: 20px 0 10px;
+            color: var(--brand-blue);
         }
     </style>
 </head>
 <body>
 
     <nav>
-        <a href="#" class="logo">MechRoute.</a>
+        <a href="#" class="logo">Mech<span>Route.</span></a>
         <div style="display: flex; gap: 40px; align-items: center;">
             <a href="pages/login.html" style="text-decoration: none; color: var(--soft-slate); font-weight: 600;">Sign In</a>
-            <a href="pages/register.html" class="btn-black" style="padding: 12px 24px;">Get Started</a>
+            <a href="pages/register.html" class="btn-elite" style="padding: 12px 28px;">Get Started</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="hero-tag">Platform v2.0 Live</div>
-        <h1>Built for the <span>Road.</span></h1>
-        <p style="font-size: 1.4rem; color: var(--soft-slate); max-width: 650px; margin: 0 auto 48px;">
-            The intelligent fleet for immediate roadside recovery. Engineering safety into every mile.
+        <div style="color: var(--brand-blue); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 20px;">
+            Intelligent Fleet Management
+        </div>
+        
+        <h1>The Full Spectrum <br>of <span class="highlight">Automotive Care.</span></h1>
+        
+        <p>
+            From immediate roadside intervention to scheduled precision maintenance. 
+            MechRoute provides an elite infrastructure for every mile of your journey.
         </p>
         
-        <div style="display: flex; gap: 32px; justify-content: center; align-items: center;">
-            <a href="pages/register.html" class="btn-black">Deploy Mechanic</a>
-            <button class="btn-text" onclick="showEnterpriseDetails()">
-                See How It Works <span>→</span>
+        <div style="display: flex; gap: 30px; justify-content: center; align-items: center;">
+            <a href="pages/register.html" class="btn-elite">Start Your Journey</a>
+            <button onclick="revealSpectrum()" style="background: none; border: none; font-size: 1.1rem; font-weight: 700; color: var(--deep-slate); cursor: pointer; display: flex; align-items: center; gap: 10px;">
+                Explore the Spectrum <span>→</span>
             </button>
         </div>
     </section>
 
-    <section id="how-it-works-section">
-        <div class="section-header">
-            <h2>Modern Infrastructure for the Roadside.</h2>
+    <section id="spectrum-section">
+        <div style="text-align: center;">
+            <h2 style="font-size: 2.8rem; letter-spacing: -2px;">Complete Life-Cycle Support.</h2>
+            <p style="color: var(--soft-slate); font-size: 1.1rem;">Bridging the gap between emergency and routine.</p>
         </div>
 
         <div class="bento-grid">
             <div class="bento-card">
-                <div style="font-size: 2rem;">🛰️</div>
-                <h3>Precision GPS</h3>
-                <p>Proprietary location mapping ensures a 98% accuracy in mechanic dispatching within 5 miles.</p>
+                <div style="font-size: 2.2rem;">🚨</div>
+                <h3>Reactive Response</h3>
+                <p style="color: var(--soft-slate);">High-intensity emergency care for breakdowns, flat tires, and battery failures.</p>
             </div>
             <div class="bento-card">
-                <div style="font-size: 2rem;">🛡️</div>
-                <h3>Verified Fleet</h3>
-                <p>Every technician is subjected to a multi-point certification and background verification protocol.</p>
+                <div style="font-size: 2.2rem;">📅</div>
+                <h3>Proactive Service</h3>
+                <p style="color: var(--soft-slate);">Seamlessly scheduled maintenance, oil changes, and fluid management.</p>
             </div>
             <div class="bento-card">
-                <div style="font-size: 2rem;">⚡</div>
-                <h3>Fixed Pricing</h3>
-                <p>Algorithmic pricing models eliminate negotiation. You pay exactly what the platform quotes.</p>
+                <div style="font-size: 2.2rem;">🛡️</div>
+                <h3>Predictive Health</h3>
+                <p style="color: var(--soft-slate);">Digital history and health-tracking to ensure peak vehicle longevity.</p>
             </div>
         </div>
     </section>
 
-    <footer style="padding: 100px 8%; border-top: 1px solid #f1f5f9;">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span class="logo" style="opacity: 0.5;">MechRoute.</span>
-            <p style="color: var(--soft-slate); font-size: 0.9rem;">&copy; 2026 MechRoute Systems. Built for the future of mobility.</p>
-        </div>
+    <footer style="padding: 80px 8%; border-top: 1px solid #f1f5f9; margin-top: 100px; text-align: center;">
+        <span class="logo" style="font-size: 1.5rem; opacity: 0.4;">MechRoute.</span>
+        <p style="color: var(--soft-slate); font-size: 0.85rem; margin-top: 15px;">&copy; 2026 Engineering safety for the modern driver.</p>
     </footer>
 
     <script>
-        function showEnterpriseDetails() {
-            const el = document.getElementById('how-it-works-section');
+        function revealSpectrum() {
+            const el = document.getElementById('spectrum-section');
             el.style.display = 'block';
             setTimeout(() => {
                 el.style.opacity = '1';
-                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                el.scrollIntoView({ behavior: 'smooth' });
             }, 10);
         }
     </script>
