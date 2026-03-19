@@ -10,10 +10,10 @@
             --brand: #2563eb; 
             --slate: #0f172a; 
             --bg: #fcfdfe; 
-            /* Your Requested Colors */
-            --light-green: #dcfce7;
+            /* Your Specific Colors */
+            --full-green: #dcfce7;
             --deep-green: #166534;
-            --light-blue: #eff6ff;
+            --full-blue: #eff6ff;
             --deep-blue: #1e40af;
         }
 
@@ -48,18 +48,28 @@
             position: relative;
         }
 
-        .service-card:hover { 
-            border-color: var(--brand); 
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.03);
+        /* --- COLORED CARDS --- */
+        .card-best { 
+            background: var(--full-green); 
+            border-color: #c4f2d5; 
+        }
+        .card-prevent { 
+            background: var(--full-blue); 
+            border-color: #dbeafe; 
         }
 
+        .service-card:hover { 
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.05);
+        }
+
+        /* ACTIVE STATE */
         .service-card.active { 
             border-color: var(--brand); 
-            background: #f0f7ff; 
+            border-width: 3px;
         }
 
-        /* THE REQUESTED BADGES */
+        /* BADGES (Now simplified as the card itself is colored) */
         .tag { 
             font-size: 0.7rem; 
             font-weight: 800; 
@@ -69,30 +79,22 @@
             position: absolute; 
             top: 20px; 
             right: 20px; 
+            background: white; /* Contrast against colored card */
         }
-
-        /* 1. Light Green for Best Value */
-        .tag-best { 
-            background: var(--light-green); 
-            color: var(--deep-green); 
-        }
-
-        /* 2. Light Blue for Preventative */
-        .tag-prevent { 
-            background: var(--light-blue); 
-            color: var(--deep-blue); 
-        }
+        .tag-best { color: var(--deep-green); }
+        .tag-prevent { color: var(--deep-blue); }
 
         .service-card h3 { margin: 0; font-size: 1.3rem; letter-spacing: -0.5px; padding-right: 60px; }
-        .service-card p { font-size: 0.9rem; color: #64748b; margin: 12px 0; line-height: 1.5; }
-        .price-text { display: block; font-weight: 800; font-size: 1.25rem; color: var(--brand); margin-top: 15px; }
+        .service-card p { font-size: 0.9rem; color: #475569; margin: 12px 0; line-height: 1.5; }
+        .price-text { display: block; font-weight: 800; font-size: 1.25rem; color: var(--slate); margin-top: 15px; }
 
-        /* FORM SECTION */
+        /* BOOKING FORM */
         .booking-form { 
             background: white; 
             padding: 40px; 
             border-radius: 32px; 
             border: 1px solid #f1f5f9; 
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
         }
 
         .flex-inputs { display: flex; gap: 20px; margin-bottom: 25px; }
@@ -134,26 +136,25 @@
 <div class="container">
     <div class="header">
         <h1>Service Selection</h1>
-        <p>Proactive care for your vehicle's longevity.</p>
+        <p>Choose the best maintenance path for your fleet.</p>
     </div>
 
     <div class="service-grid">
-        <div class="service-card" onclick="selectService(this, 'Essential City Check', 2499)">
+        <div class="service-card card-best" onclick="selectService(this, 'Essential City Check', 2499)">
             <span class="tag tag-best">Best Value</span>
             <h3>Essential City Check</h3>
-            <p>Comprehensive oil change, filter refresh, and 20-point safety inspection.</p>
+            <p>Complete oil change, filter refresh, and 20-point pothole safety inspection.</p>
             <span class="price-text">₹2,499</span>
         </div>
 
-        <div class="service-card" onclick="selectService(this, 'Full Diagnostics', 1800)">
+        <div class="service-card card-prevent" onclick="selectService(this, 'Full Diagnostics', 1800)">
             <span class="tag tag-prevent">Preventative</span>
             <h3>Full Diagnostics</h3>
-            <p>Deep system scan using OBD-II protocols to detect hidden electronic faults.</p>
+            <p>Advanced system scan using OBD-II protocols to detect hidden electronic faults.</p>
             <span class="price-text">₹1,800</span>
         </div>
 
         <div class="service-card" onclick="selectService(this, 'Brake Integrity', 3200)">
-            <span class="tag tag-prevent">Preventative</span>
             <h3>Brake Integrity</h3>
             <p>Hydraulic fluid testing, pad wear analysis, and stopping distance calibration.</p>
             <span class="price-text">₹3,200</span>
@@ -161,7 +162,7 @@
 
         <div class="service-card" onclick="selectService(this, 'Monsoon Prep', 1500)">
             <h3>Monsoon Prep</h3>
-            <p>Specialized wiper, tyre-tread, and underbody coating for heavy rain safety.</p>
+            <p>Wiper, tyre-tread, and underbody coating for heavy rain safety.</p>
             <span class="price-text">₹1,500</span>
         </div>
     </div>
@@ -192,7 +193,7 @@
         const time = document.getElementById('bTime').value;
 
         if(!selectedData.name || !date || !time) {
-            alert("Incomplete Selection: Please choose a service and schedule a time.");
+            alert("Selection Required: Please choose a service and schedule a time.");
             return;
         }
 
