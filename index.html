@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MechRoute | The Full Spectrum of Automotive Care</title>
-    <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -20,6 +19,7 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             margin: 0;
             -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth;
         }
 
         /* --- CLEAN MINIMALIST NAVIGATION --- */
@@ -36,7 +36,7 @@
         }
 
         .logo {
-            font-size: 2.2rem; /* LARGE & COMMANDING */
+            font-size: 2.8rem; 
             font-weight: 800;
             letter-spacing: -1.5px;
             color: var(--deep-slate);
@@ -45,12 +45,11 @@
 
         .logo span { color: var(--brand-blue); }
 
-        /* ENHANCED SIGN IN LINK */
         .nav-link-signin {
             text-decoration: none;
             color: var(--deep-slate);
             font-weight: 700;
-            font-size: 1.2rem; /* INCREASED SIZE PER REQUEST */
+            font-size: 1.2rem;
             letter-spacing: -0.5px;
             padding: 12px 24px;
             border-radius: 14px;
@@ -80,7 +79,7 @@
         }
 
         .hero h1 {
-            font-size: 5.5rem; /* CINEMATIC SCALE */
+            font-size: 5.5rem;
             font-weight: 800;
             line-height: 1;
             letter-spacing: -4px;
@@ -148,6 +147,60 @@
             color: var(--brand-blue);
         }
 
+        /* --- HOW IT WORKS (THE SOPHISTICATED STEP SEGMENT) --- */
+        .process-section {
+            padding: 100px 8% 140px;
+            background: #ffffff;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .process-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 80px;
+        }
+
+        .step-card {
+            position: relative;
+            padding: 40px;
+        }
+
+        .step-number {
+            font-size: 5rem;
+            font-weight: 800;
+            color: #f1f5f9;
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            z-index: 1;
+            transition: 0.3s;
+        }
+
+        .step-card:hover .step-number {
+            color: #eef2ff;
+            transform: translateY(-5px);
+        }
+
+        .step-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-content h4 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: var(--deep-slate);
+            letter-spacing: -0.5px;
+        }
+
+        .step-content p {
+            color: var(--soft-slate);
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
         /* --- SPECTRUM REVEAL --- */
         #spectrum-section {
             display: none;
@@ -155,6 +208,7 @@
             padding: 120px 8%;
             border-top: 1px solid #f1f5f9;
             transition: opacity 1s ease;
+            background: #fafbfc;
         }
 
         .bento-grid {
@@ -166,7 +220,7 @@
         }
 
         .bento-card {
-            background: #fcfdfe;
+            background: #ffffff;
             border: 1px solid #f1f5f9;
             padding: 50px;
             border-radius: 36px;
@@ -174,17 +228,30 @@
         }
 
         .bento-card:hover {
-            background: white;
             border-color: var(--brand-blue);
             transform: translateY(-12px);
             box-shadow: 0 40px 80px -15px rgba(0,0,0,0.06);
         }
 
         .bento-card h3 {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             margin: 24px 0 12px;
             font-weight: 800;
             color: var(--brand-blue);
+            letter-spacing: -1px;
+        }
+
+        .bento-card p {
+            color: var(--soft-slate);
+            font-size: 1.15rem;
+            line-height: 1.6;
+        }
+
+        footer {
+            padding: 120px 8% 60px;
+            text-align: center;
+            border-top: 1px solid #f1f5f9;
+            margin-top: 100px;
         }
     </style>
 </head>
@@ -199,19 +266,47 @@
 
     <section class="hero">
         <span class="hero-tag">Intelligent Fleet Infrastructure</span>
-        
         <h1>The Full Spectrum <br>of <span class="highlight">Automotive Care.</span></h1>
-        
         <p>
             An elite ecosystem bridging the gap between immediate roadside intervention 
             and scheduled precision maintenance.
         </p>
-        
         <div class="cta-group">
             <a href="pages/register.html" class="btn-elite">Start Your Journey</a>
             <button class="btn-philosophy" onclick="revealSpectrum()">
                 Explore the Spectrum <span>→</span>
             </button>
+        </div>
+    </section>
+
+    <section class="process-section">
+        <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <h2 style="font-size: 3.5rem; letter-spacing: -2px; font-weight: 800;">How It Works.</h2>
+            <p style="color: var(--soft-slate); font-size: 1.3rem;">Our seamless protocol for elite vehicle management.</p>
+        </div>
+
+        <div class="process-grid">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <div class="step-content">
+                    <h4>Digital Enrollment</h4>
+                    <p>Onboard your vehicle to our secure cloud. We map your fleet's specific requirements and health history.</p>
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <div class="step-content">
+                    <h4>Smart Diagnostics</h4>
+                    <p>Real-time tracking of service intervals. Whether emergency or routine, our system triggers the right protocol.</p>
+                </div>
+            </div>
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <div class="step-content">
+                    <h4>Precision Execution</h4>
+                    <p>Our elite mechanics perform the necessary care, verified by digital logs for absolute transparency.</p>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -225,23 +320,23 @@
             <div class="bento-card">
                 <div style="font-size: 3rem;">🚨</div>
                 <h3>Reactive</h3>
-                <p style="color: var(--soft-slate); font-size: 1.1rem;">Emergency response protocols for breakdowns, recoveries, and on-spot diagnostics.</p>
+                <p>Emergency response protocols for breakdowns, recoveries, and on-spot diagnostics.</p>
             </div>
             <div class="bento-card">
                 <div style="font-size: 3rem;">📅</div>
                 <h3>Proactive</h3>
-                <p style="color: var(--soft-slate); font-size: 1.1rem;">Scheduled maintenance, fluid management, and routine optimization at your convenience.</p>
+                <p>Scheduled maintenance, fluid management, and routine optimization at your convenience.</p>
             </div>
             <div class="bento-card">
                 <div style="font-size: 3rem;">🛡️</div>
                 <h3>Predictive</h3>
-                <p style="color: var(--soft-slate); font-size: 1.1rem;">Advanced health tracking and digital service logs to ensure long-term vehicle integrity.</p>
+                <p>Advanced health tracking and digital service logs to ensure long-term vehicle integrity before issues arise.</p>
             </div>
         </div>
     </section>
 
-    <footer style="padding: 120px 8% 60px; text-align: center; border-top: 1px solid #f1f5f9; margin-top: 100px;">
-        <span class="logo" style="font-size: 1.8rem; opacity: 0.3;">MechRoute.</span>
+    <footer>
+        <span class="logo" style="font-size: 1.8rem; opacity: 0.3;">Mech<span>Route.</span></span>
         <p style="color: var(--soft-slate); font-size: 1rem; margin-top: 24px; font-weight: 600;">&copy; 2026 Engineering safety for every journey.</p>
     </footer>
 
