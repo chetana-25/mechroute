@@ -3,113 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MechRoute | Precision Vehicle Care</title>
+    <title>MechRoute | The Full Spectrum of Automotive Care</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand: #2563eb;
-            --slate: #0f172a;
-            --soft-slate: #64748b;
-            --bg: #fcfdfe;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg);
-            color: var(--slate);
-        }
-
-        /* --- SOPHISTICATED NAVBAR --- */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 30px 8%;
-            background: white;
-            border-bottom: 1px solid #f1f5f9;
-        }
-
-        .logo {
-            font-size: 3.5rem; /* Large & Bold Branding */
-            font-weight: 800;
-            letter-spacing: -3.5px;
-            text-decoration: none;
-            color: var(--slate);
-        }
-        .logo span { color: var(--brand); }
-
-        .nav-links { display: flex; gap: 40px; align-items: center; }
-        .nav-links a { text-decoration: none; color: var(--soft-slate); font-weight: 700; font-size: 0.95rem; }
-        
-        .btn-signin {
-            background: var(--slate);
-            color: white;
-            padding: 14px 32px;
-            border-radius: 100px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .btn-signin:hover { background: var(--brand); transform: translateY(-1px); }
-
-        /* --- ORIGINAL HERO LAYOUT --- */
-        .hero {
-            padding: 120px 8%;
-            max-width: 1200px;
-        }
-
-        .hero h1 {
-            font-size: 5rem;
-            line-height: 1;
-            letter-spacing: -4px;
-            margin: 0 0 30px 0;
-            font-weight: 800;
-        }
-
-        .hero p {
-            font-size: 1.35rem;
-            color: var(--soft-slate);
-            max-width: 600px;
-            margin-bottom: 50px;
-            font-weight: 500;
-            line-height: 1.5;
-        }
-
-        .btn-main {
-            background-color: var(--brand);
-            color: white;
-            padding: 24px 50px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 800;
-            font-size: 1.15rem;
-            display: inline-block;
-            transition: 0.3s;
-            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
-        }
-        .btn-main:hover { transform: translateY(-4px); box-shadow: 0 25px 50px rgba(37, 99, 235, 0.25); }
+        :root { --brand-blue: #2563eb; --deep-slate: #0f172a; --soft-slate: #64748b; }
+        body { background-color: #ffffff; color: var(--deep-slate); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; -webkit-font-smoothing: antialiased; }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 35px 8%; background: #ffffff; border-bottom: 1px solid #f1f5f9; position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 2.2rem; font-weight: 800; letter-spacing: -1.5px; color: var(--deep-slate); text-decoration: none; }
+        .logo span { color: var(--brand-blue); }
+        .nav-link-signin { text-decoration: none; color: var(--deep-slate); font-weight: 700; font-size: 1.2rem; letter-spacing: -0.5px; padding: 12px 24px; border-radius: 14px; transition: all 0.3s ease; }
+        .nav-link-signin:hover { color: var(--brand-blue); background-color: #f8fafc; }
+        .hero { padding: 160px 8% 120px; text-align: center; background: radial-gradient(circle at 50% -20%, #eff6ff 0%, #ffffff 70%); }
+        .hero h1 { font-size: 5.5rem; font-weight: 800; line-height: 1; letter-spacing: -4px; margin-bottom: 32px; }
+        .hero h1 .highlight { background: linear-gradient(90deg, #2563eb, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { font-size: 1.5rem; color: var(--soft-slate); max-width: 800px; margin: 0 auto 56px; line-height: 1.6; }
+        .btn-elite { background: var(--deep-slate); color: white; padding: 22px 50px; border-radius: 18px; font-weight: 700; text-decoration: none; display: inline-block; font-size: 1.15rem; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+        .btn-elite:hover { transform: translateY(-5px); background: var(--brand-blue); box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2); }
     </style>
 </head>
 <body>
-
-    <nav class="navbar">
-        <a href="index.html" class="logo">MechRoute<span>.</span></a>
-        <div class="nav-links">
-            <a href="#">Fleet</a>
-            <a href="#">Services</a>
-            <a href="#">Support</a>
-            <a href="#" class="btn-signin">Sign In</a>
-        </div>
+    <nav>
+        <a href="index.html" class="logo">Mech<span>Route.</span></a>
+        <a href="pages/login.html" class="nav-link-signin">Sign In</a>
     </nav>
-
-    <main class="hero">
-        <h1>Precision Care <br> For Your Drive.</h1>
-        <p>
-            The digital command centre for your vehicle maintenance. Professional, transparent, and built for the modern Indian road.
-        </p>
-        <a href="pages/dashboard.html" class="btn-main">Go to Command Centre</a>
-    </main>
-
+    <section class="hero">
+        <span style="color: var(--brand-blue); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 24px; display: block;">Intelligent Fleet Infrastructure</span>
+        <h1>The Full Spectrum <br>of <span class="highlight">Automotive Care.</span></h1>
+        <p>From immediate roadside intervention to scheduled precision maintenance. MechRoute provides an elite infrastructure for every mile.</p>
+        <a href="pages/register.html" class="btn-elite">Start Your Journey</a>
+    </section>
 </body>
 </html>
