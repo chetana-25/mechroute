@@ -3,59 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join the Fleet | MechRoute</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Join the Fleet | MechRoute Identity</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #ffffff; font-family: 'Plus Jakarta Sans', sans-serif; display: flex; min-height: 100vh; margin: 0; }
-        .auth-side { flex: 1; background: radial-gradient(circle at top right, #eff6ff 0%, #ffffff 100%); display: flex; flex-direction: column; justify-content: center; padding: 0 10%; }
-        .auth-form-side { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; border-left: 1px solid #f1f5f9; }
-        .form-container { width: 100%; max-width: 400px; }
-        .logo { font-size: 2rem; font-weight: 800; letter-spacing: -1.5px; color: #0f172a; text-decoration: none; margin-bottom: 60px; display: inline-block; }
-        .logo span { color: #2563eb; }
-        input { width: 100%; padding: 16px; margin-bottom: 15px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; font-size: 1rem; transition: 0.3s; }
-        input:focus { border-color: #2563eb; background: white; outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-        .btn-auth { width: 100%; padding: 18px; border-radius: 12px; border: none; background: #0f172a; color: white; font-weight: 700; font-size: 1rem; cursor: pointer; transition: 0.3s; }
-        .btn-auth:hover { background: #2563eb; transform: translateY(-2px); }
+        :root {
+            --brand-blue: #2563eb;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --input-bg: #f8fafc;
+        }
+
+        body {
+            background: #ffffff;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- LEFT SIDE: BRAND REINFORCEMENT --- */
+        .auth-visual-side {
+            flex: 1;
+            background: radial-gradient(circle at top right, #eff6ff 0%, #ffffff 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 10%;
+            border-right: 1px solid #f1f5f9;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: var(--deep-slate);
+            text-decoration: none;
+            margin-bottom: 60px;
+            display: inline-block;
+        }
+
+        .logo span { color: var(--brand-blue); }
+
+        .auth-visual-side h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -3px;
+            line-height: 1;
+            margin-bottom: 24px;
+            color: var(--deep-slate);
+        }
+
+        .auth-visual-side p {
+            color: var(--soft-slate);
+            font-size: 1.25rem;
+            line-height: 1.6;
+            max-width: 440px;
+        }
+
+        /* --- RIGHT SIDE: IDENTITY ENGINE --- */
+        .auth-form-side {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .form-header {
+            margin-bottom: 40px;
+        }
+
+        .form-header h2 {
+            font-size: 2rem;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+            font-weight: 800;
+        }
+
+        .form-header p {
+            color: var(--soft-slate);
+            font-weight: 500;
+        }
+
+        /* --- INPUT STYLING --- */
+        .input-group {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px 24px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            background: var(--input-bg);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--brand-blue);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .btn-initialize {
+            width: 100%;
+            padding: 20px;
+            border-radius: 14px;
+            border: none;
+            background: var(--deep-slate);
+            color: white;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-initialize:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .signin-prompt {
+            text-align: center;
+            margin-top: 32px;
+            font-size: 0.95rem;
+            color: var(--soft-slate);
+        }
+
+        .signin-prompt a {
+            color: var(--brand-blue);
+            text-decoration: none;
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
-    <div class="auth-side">
+
+    <div class="auth-visual-side">
         <a href="../index.html" class="logo">Mech<span>Route.</span></a>
-        <h1 style="font-size: 3.5rem; letter-spacing: -3px; line-height: 1; margin-bottom: 24px;">Initialize Your <br><span style="color: #2563eb;">Identity.</span></h1>
-        <p style="color: #64748b; font-size: 1.2rem; line-height: 1.6; max-width: 420px;">
-            Enter your details to generate your unique professional Fleet ID and access the spectrum.
-        </p>
+        <h1>Join the <br><span style="color: var(--brand-blue);">Elite Fleet.</span></h1>
+        <p>Your unique Fleet Identity will be generated automatically based on your credentials.</p>
     </div>
+
     <div class="auth-form-side">
         <div class="form-container">
-            <h2 style="font-size: 1.8rem; margin-bottom: 30px; letter-spacing: -1px;">Member Registration</h2>
-            <form id="registrationForm">
-                <div style="display: flex; gap: 15px;">
+            <div class="form-header">
+                <h2>Initialize Profile</h2>
+                <p>Enter your legal name to begin.</p>
+            </div>
+
+            <form id="identityForm">
+                <div class="input-group">
                     <input type="text" id="firstName" placeholder="First Name" required>
                     <input type="text" id="lastName" placeholder="Last Name" required>
                 </div>
-                <input type="email" id="personalEmail" placeholder="Personal Email (for recovery)" required>
+                <input type="email" id="recoveryEmail" placeholder="Personal Email (Recovery)" required>
                 <input type="password" placeholder="Create Secure Password" required>
-                <button type="submit" class="btn-auth">Generate Fleet ID</button>
+                
+                <button type="submit" class="btn-initialize">Generate Fleet ID</button>
             </form>
+
+            <p class="signin-prompt">
+                Already a member? <a href="login.html">Sign in here</a>
+            </p>
         </div>
     </div>
 
     <script>
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+        document.getElementById('identityForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            const first = document.getElementById('firstName').value.toLowerCase().trim();
-            const last = document.getElementById('lastName').value.toLowerCase().trim();
             
-            // Generate the professional email
-            const fleetEmail = `${first}.${last}@mechroute.com`;
+            // 1. EXTRACT RAW DATA
+            const first = document.getElementById('firstName').value.trim();
+            const last = document.getElementById('lastName').value.trim();
             
-            // Store in localStorage for the dashboard to "extract"
-            localStorage.setItem('userEmail', fleetEmail);
-            localStorage.setItem('userName', first.charAt(0).toUpperCase() + first.slice(1));
+            // 2. GENERATE PROFESSIONAL FLEET EMAIL
+            // Formats to: first.last@mechroute.com
+            const generatedEmail = first.toLowerCase() + "." + last.toLowerCase() + "@mechroute.com";
             
-            // Redirect to the elite dashboard
+            // 3. PERSIST TO BROWSER STORAGE
+            localStorage.setItem('mech_user_name', first);
+            localStorage.setItem('mech_user_email', generatedEmail);
+            
+            // 4. ELITE REDIRECT
             window.location.href = 'dashboard.html';
         });
     </script>
