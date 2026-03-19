@@ -1,64 +1,122 @@
-/* --- MECHROUTE PROFESSIONAL LIGHT THEME --- */
+/* --- MECHROUTE DESIGN SYSTEM 2026 --- */
 :root {
-    --brand: #2563eb;          /* Clear Blue */
-    --brand-soft: #f0f7ff;     /* Light Blue Hint */
-    --bg: #ffffff;             /* Pure White Background */
-    --surface: #f8fafc;        /* Very Light Grey for contrast */
-    --card-bg: #ffffff;        /* White Cards */
-    --text-main: #0f172a;      /* Dark Text */
-    --text-muted: #475569;     /* Grey Text */
-    --border: #e2e8f0;         /* Light Border */
-    --success: #16a34a;
-    --danger: #ef4444;
+    --brand: #2563eb;
+    --brand-gradient: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
+    --bg: #ffffff;
+    --text-main: #0f172a;    /* Deep Slate */
+    --text-muted: #64748b;   /* Soft Blue-Grey */
+    --border: #f1f5f9;       /* Ultra-thin borders */
+    --card-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
 }
 
-* { 
-    margin: 0; 
-    padding: 0; 
-    box-sizing: border-box; 
-    font-family: inherit; /* Keeps your original font choices */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
 }
 
-/* Force everything to white theme */
-body { 
-    background-color: var(--bg) !important; 
-    color: var(--text-main) !important; 
-}
-
-/* Navigation - White with a thin border */
-nav {
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-    padding: 1rem 5%; 
-    background: #ffffff; 
-    border-bottom: 1px solid var(--border);
-}
-
-/* Cards - White with subtle shadow instead of dark borders */
-.card {
-    background: var(--card-bg) !important; 
-    color: var(--text-main) !important;
-    border: 1px solid var(--border) !important;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-}
-
-/* Inputs - White background, dark text */
-input, select, textarea {
-    background: #ffffff !important;
-    color: var(--text-main) !important;
-    border: 1px solid var(--border) !important;
-}
-
-/* Sections - Alternating white and very light grey */
-section {
+body {
     background-color: var(--bg);
+    color: var(--text-main);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
 }
 
-.hero {
-    background-color: var(--surface); /* Subtle grey to make hero stand out */
+/* --- NAVIGATION --- */
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 8%;
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-/* Buttons */
-.btn-primary { background: var(--brand); color: #ffffff; }
-.btn-outline { background: transparent; border: 2px solid var(--brand); color: var(--brand); }
+/* --- BENTO GRID SYSTEM --- */
+.bento-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 24px;
+    margin-top: 4rem;
+}
+
+.bento-card {
+    grid-column: span 4;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    padding: 3rem;
+    border-radius: 24px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--card-shadow);
+    border-color: var(--brand);
+}
+
+/* --- MODERN TYPOGRAPHY --- */
+h1 {
+    font-size: 4.5rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+}
+
+.blue-text {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* --- BUTTONS --- */
+.btn-elite {
+    background: var(--text-main);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.3s;
+    border: none;
+}
+
+.btn-elite:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
+}
+
+.btn-ghost {
+    color: var(--text-main);
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1rem;
+}
+
+/* --- INPUTS (WHITE THEME) --- */
+input {
+    width: 100%;
+    padding: 1rem;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--brand);
+    background: white;
+}
