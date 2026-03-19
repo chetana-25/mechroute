@@ -21,13 +21,12 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            overflow: hidden;
         }
 
         .register-container {
             width: 100%;
-            max-width: 450px;
-            padding: 40px;
+            max-width: 400px;
+            padding: 20px;
             text-align: center;
         }
 
@@ -35,7 +34,7 @@
             font-size: 2.2rem;
             font-weight: 800;
             letter-spacing: -1.5px;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             display: block;
             text-decoration: none;
             color: var(--deep-slate);
@@ -43,17 +42,16 @@
         .logo span { color: var(--brand-blue); }
 
         h1 {
-            font-size: 2.5rem;
+            font-size: 2rem;
             font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: var(--deep-slate);
         }
 
         p {
             color: var(--soft-slate);
-            margin-bottom: 40px;
-            font-weight: 500;
+            margin-bottom: 32px;
+            font-size: 0.95rem;
         }
 
         .form-group {
@@ -64,38 +62,39 @@
         label {
             display: block;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             margin-bottom: 8px;
             color: var(--deep-slate);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         input {
             width: 100%;
-            padding: 16px;
+            padding: 14px;
             border-radius: 12px;
             border: 1px solid #e2e8f0;
             background: var(--input-bg);
             font-family: inherit;
             font-size: 1rem;
             box-sizing: border-box;
-            transition: 0.3s;
+            transition: 0.2s;
         }
 
         input:focus {
             outline: none;
             border-color: var(--brand-blue);
             background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
 
         .btn-register {
             width: 100%;
             background: var(--deep-slate);
             color: white;
-            padding: 18px;
-            border-radius: 14px;
+            padding: 16px;
+            border-radius: 12px;
             border: none;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
@@ -108,8 +107,9 @@
         }
 
         .footer-text {
-            margin-top: 30px;
+            margin-top: 24px;
             font-size: 0.9rem;
+            color: var(--soft-slate);
         }
 
         .footer-text a {
@@ -124,17 +124,17 @@
     <div class="register-container">
         <a href="../index.html" class="logo">Mech<span>Route.</span></a>
         <h1>Create Account</h1>
-        <p>Start your journey toward elite vehicle care.</p>
+        <p>Join our elite automotive ecosystem.</p>
 
         <form id="registrationForm">
             <div class="form-group">
                 <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" placeholder="e.g. Scout Miller" required>
+                <input type="text" id="fullName" placeholder="Firstname Surname" required>
             </div>
 
             <div class="form-group">
                 <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="name@company.com" required>
+                <input type="email" id="email" placeholder="name@email.com" required>
             </div>
 
             <div class="form-group">
@@ -146,25 +146,30 @@
         </form>
 
         <div class="footer-text">
-            Already have an account? <a href="login.html">Sign In</a>
+            Already a member? <a href="login.html">Sign In</a>
         </div>
     </div>
 
     <script>
         document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Stop page from refreshing
+            e.preventDefault();
 
-            // 1. GET THE NAME FROM INPUT
-            const nameValue = document.getElementById('fullName').value;
+            // 1. Get the full name and split it
+            const fullName = document.getElementById('fullName').value.trim();
+            const nameParts = fullName.split(" ");
+            
+            // Logic to handle multiple names or just one
+            const firstName = nameParts[0];
+            const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "Member";
 
-            // 2. SAVE NAME TO LOCALSTORAGE
-            // This is what the Dashboard will "Extract" later
-            localStorage.setItem('user_name', nameValue);
+            // 2. Save both parts for the Dashboard logic
+            localStorage.setItem('user_firstName', firstName);
+            localStorage.setItem('user_lastName', lastName);
 
-            // 3. OPTIONAL: CLEAR OLD FLEET ID (To make a fresh one for a new user)
+            // 3. Clear any old data to ensure the new Fleet ID generates correctly
             localStorage.removeItem('user_fleet_id');
 
-            // 4. REDIRECT TO DASHBOARD
+            // 4. Redirect
             window.location.href = 'dashboard.html';
         });
     </script>
