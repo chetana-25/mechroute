@@ -2,47 +2,241 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Schedule Service | MechRoute</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Precision Scheduling | MechRoute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --bg-light: #fcfdfe;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--deep-slate);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            padding: 60px 5%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .booking-container {
+            width: 100%;
+            max-width: 850px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .header p {
+            color: var(--soft-slate);
+            font-size: 1.2rem;
+        }
+
+        /* --- SERVICE SELECTION --- */
+        .service-selection {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .service-card {
+            background: #ffffff;
+            border: 2px solid #f1f5f9;
+            padding: 30px;
+            border-radius: 28px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .service-card:hover {
+            border-color: var(--brand-blue);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+        }
+
+        .service-card.active {
+            border-color: var(--brand-blue);
+            background-color: #eff6ff;
+        }
+
+        .service-card h3 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .service-card p {
+            margin: 10px 0 0;
+            color: var(--soft-slate);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .est-time {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--brand-blue);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* --- SCHEDULING INPUTS --- */
+        .schedule-box {
+            background: #ffffff;
+            padding: 40px;
+            border-radius: 32px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        }
+
+        .input-flex {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .field { flex: 1; }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: var(--deep-slate);
+        }
+
+        input {
+            width: 100%;
+            padding: 18px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            background: #f8fafc;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--brand-blue);
+            background: #fff;
+        }
+
+        .btn-submit {
+            width: 100%;
+            padding: 22px;
+            background: var(--deep-slate);
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-submit:hover {
+            background: var(--brand-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .back-nav {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: var(--soft-slate);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .back-nav:hover { color: var(--brand-blue); }
+    </style>
 </head>
-<body style="background: var(--bg);">
+<body>
 
-    <nav>
-        <a href="dashboard.html" class="logo">MechRoute</a>
-        <div class="badge badge-success">Pre-Booking Portal</div>
-    </nav>
-
-    <div class="container" style="max-width: 600px;">
-        <div class="card">
-            <h2 style="margin-bottom: 1.5rem;">Schedule Maintenance</h2>
-            <form onsubmit="alert('Booking Confirmed! Check your MechRoute ID for details.'); window.location.href='dashboard.html'; return false;">
-                
-                <div class="form-group">
-                    <label>Select Service</label>
-                    <select style="width: 100%; padding: 0.75rem; background: #0f172a; border: 1px solid var(--border); border-radius: 8px; color: white;">
-                        <option>Full Engine Diagnostic</option>
-                        <option>Oil & Filter Change</option>
-                        <option>Brake System Overhaul</option>
-                        <option>Battery Health Check</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label>Preferred Date</label>
-                    <input type="date" required>
-                </div>
-
-                <div class="form-group">
-                    <label>Preferred Time Slot</label>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
-                        <button type="button" class="btn btn-secondary" onclick="this.style.background='var(--brand)'">Morning (9AM-12PM)</button>
-                        <button type="button" class="btn btn-secondary" onclick="this.style.background='var(--brand)'">Afternoon (1PM-5PM)</button>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 2rem;">Confirm Booking</button>
-            </form>
+    <div class="booking-container">
+        <div class="header">
+            <h1>Precision Scheduling</h1>
+            <p>Optimize your fleet's performance with proactive care.</p>
         </div>
+
+        <div class="service-selection">
+            <div class="service-card" onclick="toggleActive(this)">
+                <h3>Fluid Management</h3>
+                <p>Complete oil, brake, and coolant optimization for peak efficiency.</p>
+                <span class="est-time">Est. 45 Mins</span>
+            </div>
+            <div class="service-card" onclick="toggleActive(this)">
+                <h3>Fleet Diagnostics</h3>
+                <p>Deep system scan and multi-point safety inspection.</p>
+                <span class="est-time">Est. 30 Mins</span>
+            </div>
+            <div class="service-card" onclick="toggleActive(this)">
+                <h3>Brake Integrity</h3>
+                <p>Hydraulic calibration and premium pad replacement.</p>
+                <span class="est-time">Est. 60 Mins</span>
+            </div>
+            <div class="service-card" onclick="toggleActive(this)">
+                <h3>Seasonal Prep</h3>
+                <p>Full spectrum adjustment for upcoming climate shifts.</p>
+                <span class="est-time">Est. 90 Mins</span>
+            </div>
+        </div>
+
+        <div class="schedule-box">
+            <div class="input-flex">
+                <div class="field">
+                    <label>Requested Date</label>
+                    <input type="date" id="dateInput">
+                </div>
+                <div class="field">
+                    <label>Preferred Window</label>
+                    <input type="time" id="timeInput">
+                </div>
+            </div>
+            <button class="btn-submit" onclick="processBooking()">Initialize Schedule</button>
+        </div>
+
+        <a href="dashboard.html" class="back-nav">← Back to Command Center</a>
     </div>
+
+    <script>
+        function toggleActive(element) {
+            document.querySelectorAll('.service-card').forEach(card => card.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        function processBooking() {
+            const date = document.getElementById('dateInput').value;
+            const time = document.getElementById('timeInput').value;
+
+            if(!date || !time) {
+                alert("Please select a valid date and time.");
+                return;
+            }
+
+            alert("Service Confirmed. Your Fleet Identity has been updated with this schedule.");
+            window.location.href = 'dashboard.html';
+        }
+    </script>
 </body>
 </html>
