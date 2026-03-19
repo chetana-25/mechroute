@@ -56,7 +56,7 @@
 
         /* --- HERO --- */
         .hero {
-            padding: 160px 8% 120px;
+            padding: 160px 8% 100px;
             text-align: center;
             background: radial-gradient(circle at 50% -20%, #eff6ff 0%, #ffffff 70%);
         }
@@ -83,7 +83,6 @@
             line-height: 1.6;
         }
 
-        /* --- CTA GROUP --- */
         .cta-group {
             display: flex;
             gap: 32px;
@@ -117,9 +116,35 @@
         }
         .btn-philosophy:hover { gap: 18px; color: var(--brand-blue); }
 
-        /* --- HOW IT WORKS SECTION --- */
+        /* --- SECTION 1: THE SPECTRUM (TOTAL COVERAGE) --- */
+        #spectrum-section {
+            padding: 120px 8%;
+            border-top: 1px solid #f1f5f9;
+            background: #fafbfc;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1240px;
+            margin: 60px auto 0;
+        }
+
+        .bento-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            padding: 50px;
+            border-radius: 36px;
+            transition: 0.4s;
+        }
+        .bento-card:hover { transform: translateY(-12px); border-color: var(--brand-blue); }
+        .bento-card h3 { font-size: 1.8rem; margin: 24px 0 12px; font-weight: 800; color: var(--brand-blue); }
+        .bento-card p { color: var(--soft-slate); font-size: 1.15rem; line-height: 1.5; }
+
+        /* --- SECTION 2: HOW IT WORKS --- */
         .process-section {
-            padding: 100px 8% 140px;
+            padding: 120px 8% 140px;
             background: #ffffff;
             border-top: 1px solid #f1f5f9;
         }
@@ -146,64 +171,14 @@
             z-index: 1;
         }
 
-        .step-content {
-            position: relative;
-            z-index: 2;
-        }
-
-        .step-content h4 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            margin-bottom: 12px;
-            color: var(--deep-slate);
-        }
-
-        .step-content p {
-            color: var(--soft-slate);
-            font-size: 1.1rem;
-            line-height: 1.5;
-        }
-
-        /* --- SPECTRUM REVEAL SECTION --- */
-        #spectrum-section {
-            display: none;
-            opacity: 0;
-            padding: 120px 8%;
-            border-top: 1px solid #f1f5f9;
-            transition: opacity 1s ease;
-            background: #fafbfc;
-        }
-
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 32px;
-            max-width: 1240px;
-            margin: 60px auto 0;
-        }
-
-        .bento-card {
-            background: #ffffff;
-            border: 1px solid #f1f5f9;
-            padding: 50px;
-            border-radius: 36px;
-            transition: 0.4s;
-        }
-
-        .bento-card:hover { transform: translateY(-12px); border-color: var(--brand-blue); }
-
-        .bento-card h3 {
-            font-size: 1.8rem;
-            margin: 24px 0 12px;
-            font-weight: 800;
-            color: var(--brand-blue);
-        }
+        .step-content { position: relative; z-index: 2; }
+        .step-content h4 { font-size: 1.6rem; font-weight: 800; margin-bottom: 12px; color: var(--deep-slate); }
+        .step-content p { color: var(--soft-slate); font-size: 1.1rem; line-height: 1.5; }
 
         footer {
             padding: 100px 8% 60px;
             text-align: center;
             border-top: 1px solid #f1f5f9;
-            margin-top: 50px;
         }
     </style>
 </head>
@@ -222,15 +197,40 @@
         <p>A smart system built to handle everything from emergency roadside help to your regular service checkups.</p>
         <div class="cta-group">
             <a href="pages/register.html" class="btn-elite">Get Started</a>
-            <button class="btn-philosophy" onclick="revealSpectrum()">
-                How it works? <span>→</span>
+            <button class="btn-philosophy" onclick="scrollToSpectrum()">
+                Explore the Spectrum <span>→</span>
             </button>
         </div>
     </section>
 
-    <section class="process-section">
+    <section id="spectrum-section">
         <div style="text-align: center;">
-            <h2 style="font-size: 3.5rem; letter-spacing: -2px; font-weight: 800;">Simple & Effective.</h2>
+            <h2 style="font-size: 3.5rem; letter-spacing: -2px; font-weight: 800;">Total Coverage.</h2>
+            <p style="color: var(--soft-slate); font-size: 1.3rem;">From sudden fixes to future-proofing your drive.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="bento-card">
+                <div style="font-size: 3rem;">🚨</div>
+                <h3>Reactive</h3>
+                <p>Quick response for emergencies like punctures or engine failures.</p>
+            </div>
+            <div class="bento-card">
+                <div style="font-size: 3rem;">📅</div>
+                <h3>Proactive</h3>
+                <p>Regular maintenance to keep your car running smooth every single day.</p>
+            </div>
+            <div class="bento-card">
+                <div style="font-size: 3rem;">🛡️</div>
+                <h3>Predictive</h3>
+                <p>Using health logs to fix problems before they even happen.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="how-it-works" class="process-section">
+        <div style="text-align: center;">
+            <h2 style="font-size: 3.5rem; letter-spacing: -2px; font-weight: 800;">How it works?</h2>
             <p style="color: var(--soft-slate); font-size: 1.3rem;">No complex steps. Just professional care for your car.</p>
         </div>
 
@@ -259,44 +259,14 @@
         </div>
     </section>
 
-    <section id="spectrum-section">
-        <div style="text-align: center;">
-            <h2 style="font-size: 3.5rem; letter-spacing: -2px; font-weight: 800;">Total Coverage.</h2>
-            <p style="color: var(--soft-slate); font-size: 1.3rem;">From sudden fixes to future-proofing your drive.</p>
-        </div>
-
-        <div class="bento-grid">
-            <div class="bento-card">
-                <div style="font-size: 3rem;">🚨</div>
-                <h3>Reactive</h3>
-                <p style="color: var(--soft-slate);">Quick response for emergencies like punctures or engine failures.</p>
-            </div>
-            <div class="bento-card">
-                <div style="font-size: 3rem;">📅</div>
-                <h3>Proactive</h3>
-                <p style="color: var(--soft-slate);">Regular maintenance to keep your car running smooth every single day.</p>
-            </div>
-            <div class="bento-card">
-                <div style="font-size: 3rem;">🛡️</div>
-                <h3>Predictive</h3>
-                <p style="color: var(--soft-slate);">Using health logs to fix problems before they even happen.</p>
-            </div>
-        </div>
-    </section>
-
     <footer>
         <span class="logo" style="font-size: 1.8rem; opacity: 0.3;">Mech<span>Route.</span></span>
         <p style="color: var(--soft-slate); font-size: 1rem; margin-top: 24px; font-weight: 600;">&copy; 2026 Engineering safety for every journey.</p>
     </footer>
 
     <script>
-        function revealSpectrum() {
-            const section = document.getElementById('spectrum-section');
-            section.style.display = 'block';
-            setTimeout(() => {
-                section.style.opacity = '1';
-                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 10);
+        function scrollToSpectrum() {
+            document.getElementById('spectrum-section').scrollIntoView({ behavior: 'smooth' });
         }
     </script>
 </body>
