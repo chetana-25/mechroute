@@ -69,10 +69,10 @@
         }
 
         /* HEADER SECTION */
-        .header-area { margin-bottom: 60px; }
+        .header-area { margin-bottom: 50px; }
         
         .welcome-text { 
-            font-size: 2.2rem; /* Clean and not too big */
+            font-size: 2.2rem; 
             font-weight: 700; 
             margin: 0; 
             letter-spacing: -1px; 
@@ -87,7 +87,7 @@
         }
 
         .fleet-badge {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 800;
             color: var(--brand-blue);
             background: #eff6ff;
@@ -97,18 +97,19 @@
         }
 
         .fleet-email {
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             color: var(--soft-slate);
         }
 
-        /* SECTION HEADING */
+        /* SECTION HEADING - NOW SMALLER */
         .section-title {
-            font-size: 2.8rem;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            color: var(--text-slate);
-            margin-bottom: 30px;
+            font-size: 1.2rem; /* Reduced from 2.8rem */
+            font-weight: 700;
+            color: var(--soft-slate); /* Subtler color */
+            margin-bottom: 24px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         /* STATS GRID */
@@ -119,19 +120,18 @@
 
         .stat-card {
             flex: 1;
-            padding: 45px 40px;
-            border-radius: 32px;
+            padding: 40px;
+            border-radius: 28px;
             border: 1px solid var(--border-light);
             background: #ffffff;
             transition: 0.3s ease;
         }
 
-        .stat-card:hover { border-color: var(--brand-blue); transform: translateY(-5px); }
+        .stat-card:hover { border-color: var(--brand-blue); }
 
         .stat-card h2 { font-size: 3rem; margin: 0; font-weight: 800; color: var(--text-slate); }
         .stat-card p { color: var(--soft-slate); font-weight: 600; margin-top: 10px; font-size: 1.1rem; }
 
-        /* Blue outline for the primary stat */
         .border-blue { border: 2px solid var(--brand-blue); }
 
     </style>
@@ -151,7 +151,7 @@
 
     <main class="main-content">
         <header class="header-area">
-            <h1 id="userNameDisplay" class="welcome-text">Welcome, Scout</h1>
+            <h1 id="userNameDisplay" class="welcome-text">Welcome, User</h1>
             <div class="id-row">
                 <span class="fleet-badge">Fleet ID</span>
                 <span id="fleetEmailDisplay" class="fleet-email">name.surname@mechroute.com</span>
@@ -180,14 +180,11 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Extract Name Parts
             const firstName = localStorage.getItem('user_firstName') || "Scout";
             const lastName = localStorage.getItem('user_lastName') || "Member";
 
-            // 2. Set Welcome Name
             document.getElementById('userNameDisplay').innerText = `Welcome, ${firstName}`;
 
-            // 3. Generate and Set Fleet Email ID
             const fleetEmail = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@mechroute.com`;
             document.getElementById('fleetEmailDisplay').innerText = fleetEmail;
         });
