@@ -1,66 +1,64 @@
-/* --- MECHROUTE LIGHT THEME --- */
+/* --- MECHROUTE PROFESSIONAL LIGHT THEME --- */
 :root {
-    --brand: #2563eb;          /* Trustworthy Blue */
-    --brand-soft: #eff6ff;
-    --bg: #ffffff;             /* Pure White */
-    --surface: #f8fafc;        /* Light Grey Surface */
-    --card-bg: #ffffff;
-    --text-main: #1e293b;      /* Slate Dark Text */
-    --text-muted: #64748b;
-    --border: #e2e8f0;
+    --brand: #2563eb;          /* Clear Blue */
+    --brand-soft: #f0f7ff;     /* Light Blue Hint */
+    --bg: #ffffff;             /* Pure White Background */
+    --surface: #f8fafc;        /* Very Light Grey for contrast */
+    --card-bg: #ffffff;        /* White Cards */
+    --text-main: #0f172a;      /* Dark Text */
+    --text-muted: #475569;     /* Grey Text */
+    --border: #e2e8f0;         /* Light Border */
     --success: #16a34a;
-    --danger: #dc2626;
+    --danger: #ef4444;
 }
 
-* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+* { 
+    margin: 0; 
+    padding: 0; 
+    box-sizing: border-box; 
+    font-family: inherit; /* Keeps your original font choices */
+}
 
-body { background-color: var(--bg); color: var(--text-main); line-height: 1.6; }
+/* Force everything to white theme */
+body { 
+    background-color: var(--bg) !important; 
+    color: var(--text-main) !important; 
+}
 
-/* --- NAVIGATION --- */
+/* Navigation - White with a thin border */
 nav {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 1rem 5%; background: white; 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center;
+    padding: 1rem 5%; 
+    background: #ffffff; 
     border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
 }
 
-.logo { font-size: 1.5rem; font-weight: 800; color: var(--brand); text-decoration: none; }
-
-/* --- SECTIONS --- */
-.hero { padding: 80px 5%; text-align: center; background: var(--surface); }
-
-.container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
-
-/* --- THE "HOW IT WORKS" SECTION (HIDDEN BY DEFAULT) --- */
-#how-it-works-section {
-    display: none; /* This hides it initially */
-    padding: 60px 5%;
-    background: white;
-    border-top: 1px solid var(--border);
-    animation: fadeIn 0.5s ease;
-}
-
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-/* --- CARDS --- */
+/* Cards - White with subtle shadow instead of dark borders */
 .card {
-    background: var(--card-bg); padding: 2rem; border-radius: 12px;
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    background: var(--card-bg) !important; 
+    color: var(--text-main) !important;
+    border: 1px solid var(--border) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-
-/* --- BUTTONS --- */
-.btn {
-    padding: 0.8rem 1.8rem; border-radius: 6px; font-weight: 600;
-    cursor: pointer; border: none; transition: 0.3s; text-decoration: none; display: inline-block;
+/* Inputs - White background, dark text */
+input, select, textarea {
+    background: #ffffff !important;
+    color: var(--text-main) !important;
+    border: 1px solid var(--border) !important;
 }
 
-.btn-primary { background: var(--brand); color: white; }
-.btn-primary:hover { background: #1d4ed8; }
+/* Sections - Alternating white and very light grey */
+section {
+    background-color: var(--bg);
+}
 
+.hero {
+    background-color: var(--surface); /* Subtle grey to make hero stand out */
+}
+
+/* Buttons */
+.btn-primary { background: var(--brand); color: #ffffff; }
 .btn-outline { background: transparent; border: 2px solid var(--brand); color: var(--brand); }
-.btn-outline:hover { background: var(--brand-soft); }
-
-.badge-success { background: #dcfce7; color: #166534; padding: 4px 12px; border-radius: 20px; font-size: 0.8rem; }
