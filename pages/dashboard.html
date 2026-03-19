@@ -23,7 +23,7 @@
             overflow: hidden;
         }
 
-        /* --- SIDEBAR NAVIGATION --- */
+        /* --- SIDEBAR --- */
         .sidebar { 
             width: 280px; 
             background: var(--slate); 
@@ -31,23 +31,24 @@
             padding: 40px 20px; 
             display: flex; 
             flex-direction: column; 
-            box-shadow: 4px 0 10px rgba(0,0,0,0.05);
+            box-shadow: 4px 0 15px rgba(0,0,0,0.05);
         }
 
         .sidebar h2 { 
-            font-size: 1.6rem; 
-            letter-spacing: -1.5px; 
+            font-size: 1.8rem; 
+            letter-spacing: -2px; 
             margin-bottom: 50px; 
             padding-left: 15px; 
-            color: white;
         }
+        
+        .sidebar h2 span { color: var(--brand); }
 
         .nav-item { 
             color: #94a3b8; 
             text-decoration: none; 
             padding: 16px 20px; 
             border-radius: 14px; 
-            margin-bottom: 8px; 
+            margin-bottom: 10px; 
             font-weight: 700; 
             cursor: pointer; 
             transition: 0.3s;
@@ -72,12 +73,10 @@
             transition: 0.3s;
         }
 
-        .btn-book-nav:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
-
-        /* --- MAIN CONTENT AREA --- */
+        /* --- MAIN CONTENT --- */
         .main-content { 
             flex: 1; 
-            padding: 60px; 
+            padding: 60px 8%; 
             overflow-y: auto; 
         }
 
@@ -86,9 +85,28 @@
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 { font-size: 2.2rem; letter-spacing: -1.5px; margin-bottom: 30px; }
+        /* --- WELCOME HEADER --- */
+        .welcome-box {
+            margin-bottom: 50px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid #e2e8f0;
+        }
 
-        /* --- OVERVIEW: STAT CARDS --- */
+        .welcome-box h1 { 
+            font-size: 2.8rem; 
+            letter-spacing: -2.5px; 
+            margin: 0; 
+            color: var(--slate);
+        }
+
+        .user-id-strip { 
+            margin-top: 8px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--brand);
+        }
+
+        /* --- STATS GRID --- */
         .stats-grid { 
             display: grid; 
             grid-template-columns: repeat(3, 1fr); 
@@ -100,23 +118,21 @@
             padding: 30px; 
             border-radius: 28px; 
             border: 1px solid #e2e8f0; 
-            box-shadow: 0 4px 6px rgba(0,0,0,0.01);
         }
 
-        .stat-card label { color: #64748b; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card h3 { margin: 10px 0 0; font-size: 2rem; letter-spacing: -1px; }
+        .stat-card label { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .stat-card h3 { margin: 12px 0 0; font-size: 2rem; letter-spacing: -1px; }
 
-        /* --- HISTORY: TABLE DESIGN --- */
-        .history-container { 
+        /* --- TABLE STYLE --- */
+        .history-card { 
             background: white; 
             border-radius: 32px; 
-            padding: 40px; 
+            padding: 35px; 
             border: 1px solid #e2e8f0; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
         }
 
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px; padding: 20px; border-bottom: 2px solid #f8fafc; }
+        th { text-align: left; color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; padding: 15px 20px; border-bottom: 2px solid #f8fafc; }
         td { padding: 25px 20px; border-bottom: 1px solid #f8fafc; font-size: 1rem; }
 
         .status-badge { 
@@ -124,55 +140,55 @@
             color: var(--success-green); 
             padding: 6px 14px; 
             border-radius: 100px; 
-            font-size: 0.75rem; 
+            font-size: 0.7rem; 
             font-weight: 800; 
             border: 1px solid #dcfce7;
         }
-
     </style>
 </head>
 <body>
 
     <nav class="sidebar">
-        <h2>MechRoute.</h2>
-        <div class="nav-item active" onclick="showView('overview', this)">
-            <span>Overview</span>
-        </div>
-        <div class="nav-item" onclick="showView('history', this)">
-            <span>Service History</span>
-        </div>
+        <h2>MechRoute<span>.</span></h2>
+        <div class="nav-item active" onclick="showView('overview', this)">Overview</div>
+        <div class="nav-item" onclick="showView('history', this)">Service History</div>
         
-        <a href="booking.html" class="btn-book-nav">+ New Booking</a>
+        <a href="booking.html" class="btn-book-nav">+ Book Service</a>
     </nav>
 
     <main class="main-content">
         
+        <header class="welcome-box">
+            <h1>Welcome back, Fleet Manager</h1>
+            <div class="user-id-strip">
+                ID: <span id="displayEmail">user.fleet@mechroute.com</span>
+            </div>
+        </header>
+
         <section id="overview" class="view-section active">
-            <h1>Vehicle Overview</h1>
             <div class="stats-grid">
                 <div class="stat-card">
-                    <label>Fleet Health</label>
-                    <h3 style="color: #16a34a;">98%</h3>
+                    <label>System Status</label>
+                    <h3 style="color: #16a34a;">Operational</h3>
                 </div>
                 <div class="stat-card">
-                    <label>Total Services</label>
+                    <label>Fleet Records</label>
                     <h3 id="statCount">0</h3>
                 </div>
                 <div class="stat-card">
-                    <label>Last Expense</label>
-                    <h3 id="lastExpense">₹0</h3>
+                    <label>Proactive Score</label>
+                    <h3>94/100</h3>
                 </div>
             </div>
         </section>
 
         <section id="history" class="view-section">
-            <h1>Service Ledger</h1>
-            <div class="history-container">
+            <div class="history-card">
                 <table>
                     <thead>
                         <tr>
                             <th>Date</th>
-                            <th>Description</th>
+                            <th>Service Description</th>
                             <th>Amount Paid</th>
                             <th style="text-align: right;">Status</th>
                         </tr>
@@ -186,45 +202,33 @@
     </main>
 
     <script>
-        // FUNCTION TO SWITCH VIEWS WITHOUT REFRESHING
+        // Switch between Overview and History
         function showView(viewId, element) {
-            // Hide all sections
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            // Show the selected section
             document.getElementById(viewId).classList.add('active');
-
-            // Update sidebar active state
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             element.classList.add('active');
         }
 
-        // LOAD DATA FROM LOCALSTORAGE
+        // Initialize Data
         window.addEventListener('load', function() {
-            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            
-            // Update Overview Stats
-            document.getElementById('statCount').innerText = logs.length;
-            if(logs.length > 0) {
-                document.getElementById('lastExpense').innerText = logs[logs.length - 1].price;
-            }
+            // 1. Generate Email ID
+            const userName = "User"; // Can be dynamic
+            document.getElementById('displayEmail').innerText = userName.toLowerCase() + ".fleet@mechroute.com";
 
-            // Inject History Table
+            // 2. Fetch Logs
+            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+            document.getElementById('statCount').innerText = logs.length;
+
             const tbody = document.getElementById('logBody');
-            
             if(logs.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="4" style="text-align:center; padding:60px; color:#94a3b8;">
-                            <strong>No maintenance history recorded.</strong><br>
-                            Your digital ledger will start after your first booking.
-                        </td>
-                    </tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:50px; color:#94a3b8;">Your service records will appear here after your first booking.</td></tr>`;
                 return;
             }
 
-            // Display newest services at the top
+            // Render Rows (Newest first)
             [...logs].reverse().forEach(log => {
-                const row = `
+                tbody.innerHTML += `
                     <tr>
                         <td style="font-weight:600; color:#64748b;">${log.date}</td>
                         <td style="font-weight:700; color:var(--slate);">${log.service}</td>
@@ -234,10 +238,8 @@
                         </td>
                     </tr>
                 `;
-                tbody.innerHTML += row;
             });
         });
     </script>
-
 </body>
 </html>
