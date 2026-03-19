@@ -3,213 +3,117 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Command | MechRoute</title>
+    <title>Service Booking | MechRoute</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand-blue: #2563eb;
-            --deep-slate: #0f172a;
-            --soft-slate: #64748b;
-            --bg-light: #fcfdfe;
-        }
-
-        body {
-            background-color: var(--bg-light);
-            color: var(--deep-slate);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            margin: 0;
-            padding: 40px 5%;
-        }
-
+        :root { --brand: #2563eb; --slate: #0f172a; --bg: #fcfdfe; }
+        body { background: var(--bg); color: var(--slate); font-family: 'Plus Jakarta Sans', sans-serif; padding: 40px 5%; }
         .container { max-width: 900px; margin: 0 auto; }
+        
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 2.8rem; letter-spacing: -2px; margin-bottom: 10px; }
 
-        .header { text-align: center; margin-bottom: 50px; }
-        .header h1 { font-size: 2.5rem; letter-spacing: -2px; margin-bottom: 10px; }
-        .header p { color: var(--soft-slate); font-weight: 600; }
-
-        /* --- THE 4 UNIVERSAL SERVICE CARDS --- */
-        .service-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-
+        /* --- THE ORIGINAL 4-CARD GRID --- */
+        .service-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; }
+        
         .service-card {
-            background: #ffffff;
-            border: 2px solid #f1f5f9;
-            padding: 30px;
-            border-radius: 28px;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
+            background: white; border: 2px solid #f1f5f9; padding: 30px; border-radius: 24px;
+            cursor: pointer; transition: 0.3s; position: relative;
         }
 
-        .service-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--brand-blue);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
-        }
+        .service-card:hover { border-color: var(--brand); transform: translateY(-4px); }
+        .service-card.active { border-color: var(--brand); background: #eff6ff; }
 
-        .service-card.active {
-            border-color: var(--brand-blue);
-            background: #eff6ff;
-        }
+        /* BADGES */
+        .tag { font-size: 0.7rem; font-weight: 800; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; position: absolute; top: 20px; right: 20px; }
+        .tag-value { background: #dcfce7; color: #166534; }
+        .tag-prevent { background: #eff6ff; color: #2563eb; }
 
-        .service-card h3 { margin: 0; font-size: 1.3rem; letter-spacing: -0.5px; }
-        .service-card p { color: var(--soft-slate); font-size: 0.9rem; line-height: 1.5; margin: 12px 0; }
-        
-        .price-tag {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--brand-blue);
-        }
+        .price-text { display: block; margin-top: 15px; font-weight: 800; font-size: 1.2rem; color: var(--brand); }
 
-        /* --- SCHEDULING SECTION --- */
-        .schedule-box {
-            background: #ffffff;
-            border: 1px solid #f1f5f9;
-            padding: 40px;
-            border-radius: 32px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-        }
+        /* INPUTS */
+        .booking-form { background: white; padding: 40px; border-radius: 28px; border: 1px solid #f1f5f9; }
+        .flex-inputs { display: flex; gap: 20px; margin-bottom: 25px; }
+        .field { flex: 1; }
+        label { display: block; font-weight: 700; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase; color: #64748b; }
+        input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #e2e8f0; background: #f8fafc; font-family: inherit; box-sizing: border-box; }
 
-        .input-group { display: flex; gap: 20px; margin-bottom: 30px; }
-        .input-field { flex: 1; }
-        label { display: block; font-weight: 800; font-size: 0.8rem; text-transform: uppercase; color: var(--soft-slate); margin-bottom: 10px; }
-        
-        input {
-            width: 100%;
-            padding: 18px;
-            border-radius: 14px;
-            border: 1px solid #e2e8f0;
-            background: #f8fafc;
-            font-family: inherit;
-            font-size: 1rem;
-            box-sizing: border-box;
-        }
-
-        .btn-initialize {
-            width: 100%;
-            padding: 22px;
-            background: var(--deep-slate);
-            color: white;
-            border: none;
-            border-radius: 18px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn-initialize:hover { background: var(--brand-blue); }
-
-        @media (max-width: 768px) { .service-grid { grid-template-columns: 1fr; } }
+        .btn-confirm { width: 100%; padding: 20px; background: var(--slate); color: white; border: none; border-radius: 16px; font-size: 1.1rem; font-weight: 700; cursor: pointer; }
+        .btn-confirm:hover { background: var(--brand); }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header">
-            <h1 id="dynamicTitle">Fleet Maintenance</h1>
-            <p>Select a proactive service to optimize your vehicle health.</p>
+<div class="container">
+    <div class="header">
+        <h1>Book Your Service</h1>
+        <p>Premium maintenance for your daily driver.</p>
+    </div>
+
+    <div class="service-grid">
+        <div class="service-card" onclick="selectService(this, 'Essential City Check', 2499)">
+            <span class="tag tag-value">Best Value</span>
+            <h3>Essential City Check</h3>
+            <p>Perfect for daily commuters. Oil, filters, and safety check.</p>
+            <span class="price-text">₹2,499</span>
         </div>
 
-        <div class="service-grid" id="serviceContainer">
-            </div>
+        <div class="service-card" onclick="selectService(this, 'Full Diagnostics', 1800)">
+            <h3>Full Diagnostics</h3>
+            <p>Advanced system scan to find hidden mechanical errors.</p>
+            <span class="price-text">₹1,800</span>
+        </div>
 
-        <div class="schedule-box">
-            <div class="input-group">
-                <div class="input-field">
-                    <label>Preferred Date</label>
-                    <input type="date" id="serviceDate">
-                </div>
-                <div class="input-field">
-                    <label>Preferred Time</label>
-                    <input type="time" id="serviceTime">
-                </div>
-            </div>
-            <button class="btn-initialize" onclick="handleBooking()">Initialize Fleet Schedule</button>
-            <p style="text-align:center; margin-top:20px;">
-                <a href="dashboard.html" style="color:var(--soft-slate); text-decoration:none; font-weight:600; font-size:0.9rem;">← Cancel and Return</a>
-            </p>
+        <div class="service-card" onclick="selectService(this, 'Brake Integrity', 3200)">
+            <span class="tag tag-prevent">Preventative</span>
+            <h3>Brake Integrity</h3>
+            <p>Full inspection and calibration for maximum stopping power.</p>
+            <span class="price-text">₹3,200</span>
+        </div>
+
+        <div class="service-card" onclick="selectService(this, 'Monsoon Prep', 1500)">
+            <h3>Monsoon Prep</h3>
+            <p>Specialized check for heavy rains, wipers, and tire grip.</p>
+            <span class="price-text">₹1,500</span>
         </div>
     </div>
 
-    <script>
-        /* ==========================================
-           THE GLOBAL SWITCH
-           Change "IN" to "UK" or "US" to switch regions
-           ========================================== */
-        const currentRegion = "IN"; 
+    <div class="booking-form">
+        <div class="flex-inputs">
+            <div class="field"><label>Date</label><input type="date" id="bDate"></div>
+            <div class="field"><label>Time</label><input type="time" id="bTime"></div>
+        </div>
+        <button class="btn-confirm" onclick="confirmBooking()">Save to my Fleet History</button>
+    </div>
+</div>
 
-        const regionData = {
-            "IN": {
-                currency: "₹",
-                title: "Reliable Commuter Care",
-                services: [
-                    { id: 1, name: "Essential City Check", price: 2499, desc: "Oil & filter refresh + 20-point pothole safety inspection." },
-                    { id: 2, name: "Health Scan & OBD", price: 1800, desc: "Digital diagnostic scan to identify hidden system faults." },
-                    { id: 3, name: "Monsoon / Highway Prep", price: 3500, desc: "Precision brake check and wiper/tyre optimization." },
-                    { id: 4, name: "AC & Cabin Comfort", price: 1200, desc: "Coolant top-up and filter cleaning for peak efficiency." }
-                ]
-            },
-            "UK": {
-                currency: "£",
-                title: "Elite Fleet Calibration",
-                services: [
-                    { id: 1, name: "Fluid Management", price: 140, desc: "Precision engine oil and hydraulic fluid optimization." },
-                    { id: 2, name: "Elite Diagnostics", price: 90, desc: "Deep-system computer scan using the latest protocols." },
-                    { id: 3, name: "Brake Integrity", price: 110, desc: "Full hydraulic calibration and friction material check." },
-                    { id: 4, name: "Seasonal / Winter Prep", price: 75, desc: "Battery health and thermal system optimization." }
-                ]
-            }
-        };
+<script>
+    let selectedData = { name: '', price: 0 };
 
-        // --- RENDER ENGINE ---
-        const config = regionData[currentRegion];
-        const container = document.getElementById('serviceContainer');
-        document.getElementById('dynamicTitle').innerText = config.title;
+    function selectService(element, name, price) {
+        document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
+        element.classList.add('active');
+        selectedData = { name, price };
+    }
 
-        let selected = null;
+    function confirmBooking() {
+        const date = document.getElementById('bDate').value;
+        const time = document.getElementById('bTime').value;
 
-        config.services.forEach(service => {
-            const card = document.createElement('div');
-            card.className = 'service-card';
-            card.onclick = () => {
-                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
-                card.classList.add('active');
-                selected = service;
-            };
-
-            card.innerHTML = `
-                <h3>${service.name}</h3>
-                <p>${service.desc}</p>
-                <div class="price-tag">${config.currency}${service.price}</div>
-            `;
-            container.appendChild(card);
-        });
-
-        // --- LOGIC ENGINE ---
-        function handleBooking() {
-            const date = document.getElementById('serviceDate').value;
-            const time = document.getElementById('serviceTime').value;
-
-            if(!selected || !date || !time) {
-                alert("Selection Required: Please pick a service, date, and time.");
-                return;
-            }
-
-            // Save data for Checkout and Logs
-            localStorage.setItem('pending_service', selected.name);
-            localStorage.setItem('pending_price', config.currency + selected.price);
-            localStorage.setItem('pending_date', date);
-            localStorage.setItem('pending_time', time);
-            localStorage.setItem('pending_currency', config.currency);
-
-            // Move to checkout
-            window.location.href = 'checkout.html';
+        if(!selectedData.name || !date || !time) {
+            alert("Please select a service and schedule.");
+            return;
         }
-    </script>
+
+        // Save data for Checkout/Logs
+        localStorage.setItem('pending_service', selectedData.name);
+        localStorage.setItem('pending_price', "₹" + selectedData.price);
+        localStorage.setItem('pending_date', date);
+        localStorage.setItem('pending_time', time);
+        
+        window.location.href = 'checkout.html';
+    }
+</script>
+
 </body>
 </html>
