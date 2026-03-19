@@ -3,77 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fleet Dashboard | MechRoute</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <title>Fleet Dashboard | MechRoute Command</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --brand: #2563eb; --slate: #0f172a; --muted: #64748b; }
-        body { background: #fcfdfe; font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; display: flex; min-height: 100vh; }
-        
-        /* Sidebar Navigation */
-        .sidebar { width: 280px; background: white; border-right: 1px solid #f1f5f9; padding: 40px; display: flex; flex-direction: column; }
-        .main-content { flex: 1; padding: 60px 8%; }
-        
-        .nav-item { padding: 15px 20px; border-radius: 12px; color: var(--muted); text-decoration: none; font-weight: 600; margin-bottom: 10px; transition: 0.3s; }
-        .nav-item.active { background: #eff6ff; color: var(--brand); }
-        .nav-item:hover:not(.active) { background: #f8fafc; color: var(--slate); }
+        :root {
+            --brand-blue: #2563eb;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --sidebar-bg: #ffffff;
+            --main-bg: #fcfdfe;
+        }
 
-        /* Identity Card */
-        .identity-card { background: white; border: 1px solid #f1f5f9; padding: 30px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); margin-bottom: 40px; display: flex; align-items: center; justify-content: space-between; }
-        .user-avatar { width: 60px; height: 60px; background: var(--brand); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; }
-        
-        .badge { background: #f0fdf4; color: #166534; padding: 6px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
+        body {
+            background-color: var(--main-bg);
+            color: var(--deep-slate);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            display: flex;
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- SIDEBAR NAVIGATION --- */
+        .sidebar {
+            width: 300px;
+            background: var(--sidebar-bg);
+            border-right: 1px solid #f1f5f9;
+            padding: 45px 30px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: var(--deep-slate);
+            text-decoration: none;
+            margin-bottom: 60px;
+        }
+
+        .logo span { color: var(--brand-blue); }
+
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            padding: 14px 20px;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--soft-slate);
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: #f8fafc;
+            color: var(--deep-slate);
+        }
+
+        .nav-item.active {
+            background: #eff6ff;
+            color: var(--brand-blue);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        .main-content {
+            margin-left: 300px;
+            flex: 1;
+            padding: 60px 6%;
+        }
+
+        /* --- IDENTITY COMMAND CARD --- */
+        .identity-header {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            padding: 35px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02);
+            margin-bottom: 50px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .avatar-box {
+            width: 70px;
+            height: 70px;
+            background: var(--brand-blue);
+            color: white;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 800;
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .identity-text h2 {
+            margin: 0;
+            font-size: 1.6rem;
+            letter-spacing: -1px;
+        }
+
+        .fleet-id {
+            margin: 4px 0 0;
+            font-family: 'monospace';
+            color: var(--soft-slate);
+            font-size: 1rem;
+            background: #f1f5f9;
+            padding: 4px 10px;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .status-badge {
+            background: #f0fdf4;
+            color: #166534;
+            padding: 8px 18px;
+            border-radius: 100px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- DASHBOARD GRID --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+
+        .card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            padding: 40px;
+            border-radius: 32px;
+            transition: 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.04);
+        }
+
+        .card.dark {
+            background: var(--deep-slate);
+            color: #ffffff;
+            border: none;
+        }
+
+        .btn-card {
+            margin-top: 25px;
+            padding: 14px 28px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary { background: var(--brand-blue); color: white; }
+        .btn-secondary { background: white; color: var(--deep-slate); border: 1px solid #e2e8f0; }
+
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <a href="../index.html" style="font-size: 1.6rem; font-weight: 800; color: var(--slate); text-decoration: none; margin-bottom: 60px;">Mech<span>Route.</span></a>
-        <a href="#" class="nav-item active">Overview</a>
-        <a href="#" class="nav-item">Service History</a>
-        <a href="#" class="nav-item">Fleet Health</a>
-        <a href="#" class="nav-item">Settings</a>
+    <aside class="sidebar">
+        <a href="../index.html" class="logo">Mech<span>Route.</span></a>
+        
+        <nav class="nav-group">
+            <a href="#" class="nav-item active">Overview</a>
+            <a href="#" class="nav-item">Service History</a>
+            <a href="#" class="nav-item">Fleet Health</a>
+            <a href="#" class="nav-item">Account Settings</a>
+        </nav>
+
         <div style="margin-top: auto;">
             <a href="../index.html" class="nav-item" style="color: #ef4444;">Sign Out</a>
         </div>
-    </div>
+    </aside>
 
-    <div class="main-content">
-        <div class="identity-card">
-            <div style="display: flex; align-items: center; gap: 20px;">
-                <div class="user-avatar" id="avatarLetter">U</div>
-                <div>
-                    <h2 style="margin: 0; font-size: 1.4rem; letter-spacing: -0.5px;">Welcome, <span id="displayName">Driver</span></h2>
-                    <p style="margin: 5px 0 0; color: var(--muted); font-family: monospace; font-size: 0.9rem;" id="displayEmail">loading.id@mechroute.com</p>
+    <main class="main-content">
+        
+        <div class="identity-header">
+            <div class="user-profile">
+                <div class="avatar-box" id="avatarDisplay">?</div>
+                <div class="identity-text">
+                    <h2 id="welcomeGreeting">Welcome, Driver</h2>
+                    <span class="fleet-id" id="emailDisplay">identifying...</span>
                 </div>
             </div>
-            <span class="badge">Verified Member</span>
+            <div class="status-badge">ACTIVE FLEET MEMBER</div>
         </div>
 
-        <h1 style="font-size: 2.5rem; letter-spacing: -2px; margin-bottom: 40px;">Fleet Overview</h1>
+        <h1 style="font-size: 2.8rem; letter-spacing: -2.5px; margin-bottom: 40px;">Spectrum Overview</h1>
 
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
-            <div style="background: var(--slate); color: white; padding: 40px; border-radius: 24px;">
-                <h3 style="margin-top: 0;">Emergency Response</h3>
-                <p style="opacity: 0.7;">Instant deployment for breakdowns and critical failures.</p>
-                <button style="background: var(--brand); border: none; color: white; padding: 12px 24px; border-radius: 10px; font-weight: 700; margin-top: 20px; cursor: pointer;">Request Now</button>
+        <div class="grid">
+            <div class="card dark">
+                <div style="font-size: 2.5rem; margin-bottom: 20px;">🚨</div>
+                <h3 style="font-size: 1.6rem; margin: 0;">Reactive Deployment</h3>
+                <p style="opacity: 0.7; margin-top: 10px;">Immediate roadside recovery and technical intervention.</p>
+                <button class="btn-card btn-primary">Request Recovery</button>
             </div>
-            <div style="background: white; border: 1px solid #f1f5f9; padding: 40px; border-radius: 24px;">
-                <h3 style="margin-top: 0;">Scheduled Maintenance</h3>
-                <p style="color: var(--muted);">Pre-book routine care and preserve vehicle longevity.</p>
-                <button style="background: white; border: 1px solid var(--slate); color: var(--slate); padding: 12px 24px; border-radius: 10px; font-weight: 700; margin-top: 20px; cursor: pointer;">Book Service</button>
+
+            <div class="card">
+                <div style="font-size: 2.5rem; margin-bottom: 20px;">📅</div>
+                <h3 style="font-size: 1.6rem; margin: 0; color: var(--brand-blue);">Proactive Maintenance</h3>
+                <p style="color: var(--soft-slate); margin-top: 10px;">Scheduled health checks and precision fluid management.</p>
+                <button class="btn-card btn-secondary">Schedule Service</button>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
-        // Extracting the data generated during registration
-        const name = localStorage.getItem('userName') || 'Driver';
-        const email = localStorage.getItem('userEmail') || 'member@mechroute.com';
+        // THE EXTRACTION ENGINE
+        window.onload = function() {
+            // Retrieve the data saved during registration
+            const extractedName = localStorage.getItem('mech_user_name');
+            const extractedEmail = localStorage.getItem('mech_user_email');
 
-        document.getElementById('displayName').innerText = name;
-        document.getElementById('displayEmail').innerText = email;
-        document.getElementById('avatarLetter').innerText = name.charAt(0);
+            if (extractedName) {
+                // Update Greeting
+                document.getElementById('welcomeGreeting').innerText = `Welcome, ${extractedName}`;
+                // Update Avatar Initial
+                document.getElementById('avatarDisplay').innerText = extractedName.charAt(0).toUpperCase();
+            }
+
+            if (extractedEmail) {
+                // Update the generated Professional Email
+                document.getElementById('emailDisplay').innerText = extractedEmail;
+            }
+        };
     </script>
 </body>
 </html>
