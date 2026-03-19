@@ -3,243 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fleet Command | MechRoute</title>
+    <title>Dashboard | MechRoute</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --brand: #2563eb; 
-            --slate: #0f172a; 
-            --bg: #f8fafc; 
-            --light-green: #dcfce7;
-            --success-green: #166534;
+        :root { --brand: #2563eb; --slate: #0f172a; --bg: #f8fafc; }
+        body { margin: 0; font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: var(--slate); }
+
+        /* --- TOP NAVIGATION (RESTORED) --- */
+        .navbar { 
+            display: flex; justify-content: space-between; align-items: center; 
+            padding: 20px 5%; background: white; border-bottom: 1px solid #e2e8f0;
         }
 
-        body { 
-            margin: 0; 
-            display: flex; 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background: var(--bg); 
-            height: 100vh; 
-            overflow: hidden;
+        /* BIGGER LOGO FIX */
+        .logo { 
+            font-size: 2.8rem; /* Increased as requested */
+            font-weight: 800; letter-spacing: -3px; text-decoration: none; color: var(--slate);
         }
+        .logo span { color: var(--brand); }
 
-        /* --- SIDEBAR --- */
-        .sidebar { 
-            width: 280px; 
-            background: var(--slate); 
-            color: white; 
-            padding: 40px 20px; 
-            display: flex; 
-            flex-direction: column; 
-            box-shadow: 4px 0 15px rgba(0,0,0,0.05);
-        }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-links a { text-decoration: none; color: #64748b; font-weight: 700; font-size: 0.9rem; }
+        .btn-signin { background: var(--slate); color: white; padding: 10px 24px; border-radius: 100px; }
 
-        .sidebar h2 { 
-            font-size: 1.8rem; 
-            letter-spacing: -2px; 
-            margin-bottom: 50px; 
-            padding-left: 15px; 
-        }
+        /* --- LAYOUT WITH SIDEBAR --- */
+        .dashboard-wrapper { display: flex; min-height: calc(100vh - 80px); }
         
-        .sidebar h2 span { color: var(--brand); }
-
-        .nav-item { 
-            color: #94a3b8; 
-            text-decoration: none; 
-            padding: 16px 20px; 
-            border-radius: 14px; 
-            margin-bottom: 10px; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
+        .sidebar { 
+            width: 250px; background: white; border-right: 1px solid #e2e8f0; padding: 40px 20px;
         }
-
-        .nav-item:hover, .nav-item.active { 
-            background: rgba(255,255,255,0.1); 
-            color: white; 
+        .side-item { 
+            padding: 15px; border-radius: 12px; margin-bottom: 10px; cursor: pointer; 
+            color: #64748b; font-weight: 700; transition: 0.3s;
         }
-
-        .btn-book-nav {
-            margin-top: auto;
-            background: var(--brand);
-            color: white;
-            text-align: center;
-            padding: 18px;
-            border-radius: 16px;
-            text-decoration: none;
-            font-weight: 800;
-            transition: 0.3s;
-        }
+        .side-item.active { background: #eff6ff; color: var(--brand); }
 
         /* --- MAIN CONTENT --- */
-        .main-content { 
-            flex: 1; 
-            padding: 60px 8%; 
-            overflow-y: auto; 
-        }
-
+        .main-content { flex: 1; padding: 40px 5%; }
         .view-section { display: none; }
-        .view-section.active { display: block; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .welcome-header { margin-bottom: 30px; }
+        .welcome-header h1 { font-size: 2.2rem; letter-spacing: -1.5px; margin: 0; }
+        .user-email { color: var(--brand); font-weight: 700; font-size: 0.9rem; margin-top: 5px; }
 
-        /* --- WELCOME HEADER --- */
-        .welcome-box {
-            margin-bottom: 50px;
-            padding-bottom: 30px;
-            border-bottom: 1px solid #e2e8f0;
-        }
+        /* ORIGINAL STAT CARDS */
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+        .stat-card { background: white; padding: 25px; border-radius: 20px; border: 1px solid #e2e8f0; }
+        .stat-card label { font-size: 0.7rem; font-weight: 800; color: #94a3b8; text-transform: uppercase; }
+        .stat-card h3 { margin: 10px 0 0; font-size: 1.8rem; }
 
-        .welcome-box h1 { 
-            font-size: 2.8rem; 
-            letter-spacing: -2.5px; 
-            margin: 0; 
-            color: var(--slate);
-        }
-
-        .user-id-strip { 
-            margin-top: 8px;
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--brand);
-        }
-
-        /* --- STATS GRID --- */
-        .stats-grid { 
-            display: grid; 
-            grid-template-columns: repeat(3, 1fr); 
-            gap: 25px; 
-        }
-
-        .stat-card { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 28px; 
-            border: 1px solid #e2e8f0; 
-        }
-
-        .stat-card label { color: #94a3b8; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-card h3 { margin: 12px 0 0; font-size: 2rem; letter-spacing: -1px; }
-
-        /* --- TABLE STYLE --- */
-        .history-card { 
-            background: white; 
-            border-radius: 32px; 
-            padding: 35px; 
-            border: 1px solid #e2e8f0; 
-        }
-
+        /* DYNAMIC HISTORY TABLE */
+        .history-card { background: white; border-radius: 24px; padding: 30px; border: 1px solid #e2e8f0; }
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; padding: 15px 20px; border-bottom: 2px solid #f8fafc; }
-        td { padding: 25px 20px; border-bottom: 1px solid #f8fafc; font-size: 1rem; }
-
-        .status-badge { 
-            background: var(--light-green); 
-            color: var(--success-green); 
-            padding: 6px 14px; 
-            border-radius: 100px; 
-            font-size: 0.7rem; 
-            font-weight: 800; 
-            border: 1px solid #dcfce7;
-        }
+        th { text-align: left; color: #94a3b8; font-size: 0.7rem; text-transform: uppercase; padding: 15px; border-bottom: 2px solid #f1f5f9; }
+        td { padding: 20px 15px; border-bottom: 1px solid #f1f5f9; font-size: 0.95rem; }
+        .status-pill { background: #dcfce7; color: #166534; padding: 6px 12px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; }
     </style>
 </head>
 <body>
 
-    <nav class="sidebar">
-        <h2>MechRoute<span>.</span></h2>
-        <div class="nav-item active" onclick="showView('overview', this)">Overview</div>
-        <div class="nav-item" onclick="showView('history', this)">Service History</div>
-        
-        <a href="booking.html" class="btn-book-nav">+ Book Service</a>
+    <nav class="navbar">
+        <a href="../index.html" class="logo">MechRoute<span>.</span></a>
+        <div class="nav-links">
+            <a href="#">Fleet</a>
+            <a href="#">Services</a>
+            <a href="#">Support</a>
+            <a href="#" class="btn-signin">Sign In</a>
+        </div>
     </nav>
 
-    <main class="main-content">
-        
-        <header class="welcome-box">
-            <h1>Welcome back, Fleet Manager</h1>
-            <div class="user-id-strip">
-                ID: <span id="displayEmail">user.fleet@mechroute.com</span>
-            </div>
-        </header>
+    <div class="dashboard-wrapper">
+        <aside class="sidebar">
+            <div class="side-item active" onclick="showView('overview', this)">Overview</div>
+            <div class="side-item" onclick="showView('history', this)">Service History</div>
+            <a href="booking.html" style="text-decoration:none;">
+                <div class="side-item" style="color: var(--brand);">+ Book Service</div>
+            </a>
+        </aside>
 
-        <section id="overview" class="view-section active">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <label>System Status</label>
-                    <h3 style="color: #16a34a;">Operational</h3>
-                </div>
-                <div class="stat-card">
-                    <label>Fleet Records</label>
-                    <h3 id="statCount">0</h3>
-                </div>
-                <div class="stat-card">
-                    <label>Proactive Score</label>
-                    <h3>94/100</h3>
-                </div>
+        <main class="main-content">
+            <div class="welcome-header">
+                <h1>Welcome back, Admin</h1>
+                <div class="user-email">ID: admin.fleet@mechroute.com</div>
             </div>
-        </section>
 
-        <section id="history" class="view-section">
-            <div class="history-card">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Service Description</th>
-                            <th>Amount Paid</th>
-                            <th style="text-align: right;">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="logBody">
-                        </tbody>
-                </table>
-            </div>
-        </section>
+            <section id="overview" class="view-section active">
+                <div class="stats-grid">
+                    <div class="stat-card"><label>System Health</label><h3 style="color:#16a34a;">Excellent</h3></div>
+                    <div class="stat-card"><label>Total Services</label><h3 id="statCount">0</h3></div>
+                    <div class="stat-card"><label>Next Visit</label><h3>Apr 2026</h3></div>
+                </div>
+            </section>
 
-    </main>
+            <section id="history" class="view-section">
+                <div class="history-card">
+                    <table>
+                        <thead>
+                            <tr><th>Date</th><th>Service</th><th>Cost</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="logBody">
+                            </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <script>
-        // Switch between Overview and History
         function showView(viewId, element) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.side-item').forEach(s => s.classList.remove('active'));
             element.classList.add('active');
         }
 
-        // Initialize Data
-        window.addEventListener('load', function() {
-            // 1. Generate Email ID
-            const userName = "User"; // Can be dynamic
-            document.getElementById('displayEmail').innerText = userName.toLowerCase() + ".fleet@mechroute.com";
-
-            // 2. Fetch Logs
+        window.onload = function() {
             const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             document.getElementById('statCount').innerText = logs.length;
-
+            
             const tbody = document.getElementById('logBody');
             if(logs.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:50px; color:#94a3b8;">Your service records will appear here after your first booking.</td></tr>`;
-                return;
+                tbody.innerHTML = "<tr><td colspan='4' style='text-align:center; padding:40px; color:#94a3b8;'>No records found.</td></tr>";
+            } else {
+                [...logs].reverse().forEach(log => {
+                    tbody.innerHTML += `<tr>
+                        <td style="font-weight:700; color:#64748b;">${log.date}</td>
+                        <td style="font-weight:700;">${log.service}</td>
+                        <td style="color:var(--brand); font-weight:800;">${log.price}</td>
+                        <td><span class="status-pill">VERIFIED</span></td>
+                    </tr>`;
+                });
             }
-
-            // Render Rows (Newest first)
-            [...logs].reverse().forEach(log => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td style="font-weight:600; color:#64748b;">${log.date}</td>
-                        <td style="font-weight:700; color:var(--slate);">${log.service}</td>
-                        <td style="font-weight:800; color:var(--slate);">${log.price}</td>
-                        <td style="text-align: right;">
-                            <span class="status-badge">VERIFIED</span>
-                        </td>
-                    </tr>
-                `;
-            });
-        });
+        };
     </script>
 </body>
 </html>
