@@ -4,33 +4,256 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MechRoute | The Full Spectrum of Automotive Care</title>
+    <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { --brand-blue: #2563eb; --deep-slate: #0f172a; --soft-slate: #64748b; }
-        body { background-color: #ffffff; color: var(--deep-slate); font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; -webkit-font-smoothing: antialiased; }
-        nav { display: flex; justify-content: space-between; align-items: center; padding: 35px 8%; background: #ffffff; border-bottom: 1px solid #f1f5f9; position: sticky; top: 0; z-index: 1000; }
-        .logo { font-size: 2.2rem; font-weight: 800; letter-spacing: -1.5px; color: var(--deep-slate); text-decoration: none; }
+        :root {
+            --brand-blue: #2563eb;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --bg-glass: rgba(255, 255, 255, 0.9);
+        }
+
+        body {
+            background-color: #ffffff;
+            color: var(--deep-slate);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            margin: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- CLEAN MINIMALIST NAVIGATION --- */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 35px 8%;
+            background: #ffffff;
+            border-bottom: 1px solid #f1f5f9;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 2.2rem; /* LARGE & COMMANDING */
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            color: var(--deep-slate);
+            text-decoration: none;
+        }
+
         .logo span { color: var(--brand-blue); }
-        .nav-link-signin { text-decoration: none; color: var(--deep-slate); font-weight: 700; font-size: 1.2rem; letter-spacing: -0.5px; padding: 12px 24px; border-radius: 14px; transition: all 0.3s ease; }
-        .nav-link-signin:hover { color: var(--brand-blue); background-color: #f8fafc; }
-        .hero { padding: 160px 8% 120px; text-align: center; background: radial-gradient(circle at 50% -20%, #eff6ff 0%, #ffffff 70%); }
-        .hero h1 { font-size: 5.5rem; font-weight: 800; line-height: 1; letter-spacing: -4px; margin-bottom: 32px; }
-        .hero h1 .highlight { background: linear-gradient(90deg, #2563eb, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .hero p { font-size: 1.5rem; color: var(--soft-slate); max-width: 800px; margin: 0 auto 56px; line-height: 1.6; }
-        .btn-elite { background: var(--deep-slate); color: white; padding: 22px 50px; border-radius: 18px; font-weight: 700; text-decoration: none; display: inline-block; font-size: 1.15rem; transition: 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        .btn-elite:hover { transform: translateY(-5px); background: var(--brand-blue); box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2); }
+
+        /* ENHANCED SIGN IN LINK */
+        .nav-link-signin {
+            text-decoration: none;
+            color: var(--deep-slate);
+            font-weight: 700;
+            font-size: 1.2rem; /* INCREASED SIZE PER REQUEST */
+            letter-spacing: -0.5px;
+            padding: 12px 24px;
+            border-radius: 14px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .nav-link-signin:hover {
+            color: var(--brand-blue);
+            background-color: #f8fafc;
+        }
+
+        /* --- ELITE HERO SECTION --- */
+        .hero {
+            padding: 160px 8% 120px;
+            text-align: center;
+            background: radial-gradient(circle at 50% -20%, #eff6ff 0%, #ffffff 70%);
+        }
+
+        .hero-tag {
+            color: var(--brand-blue);
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            margin-bottom: 24px;
+            display: block;
+        }
+
+        .hero h1 {
+            font-size: 5.5rem; /* CINEMATIC SCALE */
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -4px;
+            margin-bottom: 32px;
+            color: var(--deep-slate);
+        }
+
+        .hero h1 .highlight {
+            background: linear-gradient(90deg, #2563eb, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            color: var(--soft-slate);
+            max-width: 800px;
+            margin: 0 auto 56px;
+            line-height: 1.6;
+            letter-spacing: -0.5px;
+        }
+
+        /* --- CALL TO ACTION --- */
+        .cta-group {
+            display: flex;
+            gap: 32px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-elite {
+            background: var(--deep-slate);
+            color: white;
+            padding: 22px 50px;
+            border-radius: 18px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: inline-block;
+            font-size: 1.15rem;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+        }
+
+        .btn-elite:hover {
+            transform: translateY(-5px);
+            background: var(--brand-blue);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-philosophy {
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--deep-slate);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-philosophy:hover {
+            gap: 18px;
+            color: var(--brand-blue);
+        }
+
+        /* --- SPECTRUM REVEAL --- */
+        #spectrum-section {
+            display: none;
+            opacity: 0;
+            padding: 120px 8%;
+            border-top: 1px solid #f1f5f9;
+            transition: opacity 1s ease;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1240px;
+            margin: 80px auto 0;
+        }
+
+        .bento-card {
+            background: #fcfdfe;
+            border: 1px solid #f1f5f9;
+            padding: 50px;
+            border-radius: 36px;
+            transition: all 0.4s ease;
+        }
+
+        .bento-card:hover {
+            background: white;
+            border-color: var(--brand-blue);
+            transform: translateY(-12px);
+            box-shadow: 0 40px 80px -15px rgba(0,0,0,0.06);
+        }
+
+        .bento-card h3 {
+            font-size: 1.6rem;
+            margin: 24px 0 12px;
+            font-weight: 800;
+            color: var(--brand-blue);
+        }
     </style>
 </head>
 <body>
+
     <nav>
         <a href="index.html" class="logo">Mech<span>Route.</span></a>
-        <a href="pages/login.html" class="nav-link-signin">Sign In</a>
+        <div>
+            <a href="pages/login.html" class="nav-link-signin">Sign In</a>
+        </div>
     </nav>
+
     <section class="hero">
-        <span style="color: var(--brand-blue); font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 0.85rem; margin-bottom: 24px; display: block;">Intelligent Fleet Infrastructure</span>
+        <span class="hero-tag">Intelligent Fleet Infrastructure</span>
+        
         <h1>The Full Spectrum <br>of <span class="highlight">Automotive Care.</span></h1>
-        <p>From immediate roadside intervention to scheduled precision maintenance. MechRoute provides an elite infrastructure for every mile.</p>
-        <a href="pages/register.html" class="btn-elite">Start Your Journey</a>
+        
+        <p>
+            An elite ecosystem bridging the gap between immediate roadside intervention 
+            and scheduled precision maintenance.
+        </p>
+        
+        <div class="cta-group">
+            <a href="pages/register.html" class="btn-elite">Start Your Journey</a>
+            <button class="btn-philosophy" onclick="revealSpectrum()">
+                Explore the Spectrum <span>→</span>
+            </button>
+        </div>
     </section>
+
+    <section id="spectrum-section">
+        <div style="text-align: center; max-width: 700px; margin: 0 auto;">
+            <h2 style="font-size: 3.5rem; letter-spacing: -2px; line-height: 1.1; font-weight: 800;">Complete Lifecycle Management.</h2>
+            <p style="color: var(--soft-slate); font-size: 1.3rem; margin-top: 24px;">Redefining how the world interacts with the road.</p>
+        </div>
+
+        <div class="bento-grid">
+            <div class="bento-card">
+                <div style="font-size: 3rem;">🚨</div>
+                <h3>Reactive</h3>
+                <p style="color: var(--soft-slate); font-size: 1.1rem;">Emergency response protocols for breakdowns, recoveries, and on-spot diagnostics.</p>
+            </div>
+            <div class="bento-card">
+                <div style="font-size: 3rem;">📅</div>
+                <h3>Proactive</h3>
+                <p style="color: var(--soft-slate); font-size: 1.1rem;">Scheduled maintenance, fluid management, and routine optimization at your convenience.</p>
+            </div>
+            <div class="bento-card">
+                <div style="font-size: 3rem;">🛡️</div>
+                <h3>Predictive</h3>
+                <p style="color: var(--soft-slate); font-size: 1.1rem;">Advanced health tracking and digital service logs to ensure long-term vehicle integrity.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 120px 8% 60px; text-align: center; border-top: 1px solid #f1f5f9; margin-top: 100px;">
+        <span class="logo" style="font-size: 1.8rem; opacity: 0.3;">MechRoute.</span>
+        <p style="color: var(--soft-slate); font-size: 1rem; margin-top: 24px; font-weight: 600;">&copy; 2026 Engineering safety for every journey.</p>
+    </footer>
+
+    <script>
+        function revealSpectrum() {
+            const section = document.getElementById('spectrum-section');
+            section.style.display = 'block';
+            setTimeout(() => {
+                section.style.opacity = '1';
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 10);
+        }
+    </script>
 </body>
 </html>
