@@ -26,7 +26,6 @@
         .header h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -2px; margin: 0; color: var(--deep-slate); }
         .header p { color: var(--soft-slate); font-weight: 500; margin-top: 10px; }
 
-        /* THE 4-CARD GRID */
         .service-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -37,15 +36,21 @@
         .service-card {
             background: white;
             border: 2px solid #f1f5f9;
-            border-radius: 24px;
-            padding: 30px;
+            border-radius: 28px;
+            padding: 35px;
             cursor: pointer;
             transition: all 0.3s ease;
-            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .service-card:hover { border-color: var(--brand-blue); transform: translateY(-5px); }
-        .service-card.selected { border-color: var(--brand-blue); background: #f8faff; }
+        /* --- LIGHT COLOR CODING --- */
+        .card-best { background-color: #f0fdf4; border-color: #dcfce7; } /* Light Green */
+        .card-preventative { background-color: #eff6ff; border-color: #dbeafe; } /* Light Blue */
+
+        .service-card:hover { transform: translateY(-5px); border-color: var(--brand-blue); }
+        .service-card.selected { border-color: var(--brand-blue); box-shadow: 0 0 0 2px var(--brand-blue); }
 
         .badge {
             display: inline-block;
@@ -54,131 +59,142 @@
             font-size: 0.7rem;
             font-weight: 800;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
+            align-self: flex-start;
         }
 
-        .badge-green { background: #ecfdf5; color: var(--brand-green); }
-        .badge-blue { background: #eff6ff; color: var(--brand-blue); }
+        .badge-green { background: #dcfce7; color: #15803d; }
+        .badge-blue { background: #dbeafe; color: #1d4ed8; }
         .badge-slate { background: #f1f5f9; color: var(--soft-slate); }
 
-        .service-card h3 { font-size: 1.25rem; font-weight: 800; margin: 0 0 10px 0; color: var(--deep-slate); }
-        .service-card p { font-size: 0.9rem; color: var(--soft-slate); line-height: 1.5; margin-bottom: 20px; }
-        .price { font-size: 1.5rem; font-weight: 800; color: var(--deep-slate); }
+        .service-card h3 { font-size: 1.4rem; font-weight: 800; margin: 0 0 12px 0; color: var(--deep-slate); }
+        .service-card p { font-size: 0.95rem; color: var(--soft-slate); line-height: 1.6; margin-bottom: 25px; }
+        .price { font-size: 1.6rem; font-weight: 800; color: var(--deep-slate); }
 
-        /* DATE & BUTTON AREA */
+        /* FOOTER AREA */
         .footer-selection {
             display: flex;
-            align-items: center;
+            align-items: flex-end;
             justify-content: space-between;
             background: white;
-            padding: 25px 40px;
-            border-radius: 24px;
+            padding: 30px 45px;
+            border-radius: 28px;
             border: 1px solid #f1f5f9;
+            gap: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
         }
 
-        .date-input-group { display: flex; flex-direction: column; }
-        .date-input-group label { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--soft-slate); margin-bottom: 8px; }
+        .input-group { display: flex; flex-direction: column; flex: 1; }
+        .input-group label { font-weight: 700; font-size: 0.75rem; text-transform: uppercase; color: var(--soft-slate); margin-bottom: 10px; letter-spacing: 0.5px; }
         
-        input[type="date"] {
+        input {
             border: 1px solid #e2e8f0;
-            padding: 12px;
-            border-radius: 12px;
+            padding: 14px;
+            border-radius: 14px;
             font-family: inherit;
             font-weight: 600;
+            font-size: 1rem;
             outline: none;
+            background: #f8fafc;
         }
 
         .btn-confirm {
             background: var(--deep-slate);
             color: white;
-            padding: 18px 45px;
-            border-radius: 16px;
+            padding: 20px 50px;
+            border-radius: 18px;
             border: none;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
         }
 
-        .btn-confirm:hover { background: var(--brand-blue); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
+        .btn-confirm:hover { background: var(--brand-blue); transform: scale(1.02); }
     </style>
 </head>
 <body>
 
 <div class="container">
     <div class="header">
-        <h1>Select Service</h1>
-        <p>Sophisticated care for your elite vehicle fleet.</p>
+        <h1>Schedule Service</h1>
+        <p>Expert maintenance tailored to your vehicle's health requirements.</p>
     </div>
 
     <div class="service-grid">
-        <div class="service-card" onclick="selectService(this, 'Full Synthetic Vitality', '₹4500', 'Best')">
+        <div class="service-card card-best" onclick="selectService(this, 'Full Periodic Maintenance', '4500', 'Best')">
             <span class="badge badge-green">Best Value</span>
-            <h3>Full Synthetic Vitality</h3>
-            <p>Premium oil change with filter and 24-point check.</p>
+            <h3>Full Service</h3>
+            <p>Engine oil & filter change, 50-point inspection, and fluid top-ups.</p>
             <div class="price">₹4500</div>
         </div>
 
-        <div class="service-card" onclick="selectService(this, 'Preventative Shield', '₹2800', 'Preventative')">
+        <div class="service-card card-preventative" onclick="selectService(this, 'Brake & Tire Safety', '2800', 'Preventative')">
             <span class="badge badge-blue">Preventative</span>
-            <h3>Shield Maintenance</h3>
-            <p>Brake inspection and fluid top-up for safety.</p>
+            <h3>Safety Check</h3>
+            <p>Brake pad replacement, tire rotation, and wheel alignment.</p>
             <div class="price">₹2800</div>
         </div>
 
-        <div class="service-card" onclick="selectService(this, 'System Diagnostic', '₹1500', 'Diagnostic')">
-            <span class="badge badge-slate">Advanced</span>
-            <h3>System Diagnostic</h3>
-            <p>Full engine scan and digital health report.</p>
+        <div class="service-card" onclick="selectService(this, 'Advanced Engine Scan', '1500', 'Advanced')">
+            <span class="badge badge-slate">Diagnostics</span>
+            <h3>Engine Scan</h3>
+            <p>Comprehensive OBD-II scan and sensor calibration for optimal performance.</p>
             <div class="price">₹1500</div>
         </div>
 
-        <div class="service-card" onclick="selectService(this, 'Essential Care', '₹1200', 'Essential')">
-            <span class="badge badge-slate">Basic</span>
-            <h3>Essential Care</h3>
-            <p>Standard wash and interior cleaning services.</p>
+        <div class="service-card" onclick="selectService(this, 'Deep Cleaning & Wash', '1200', 'Basic')">
+            <span class="badge badge-slate">Essentials</span>
+            <h3>Deep Clean</h3>
+            <p>Premium pressure wash, interior vacuuming, and polish.</p>
             <div class="price">₹1200</div>
         </div>
     </div>
 
     <div class="footer-selection">
-        <div class="date-input-group">
-            <label>Preferred Date</label>
+        <div class="input-group">
+            <label>Select Date</label>
             <input type="date" id="serviceDate" required>
         </div>
+        
+        <div class="input-group">
+            <label>Select Time</label>
+            <input type="time" id="serviceTime" required>
+        </div>
+
         <button class="btn-confirm" onclick="confirmBooking()">Confirm Selection</button>
     </div>
     
-    <center><a href="dashboard.html" style="display:block; margin-top:30px; color:var(--soft-slate); text-decoration:none; font-weight:600;">Return to Dashboard</a></center>
+    <center><a href="dashboard.html" style="display:block; margin-top:35px; color:var(--soft-slate); text-decoration:none; font-weight:700; font-size: 0.9rem;">← Back to Dashboard</a></center>
 </div>
 
 <script>
     let selectedData = null;
 
     function selectService(element, name, price, type) {
-        // Remove 'selected' class from all cards
         document.querySelectorAll('.service-card').forEach(card => card.classList.remove('selected'));
-        // Add to current card
         element.classList.add('selected');
-        
-        selectedData = { name, price, type };
+        selectedData = { name, price: "₹" + price, type };
     }
 
     function confirmBooking() {
         const date = document.getElementById('serviceDate').value;
+        const time = document.getElementById('serviceTime').value;
 
         if (!selectedData) {
-            alert("Please select a service card first.");
+            alert("Please select a service card.");
             return;
         }
-        if (!date) {
-            alert("Please select a date.");
+        if (!date || !time) {
+            alert("Please provide both a date and a time.");
             return;
         }
 
-        // Save to fleet_logs for logs.html
+        // Store with time included
+        const finalDate = `${date} at ${time}`;
+
         const newEntry = {
-            date: date,
+            date: finalDate,
             type: selectedData.type,
             service: selectedData.name,
             price: selectedData.price
