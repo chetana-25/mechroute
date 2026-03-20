@@ -17,10 +17,13 @@
         td:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 20px 20px 0; text-align: right; }
 
         .badge { padding: 6px 14px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
-        .badge-proactive { background: #eff6ff; color: #2563eb; }
-        .badge-basic { background: #f1f5f9; color: #64748b; }
+        
+        /* Updated naming and color scheme */
+        .badge-best { background: #ecfdf5; color: #10b981; }        /* Light Green */
+        .badge-preventative { background: #eff6ff; color: #2563eb; }  /* Light Blue */
+        .badge-diagnostic { background: #fff7ed; color: #c2410c; }    /* Light Orange */
+        .badge-essential { background: #f1f5f9; color: #64748b; }     /* Grey */
 
-        /* DELETE BUTTON STYLE */
         .btn-cancel {
             background: #fff1f2;
             color: #e11d48;
@@ -48,8 +51,7 @@
             <a href="dashboard.html" class="dashboard-link">Dashboard</a>
         </div>
 
-        <table class="log-table" id="ledgerTable">
-            </table>
+        <table class="log-table" id="ledgerTable"></table>
     </div>
 
     <script>
@@ -63,13 +65,16 @@
                 return;
             }
 
-            // Reverse logs to show the latest at the top
             logs.slice().reverse().forEach((entry, index) => {
-                // Calculate the original index for deletion
                 const originalIndex = logs.length - 1 - index;
-                const badgeClass = entry.type === 'Basic' ? 'badge-basic' : 'badge-proactive';
+                
+                // Set the badge class based on the card types
+                let badgeClass = "badge-essential";
+                if (entry.type === "Best Value") badgeClass = "badge-best";
+                if (entry.type === "Preventative") badgeClass = "badge-preventative";
+                if (entry.type === "Diagnostic") badgeClass = "badge-diagnostic";
 
-                const row = `
+                table.innerHTML += `
                     <tr class="log-row">
                         <td>${entry.date}</td>
                         <td><span class="badge ${badgeClass}">${entry.type}</span></td>
@@ -80,19 +85,17 @@
                         </td>
                     </tr>
                 `;
-                table.innerHTML += row;
             });
         }
 
         function removeEntry(index) {
             if (confirm("Are you sure you want to cancel this scheduled service?")) {
                 let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-                logs.splice(index, 1); // Remove the selected service
+                logs.splice(index, 1);
                 localStorage.setItem('fleet_logs', JSON.stringify(logs));
-                loadLedger(); // Refresh the table automatically
+                loadLedger();
             }
         }
-
         window.onload = loadLedger;
     </script>
 </body>
