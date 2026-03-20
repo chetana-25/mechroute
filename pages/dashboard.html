@@ -49,6 +49,7 @@
         }
 
         .nav-item.active { background: rgba(255, 255, 255, 0.1); color: white; }
+        .nav-item:hover { color: white; }
 
         .btn-book {
             background: var(--brand-blue);
@@ -68,72 +69,22 @@
             overflow-y: auto;
         }
 
-        /* HEADER SECTION */
         .header-area { margin-bottom: 50px; }
-        
-        .welcome-text { 
-            font-size: 2.2rem; 
-            font-weight: 700; 
-            margin: 0; 
-            letter-spacing: -1px; 
-            color: var(--text-slate); 
-        }
+        .welcome-text { font-size: 2.2rem; font-weight: 700; margin: 0; color: var(--text-slate); }
 
-        .id-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 10px;
-        }
+        .id-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+        .fleet-badge { font-size: 0.75rem; font-weight: 800; color: var(--brand-blue); background: #eff6ff; padding: 4px 10px; border-radius: 6px; text-transform: uppercase; }
+        .fleet-email { font-size: 0.9rem; font-weight: 600; color: var(--soft-slate); }
 
-        .fleet-badge {
-            font-size: 0.75rem;
-            font-weight: 800;
-            color: var(--brand-blue);
-            background: #eff6ff;
-            padding: 4px 10px;
-            border-radius: 6px;
-            text-transform: uppercase;
-        }
+        .section-title { font-size: 1.2rem; font-weight: 700; color: var(--soft-slate); margin-bottom: 24px; text-transform: uppercase; letter-spacing: 1px; }
 
-        .fleet-email {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--soft-slate);
-        }
-
-        /* SECTION HEADING - NOW SMALLER */
-        .section-title {
-            font-size: 1.2rem; /* Reduced from 2.8rem */
-            font-weight: 700;
-            color: var(--soft-slate); /* Subtler color */
-            margin-bottom: 24px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* STATS GRID */
-        .stats-grid {
-            display: flex;
-            gap: 24px;
-        }
-
-        .stat-card {
-            flex: 1;
-            padding: 40px;
-            border-radius: 28px;
-            border: 1px solid var(--border-light);
-            background: #ffffff;
-            transition: 0.3s ease;
-        }
-
+        .stats-grid { display: flex; gap: 24px; }
+        .stat-card { flex: 1; padding: 40px; border-radius: 28px; border: 1px solid var(--border-light); background: #ffffff; transition: 0.3s ease; }
         .stat-card:hover { border-color: var(--brand-blue); }
-
         .stat-card h2 { font-size: 3rem; margin: 0; font-weight: 800; color: var(--text-slate); }
         .stat-card p { color: var(--soft-slate); font-weight: 600; margin-top: 10px; font-size: 1.1rem; }
 
         .border-blue { border: 2px solid var(--brand-blue); }
-
     </style>
 </head>
 <body>
@@ -142,11 +93,11 @@
         <div>
             <div class="logo">MechRoute.</div>
             <nav class="nav-menu">
-                <a href="#" class="nav-item active">Overview</a>
-                <a href="#" class="nav-item">Service History</a>
+                <a href="dashboard.html" class="nav-item active">Overview</a>
+                <a href="history.html" class="nav-item">Service History</a>
             </nav>
         </div>
-        <a href="#" class="btn-book">+ Book Service</a>
+        <a href="booking.html" class="btn-book">+ Book Service</a>
     </aside>
 
     <main class="main-content">
@@ -160,14 +111,13 @@
 
         <section>
             <h2 class="section-title">Vehicle Overview</h2>
-            
             <div class="stats-grid">
                 <div class="stat-card border-blue">
                     <h2>94%</h2>
                     <p>Engine Health</p>
                 </div>
                 <div class="stat-card">
-                    <h2>2</h2>
+                    <h2 id="serviceCount">0</h2>
                     <p>Total Services</p>
                 </div>
                 <div class="stat-card">
@@ -180,13 +130,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 1. Name & Fleet ID Extraction
             const firstName = localStorage.getItem('user_firstName') || "Scout";
             const lastName = localStorage.getItem('user_lastName') || "Member";
 
             document.getElementById('userNameDisplay').innerText = `Welcome, ${firstName}`;
-
             const fleetEmail = `${firstName.toLowerCase()}.${lastName.toLowerCase()}@mechroute.com`;
             document.getElementById('fleetEmailDisplay').innerText = fleetEmail;
+
+            // 2. Track Services from LocalStorage
+            // This pulls the logs from booking.html to update the count
+            const history = JSON.parse(localStorage.getItem('service_history')) || [];
+            document.getElementById('serviceCount').innerText = history.length;
         });
     </script>
 </body>
