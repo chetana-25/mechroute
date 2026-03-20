@@ -10,36 +10,32 @@
         .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
         
         .log-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
-        .log-row { background: white; transition: transform 0.2s; }
-        .log-row:hover { transform: scale(1.01); }
+        .log-row { background: white; border-radius: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.01); }
 
-        td { padding: 25px; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-weight: 600; vertical-align: middle; }
-        td:first-child { border-left: 1px solid #f1f5f9; border-radius: 20px 0 0 20px; color: #64748b; width: 30%; }
+        td { padding: 25px; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-weight: 600; }
+        td:first-child { border-left: 1px solid #f1f5f9; border-radius: 20px 0 0 20px; color: #64748b; width: 25%; }
         td:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 20px 20px 0; text-align: right; }
 
         .badge { padding: 6px 14px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
-        .badge-best { background: #ecfdf5; color: #10b981; }
-        .badge-preventative { background: #eff6ff; color: #2563eb; }
-        .badge-standard { background: #f1f5f9; color: #64748b; }
+        .badge-proactive { background: #eff6ff; color: #2563eb; }
+        .badge-basic { background: #f1f5f9; color: #64748b; }
 
         /* DELETE BUTTON STYLE */
-        .btn-delete {
+        .btn-cancel {
             background: #fff1f2;
             color: #e11d48;
             border: none;
-            padding: 10px 16px;
-            border-radius: 12px;
+            padding: 8px 16px;
+            border-radius: 10px;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             cursor: pointer;
             transition: 0.3s;
-            margin-left: 20px;
+            margin-left: 15px;
         }
-        .btn-delete:hover { background: #e11d48; color: white; }
-
-        .empty-state { text-align: center; padding: 80px; color: #94a3b8; font-weight: 600; }
+        .btn-cancel:hover { background: #e11d48; color: white; }
         
-        .nav-link { text-decoration: none; font-weight: 700; color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 4px; }
+        .dashboard-link { text-decoration: none; font-weight: 700; color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -47,9 +43,9 @@
         <div class="header-flex">
             <div>
                 <h1 style="font-size: 2.5rem; letter-spacing: -2px; margin: 0;">Service Ledger</h1>
-                <p style="color: #64748b; margin-top: 5px;">Manage your verified maintenance history.</p>
+                <p style="color: #64748b; margin-top: 5px;">Verified maintenance history for your Fleet ID.</p>
             </div>
-            <a href="dashboard.html" class="nav-link">Dashboard</a>
+            <a href="dashboard.html" class="dashboard-link">Dashboard</a>
         </div>
 
         <table class="log-table" id="ledgerTable">
@@ -57,25 +53,21 @@
     </div>
 
     <script>
-        function renderLogs() {
+        function loadLedger() {
             const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             const table = document.getElementById('ledgerTable');
-            table.innerHTML = ""; // Clear table
+            table.innerHTML = "";
 
-            if(logs.length === 0) {
-                table.innerHTML = "<div class='empty-state'>No active service bookings found.</div>";
+            if (logs.length === 0) {
+                table.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 50px; color: #94a3b8;'>No services booked yet.</td></tr>";
                 return;
             }
 
-            // Show latest bookings at the top
+            // Reverse logs to show the latest at the top
             logs.slice().reverse().forEach((entry, index) => {
-                // Correctly map the real index because of the reverse()
-                const actualIndex = logs.length - 1 - index;
-                
-                // Determine badge style based on type
-                let badgeClass = "badge-standard";
-                if(entry.type === "Best") badgeClass = "badge-best";
-                if(entry.type === "Preventative") badgeClass = "badge-preventative";
+                // Calculate the original index for deletion
+                const originalIndex = logs.length - 1 - index;
+                const badgeClass = entry.type === 'Basic' ? 'badge-basic' : 'badge-proactive';
 
                 const row = `
                     <tr class="log-row">
@@ -84,7 +76,7 @@
                         <td style="color: #0f172a;">${entry.service}</td>
                         <td style="color: #166534; font-weight: 800;">
                             ${entry.price}
-                            <button class="btn-delete" onclick="deleteService(${actualIndex})">Cancel</button>
+                            <button class="btn-cancel" onclick="removeEntry(${originalIndex})">Cancel</button>
                         </td>
                     </tr>
                 `;
@@ -92,20 +84,16 @@
             });
         }
 
-        function deleteService(index) {
-            if(confirm("Are you sure you want to cancel this service?")) {
+        function removeEntry(index) {
+            if (confirm("Are you sure you want to cancel this scheduled service?")) {
                 let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-                // Remove the specific service from the array
-                logs.splice(index, 1);
-                // Save the updated list back to storage
+                logs.splice(index, 1); // Remove the selected service
                 localStorage.setItem('fleet_logs', JSON.stringify(logs));
-                // Refresh the table
-                renderLogs();
+                loadLedger(); // Refresh the table automatically
             }
         }
 
-        // Initialize table on load
-        window.onload = renderLogs;
+        window.onload = loadLedger;
     </script>
 </body>
 </html>
