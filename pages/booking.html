@@ -3,208 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Service Booking | MechRoute</title>
+    <title>Book Service | MechRoute</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root { 
-            --brand: #2563eb; 
-            --slate: #0f172a; 
-            --bg: #fcfdfe; 
-            /* Your Specific Colors */
-            --full-green: #dcfce7;
-            --deep-green: #166534;
-            --full-blue: #eff6ff;
-            --deep-blue: #1e40af;
+        :root {
+            --brand-blue: #2563eb;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --input-bg: #f8fafc;
         }
 
-        body { 
-            background: var(--bg); 
-            color: var(--slate); 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            padding: 40px 5%; 
+        body {
             margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
 
-        .container { max-width: 900px; margin: 0 auto; }
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 2.8rem; letter-spacing: -2px; margin: 0; }
-        .header p { color: #64748b; font-weight: 600; margin-top: 10px; }
-
-        /* GRID SYSTEM */
-        .service-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 20px; 
-            margin-bottom: 30px; 
-        }
-        
-        .service-card {
-            background: white; 
-            border: 2px solid #f1f5f9; 
-            padding: 30px; 
-            border-radius: 24px;
-            cursor: pointer; 
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
-            position: relative;
+        .booking-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+            background: white;
+            border-radius: 32px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.02);
         }
 
-        /* --- COLORED CARDS --- */
-        .card-best { 
-            background: var(--full-green); 
-            border-color: #c4f2d5; 
-        }
-        .card-prevent { 
-            background: var(--full-blue); 
-            border-color: #dbeafe; 
-        }
+        h1 { font-size: 2rem; font-weight: 800; color: var(--deep-slate); margin-bottom: 8px; letter-spacing: -1px; }
+        p { color: var(--soft-slate); margin-bottom: 32px; font-weight: 500; }
 
-        .service-card:hover { 
-            transform: translateY(-5px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.05);
-        }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; color: var(--deep-slate); text-transform: uppercase; letter-spacing: 0.5px; }
 
-        /* ACTIVE STATE */
-        .service-card.active { 
-            border-color: var(--brand); 
-            border-width: 3px;
-        }
-
-        /* BADGES (Now simplified as the card itself is colored) */
-        .tag { 
-            font-size: 0.7rem; 
-            font-weight: 800; 
-            padding: 5px 12px; 
-            border-radius: 8px; 
-            text-transform: uppercase; 
-            position: absolute; 
-            top: 20px; 
-            right: 20px; 
-            background: white; /* Contrast against colored card */
-        }
-        .tag-best { color: var(--deep-green); }
-        .tag-prevent { color: var(--deep-blue); }
-
-        .service-card h3 { margin: 0; font-size: 1.3rem; letter-spacing: -0.5px; padding-right: 60px; }
-        .service-card p { font-size: 0.9rem; color: #475569; margin: 12px 0; line-height: 1.5; }
-        .price-text { display: block; font-weight: 800; font-size: 1.25rem; color: var(--slate); margin-top: 15px; }
-
-        /* BOOKING FORM */
-        .booking-form { 
-            background: white; 
-            padding: 40px; 
-            border-radius: 32px; 
-            border: 1px solid #f1f5f9; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
-        }
-
-        .flex-inputs { display: flex; gap: 20px; margin-bottom: 25px; }
-        .field { flex: 1; }
-        label { display: block; font-weight: 700; margin-bottom: 10px; font-size: 0.75rem; text-transform: uppercase; color: #94a3b8; }
-        
-        input { 
-            width: 100%; 
-            padding: 16px; 
-            border-radius: 14px; 
-            border: 1px solid #e2e8f0; 
-            background: #f8fafc; 
-            font-family: inherit; 
+        input, select {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            background: var(--input-bg);
+            font-family: inherit;
             font-size: 1rem;
-            outline: none;
             box-sizing: border-box;
-        }
-
-        .btn-confirm { 
-            width: 100%; 
-            padding: 22px; 
-            background: var(--slate); 
-            color: white; 
-            border: none; 
-            border-radius: 20px; 
-            font-size: 1.1rem; 
-            font-weight: 800; 
-            cursor: pointer; 
             transition: 0.3s;
         }
 
-        .btn-confirm:hover { background: var(--brand); transform: scale(1.01); }
+        input:focus, select:focus { outline: none; border-color: var(--brand-blue); background: white; }
 
-        @media (max-width: 650px) { .service-grid { grid-template-columns: 1fr; } .flex-inputs { flex-direction: column; } }
+        .btn-confirm {
+            width: 100%;
+            background: var(--brand-blue);
+            color: white;
+            padding: 18px;
+            border-radius: 16px;
+            border: none;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-confirm:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
+        .back-link { display: block; margin-top: 20px; text-decoration: none; color: var(--soft-slate); font-weight: 600; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="header">
-        <h1>Service Selection</h1>
-        <p>Choose the best maintenance path for your fleet.</p>
-    </div>
+    <div class="booking-container">
+        <h1>Book Service</h1>
+        <p>Schedule your next maintenance elite-tier check.</p>
 
-    <div class="service-grid">
-        <div class="service-card card-best" onclick="selectService(this, 'Essential City Check', 2499)">
-            <span class="tag tag-best">Best Value</span>
-            <h3>Essential City Check</h3>
-            <p>Complete oil change, filter refresh, and 20-point pothole safety inspection.</p>
-            <span class="price-text">₹2,499</span>
-        </div>
+        <form id="bookingForm">
+            <div class="form-group">
+                <label>Service Type</label>
+                <select id="serviceType" required>
+                    <option value="General Checkup">General Checkup</option>
+                    <option value="Oil & Filter Change">Oil & Filter Change</option>
+                    <option value="Brake Pad Replacement">Brake Pad Replacement</option>
+                    <option value="Engine Diagnostics">Engine Diagnostics</option>
+                </select>
+            </div>
 
-        <div class="service-card card-prevent" onclick="selectService(this, 'Full Diagnostics', 1800)">
-            <span class="tag tag-prevent">Preventative</span>
-            <h3>Full Diagnostics</h3>
-            <p>Advanced system scan using OBD-II protocols to detect hidden electronic faults.</p>
-            <span class="price-text">₹1,800</span>
-        </div>
+            <div class="form-group">
+                <label>Preferred Date</label>
+                <input type="date" id="serviceDate" required>
+            </div>
 
-        <div class="service-card" onclick="selectService(this, 'Brake Integrity', 3200)">
-            <h3>Brake Integrity</h3>
-            <p>Hydraulic fluid testing, pad wear analysis, and stopping distance calibration.</p>
-            <span class="price-text">₹3,200</span>
-        </div>
-
-        <div class="service-card" onclick="selectService(this, 'Monsoon Prep', 1500)">
-            <h3>Monsoon Prep</h3>
-            <p>Wiper, tyre-tread, and underbody coating for heavy rain safety.</p>
-            <span class="price-text">₹1,500</span>
-        </div>
-    </div>
-
-    <div class="booking-form">
-        <div class="flex-inputs">
-            <div class="field"><label>Service Date</label><input type="date" id="bDate"></div>
-            <div class="field"><label>Arrival Time</label><input type="time" id="bTime"></div>
-        </div>
-        <button class="btn-confirm" onclick="confirmBooking()">Initialize Fleet Schedule</button>
-        <p style="text-align: center; margin-top: 15px;">
-            <a href="dashboard.html" style="color: #94a3b8; text-decoration: none; font-size: 0.8rem; font-weight: 700;">Cancel & Return</a>
-        </p>
-    </div>
-</div>
-
-<script>
-    let selectedData = { name: '', price: '' };
-
-    function selectService(element, name, price) {
-        document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
-        element.classList.add('active');
-        selectedData = { name, price: "₹" + price };
-    }
-
-    function confirmBooking() {
-        const date = document.getElementById('bDate').value;
-        const time = document.getElementById('bTime').value;
-
-        if(!selectedData.name || !date || !time) {
-            alert("Selection Required: Please choose a service and schedule a time.");
-            return;
-        }
-
-        localStorage.setItem('pending_service', selectedData.name);
-        localStorage.setItem('pending_price', selectedData.price);
-        localStorage.setItem('pending_date', date);
-        localStorage.setItem('pending_time', time);
+            <button type="submit" class="btn-confirm">Confirm Booking</button>
+        </form>
         
-        window.location.href = 'checkout.html';
-    }
-</script>
+        <center><a href="dashboard.html" class="back-link">Return to Dashboard</a></center>
+    </div>
+
+    <script>
+        document.getElementById('bookingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 1. Capture inputs
+            const type = document.getElementById('serviceType').value;
+            const date = document.getElementById('serviceDate').value;
+            
+            // 2. Generate random price for the ledger
+            const price = "₹" + (Math.floor(Math.random() * 3000) + 1500);
+
+            // 3. Create entry matching logs.html structure
+            const newEntry = {
+                date: date,
+                type: "Proactive", // Matches badge-proactive class
+                service: type,
+                price: price
+            };
+
+            // 4. Save to 'fleet_logs' (CRITICAL for logs.html)
+            const existingLogs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+            existingLogs.push(newEntry);
+            localStorage.setItem('fleet_logs', JSON.stringify(existingLogs));
+
+            // 5. Success and Redirect
+            alert("Booking Confirmed! Viewing your Service Ledger.");
+            window.location.href = 'logs.html'; // Points to your Ledger page
+        });
+    </script>
 
 </body>
 </html>
