@@ -3,131 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book Service | MechRoute</title>
+    <title>Service Selection | MechRoute</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --brand-blue: #2563eb;
+            --brand-green: #10b981;
             --deep-slate: #0f172a;
             --soft-slate: #64748b;
-            --input-bg: #f8fafc;
         }
 
         body {
             margin: 0;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+            background-color: #fcfdfe;
+            padding: 60px 5%;
         }
 
-        .booking-container {
-            width: 100%;
-            max-width: 450px;
-            padding: 40px;
+        .container { max-width: 1100px; margin: 0 auto; }
+
+        .header { margin-bottom: 40px; }
+        .header h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -2px; margin: 0; color: var(--deep-slate); }
+        .header p { color: var(--soft-slate); font-weight: 500; margin-top: 10px; }
+
+        /* THE 4-CARD GRID */
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .service-card {
             background: white;
-            border-radius: 32px;
+            border: 2px solid #f1f5f9;
+            border-radius: 24px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .service-card:hover { border-color: var(--brand-blue); transform: translateY(-5px); }
+        .service-card.selected { border-color: var(--brand-blue); background: #f8faff; }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .badge-green { background: #ecfdf5; color: var(--brand-green); }
+        .badge-blue { background: #eff6ff; color: var(--brand-blue); }
+        .badge-slate { background: #f1f5f9; color: var(--soft-slate); }
+
+        .service-card h3 { font-size: 1.25rem; font-weight: 800; margin: 0 0 10px 0; color: var(--deep-slate); }
+        .service-card p { font-size: 0.9rem; color: var(--soft-slate); line-height: 1.5; margin-bottom: 20px; }
+        .price { font-size: 1.5rem; font-weight: 800; color: var(--deep-slate); }
+
+        /* DATE & BUTTON AREA */
+        .footer-selection {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: white;
+            padding: 25px 40px;
+            border-radius: 24px;
             border: 1px solid #f1f5f9;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.02);
         }
 
-        h1 { font-size: 2rem; font-weight: 800; color: var(--deep-slate); margin-bottom: 8px; letter-spacing: -1px; }
-        p { color: var(--soft-slate); margin-bottom: 32px; font-weight: 500; }
-
-        .form-group { text-align: left; margin-bottom: 20px; }
-        label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 8px; color: var(--deep-slate); text-transform: uppercase; letter-spacing: 0.5px; }
-
-        input, select {
-            width: 100%;
-            padding: 16px;
-            border-radius: 14px;
+        .date-input-group { display: flex; flex-direction: column; }
+        .date-input-group label { font-weight: 700; font-size: 0.8rem; text-transform: uppercase; color: var(--soft-slate); margin-bottom: 8px; }
+        
+        input[type="date"] {
             border: 1px solid #e2e8f0;
-            background: var(--input-bg);
+            padding: 12px;
+            border-radius: 12px;
             font-family: inherit;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: 0.3s;
+            font-weight: 600;
+            outline: none;
         }
-
-        input:focus, select:focus { outline: none; border-color: var(--brand-blue); background: white; }
 
         .btn-confirm {
-            width: 100%;
-            background: var(--brand-blue);
+            background: var(--deep-slate);
             color: white;
-            padding: 18px;
+            padding: 18px 45px;
             border-radius: 16px;
             border: none;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
             transition: 0.3s;
-            margin-top: 10px;
         }
 
-        .btn-confirm:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
-        .back-link { display: block; margin-top: 20px; text-decoration: none; color: var(--soft-slate); font-weight: 600; font-size: 0.9rem; }
+        .btn-confirm:hover { background: var(--brand-blue); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.2); }
     </style>
 </head>
 <body>
 
-    <div class="booking-container">
-        <h1>Book Service</h1>
-        <p>Schedule your next maintenance elite-tier check.</p>
-
-        <form id="bookingForm">
-            <div class="form-group">
-                <label>Service Type</label>
-                <select id="serviceType" required>
-                    <option value="General Checkup">General Checkup</option>
-                    <option value="Oil & Filter Change">Oil & Filter Change</option>
-                    <option value="Brake Pad Replacement">Brake Pad Replacement</option>
-                    <option value="Engine Diagnostics">Engine Diagnostics</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Preferred Date</label>
-                <input type="date" id="serviceDate" required>
-            </div>
-
-            <button type="submit" class="btn-confirm">Confirm Booking</button>
-        </form>
-        
-        <center><a href="dashboard.html" class="back-link">Return to Dashboard</a></center>
+<div class="container">
+    <div class="header">
+        <h1>Select Service</h1>
+        <p>Sophisticated care for your elite vehicle fleet.</p>
     </div>
 
-    <script>
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+    <div class="service-grid">
+        <div class="service-card" onclick="selectService(this, 'Full Synthetic Vitality', '₹4500', 'Best')">
+            <span class="badge badge-green">Best Value</span>
+            <h3>Full Synthetic Vitality</h3>
+            <p>Premium oil change with filter and 24-point check.</p>
+            <div class="price">₹4500</div>
+        </div>
 
-            // 1. Capture inputs
-            const type = document.getElementById('serviceType').value;
-            const date = document.getElementById('serviceDate').value;
-            
-            // 2. Generate random price for the ledger
-            const price = "₹" + (Math.floor(Math.random() * 3000) + 1500);
+        <div class="service-card" onclick="selectService(this, 'Preventative Shield', '₹2800', 'Preventative')">
+            <span class="badge badge-blue">Preventative</span>
+            <h3>Shield Maintenance</h3>
+            <p>Brake inspection and fluid top-up for safety.</p>
+            <div class="price">₹2800</div>
+        </div>
 
-            // 3. Create entry matching logs.html structure
-            const newEntry = {
-                date: date,
-                type: "Proactive", // Matches badge-proactive class
-                service: type,
-                price: price
-            };
+        <div class="service-card" onclick="selectService(this, 'System Diagnostic', '₹1500', 'Diagnostic')">
+            <span class="badge badge-slate">Advanced</span>
+            <h3>System Diagnostic</h3>
+            <p>Full engine scan and digital health report.</p>
+            <div class="price">₹1500</div>
+        </div>
 
-            // 4. Save to 'fleet_logs' (CRITICAL for logs.html)
-            const existingLogs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            existingLogs.push(newEntry);
-            localStorage.setItem('fleet_logs', JSON.stringify(existingLogs));
+        <div class="service-card" onclick="selectService(this, 'Essential Care', '₹1200', 'Essential')">
+            <span class="badge badge-slate">Basic</span>
+            <h3>Essential Care</h3>
+            <p>Standard wash and interior cleaning services.</p>
+            <div class="price">₹1200</div>
+        </div>
+    </div>
 
-            // 5. Success and Redirect
-            alert("Booking Confirmed! Viewing your Service Ledger.");
-            window.location.href = 'logs.html'; // Points to your Ledger page
-        });
-    </script>
+    <div class="footer-selection">
+        <div class="date-input-group">
+            <label>Preferred Date</label>
+            <input type="date" id="serviceDate" required>
+        </div>
+        <button class="btn-confirm" onclick="confirmBooking()">Confirm Selection</button>
+    </div>
+    
+    <center><a href="dashboard.html" style="display:block; margin-top:30px; color:var(--soft-slate); text-decoration:none; font-weight:600;">Return to Dashboard</a></center>
+</div>
+
+<script>
+    let selectedData = null;
+
+    function selectService(element, name, price, type) {
+        // Remove 'selected' class from all cards
+        document.querySelectorAll('.service-card').forEach(card => card.classList.remove('selected'));
+        // Add to current card
+        element.classList.add('selected');
+        
+        selectedData = { name, price, type };
+    }
+
+    function confirmBooking() {
+        const date = document.getElementById('serviceDate').value;
+
+        if (!selectedData) {
+            alert("Please select a service card first.");
+            return;
+        }
+        if (!date) {
+            alert("Please select a date.");
+            return;
+        }
+
+        // Save to fleet_logs for logs.html
+        const newEntry = {
+            date: date,
+            type: selectedData.type,
+            service: selectedData.name,
+            price: selectedData.price
+        };
+
+        const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+        logs.push(newEntry);
+        localStorage.setItem('fleet_logs', JSON.stringify(logs));
+
+        window.location.href = 'logs.html';
+    }
+</script>
 
 </body>
 </html>
