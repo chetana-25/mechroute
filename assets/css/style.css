@@ -120,3 +120,18 @@ input:focus {
     border-color: var(--brand);
     background: white;
 }
+/* --- DASHBOARD ADDITIONS --- */
+.overview-header {
+    margin-top: 2rem;
+    margin-bottom: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border); /* Matches your design system border */
+}
+
+.section-title { 
+    font-size: 1.1rem; /* Smaller than H1 (4.5rem) but very clear */
+    font-weight: 700; 
+    color: var(--text-muted); /* Using your existing muted variable */
+    text-transform: uppercase; 
+    letter-spacing: 0.05em;
+}
