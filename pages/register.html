@@ -2,177 +2,68 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Join the Fleet | MechRoute</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand-blue: #2563eb;
-            --deep-slate: #0f172a;
-            --soft-slate: #64748b;
-            --input-bg: #f8fafc;
-        }
-
-        body {
-            margin: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #ffffff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .register-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .logo {
-            font-size: 2.2rem;
-            font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 30px;
-            display: block;
-            text-decoration: none;
-            color: var(--deep-slate);
-        }
-        .logo span { color: var(--brand-blue); }
-
-        h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: var(--deep-slate);
-        }
-
-        p {
-            color: var(--soft-slate);
-            margin-bottom: 32px;
-            font-size: 0.95rem;
-        }
-
-        .form-group {
-            text-align: left;
-            margin-bottom: 20px;
-        }
-
-        label {
-            display: block;
-            font-weight: 700;
-            font-size: 0.85rem;
-            margin-bottom: 8px;
-            color: var(--deep-slate);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid #e2e8f0;
-            background: var(--input-bg);
-            font-family: inherit;
-            font-size: 1rem;
-            box-sizing: border-box;
-            transition: 0.2s;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--brand-blue);
-            background: #ffffff;
-        }
-
-        .btn-register {
-            width: 100%;
-            background: var(--deep-slate);
-            color: white;
-            padding: 16px;
-            border-radius: 12px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-register:hover {
-            background: var(--brand-blue);
-            transform: translateY(-2px);
-        }
-
-        .footer-text {
-            margin-top: 24px;
-            font-size: 0.9rem;
-            color: var(--soft-slate);
-        }
-
-        .footer-text a {
-            color: var(--brand-blue);
-            text-decoration: none;
-            font-weight: 700;
-        }
+        :root { --brand: #2563eb; --dark: #0f172a; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f8fafc; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); width: 380px; }
+        h2 { font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; color: var(--dark); }
+        p { color: #64748b; font-size: 0.9rem; margin-bottom: 25px; }
+        input { width: 100%; padding: 14px; margin-bottom: 15px; border: 1.5px solid #e2e8f0; border-radius: 12px; box-sizing: border-box; font-family: inherit; font-weight: 600; }
+        .btn { width: 100%; padding: 16px; background: var(--dark); color: white; border: none; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: var(--brand); transform: translateY(-2px); }
+        .footer { margin-top: 20px; text-align: center; font-size: 0.85rem; color: #64748b; }
+        .footer a { color: var(--brand); text-decoration: none; font-weight: 700; }
     </style>
 </head>
 <body>
 
-    <div class="register-container">
-        <a href="../index.html" class="logo">Mech<span>Route.</span></a>
-        <h1>Create Account</h1>
-        <p>Join our elite automotive ecosystem.</p>
+<div class="card">
+    <h2>Create Account</h2>
+    <p>Get your official MechRoute Fleet ID.</p>
+    <form id="regForm">
+        <input type="text" id="fName" placeholder="First Name" required>
+        <input type="text" id="lName" placeholder="Last Name" required>
+        <input type="password" id="pass" placeholder="Create Password" required>
+        <button type="submit" class="btn">Register & Generate ID</button>
+    </form>
+    <div class="footer">Already have an ID? <a href="login.html">Login</a></div>
+</div>
 
-        <form id="registrationForm">
-            <div class="form-group">
-                <label for="fullName">Full Name</label>
-                <input type="text" id="fullName" placeholder="Firstname Surname" required>
-            </div>
+<script>
+    document.getElementById('regForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const fName = document.getElementById('fName').value.trim();
+        const lName = document.getElementById('lName').value.trim();
+        const pass = document.getElementById('pass').value;
 
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" placeholder="name@email.com" required>
-            </div>
+        // Generate the Official Fleet ID
+        const generatedID = `${fName.toLowerCase()}.${lName.toLowerCase()}@mechroute.com`;
 
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" id="password" placeholder="••••••••" required>
-            </div>
+        const newUser = {
+            fleetID: generatedID,
+            password: pass,
+            firstName: fName,
+            lastName: lName
+        };
 
-            <button type="submit" class="btn-register">Join the Fleet</button>
-        </form>
+        // Get existing users or start new list
+        let users = JSON.parse(localStorage.getItem('mechroute_users')) || [];
+        
+        // Prevent duplicate IDs
+        if(users.some(u => u.fleetID === generatedID)) {
+            alert("This name combination already has a Fleet ID!");
+            return;
+        }
 
-        <div class="footer-text">
-            Already a member? <a href="login.html">Sign In</a>
-        </div>
-    </div>
+        users.push(newUser);
+        localStorage.setItem('mechroute_users', JSON.stringify(users));
 
-    <script>
-        document.getElementById('registrationForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // 1. Get the full name and split it
-            const fullName = document.getElementById('fullName').value.trim();
-            const nameParts = fullName.split(" ");
-            
-            // Logic to handle multiple names or just one
-            const firstName = nameParts[0];
-            const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : "Member";
-
-            // 2. Save both parts for the Dashboard logic
-            localStorage.setItem('user_firstName', firstName);
-            localStorage.setItem('user_lastName', lastName);
-
-            // 3. Clear any old data to ensure the new Fleet ID generates correctly
-            localStorage.removeItem('user_fleet_id');
-
-            // 4. Redirect
-            window.location.href = 'dashboard.html';
-        });
-    </script>
+        alert(`SUCCESS!\nYour Official Fleet ID is: ${generatedID}\nUse this ID and your password to login.`);
+        window.location.href = 'login.html';
+    });
+</script>
 
 </body>
 </html>
