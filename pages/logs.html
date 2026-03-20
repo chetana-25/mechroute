@@ -2,101 +2,206 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Service Ledger | MechRoute</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #fcfdfe; font-family: 'Plus Jakarta Sans', sans-serif; padding: 60px 8%; margin: 0; }
+        :root {
+            --brand-blue: #2563eb;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --bg-color: #fcfdfe;
+        }
+
+        body { 
+            background: var(--bg-color); 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            padding: 60px 8%; 
+            margin: 0; 
+            color: var(--deep-slate);
+        }
+
         .log-container { max-width: 1000px; margin: 0 auto; }
-        .header-flex { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 40px; }
+
+        .header-flex { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-end; 
+            margin-bottom: 50px; 
+        }
+
+        .header-flex h1 { 
+            font-size: 2.8rem; 
+            font-weight: 800; 
+            letter-spacing: -2px; 
+            margin: 0; 
+        }
+
+        .header-flex p { color: var(--soft-slate); font-weight: 500; margin-top: 8px; }
+
+        .dashboard-link { 
+            text-decoration: none; 
+            font-weight: 700; 
+            color: var(--deep-slate); 
+            border-bottom: 2px solid var(--brand-blue); 
+            padding-bottom: 4px; 
+            transition: 0.3s;
+        }
+
+        .dashboard-link:hover { color: var(--brand-blue); }
+
+        /* TABLE STYLING */
+        .log-table { width: 100%; border-collapse: separate; border-spacing: 0 16px; }
         
-        .log-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
-        .log-row { background: white; border-radius: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.01); }
+        .log-row { 
+            background: white; 
+            border-radius: 24px; 
+            transition: transform 0.2s ease;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+        }
 
-        td { padding: 25px; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; font-weight: 600; }
-        td:first-child { border-left: 1px solid #f1f5f9; border-radius: 20px 0 0 20px; color: #64748b; width: 25%; }
-        td:last-child { border-right: 1px solid #f1f5f9; border-radius: 0 20px 20px 0; text-align: right; }
+        .log-row:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
 
-        .badge { padding: 6px 14px; border-radius: 100px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
-        
-        /* Updated naming and color scheme */
-        .badge-best { background: #ecfdf5; color: #10b981; }        /* Light Green */
-        .badge-preventative { background: #eff6ff; color: #2563eb; }  /* Light Blue */
-        .badge-diagnostic { background: #fff7ed; color: #c2410c; }    /* Light Orange */
-        .badge-essential { background: #f1f5f9; color: #64748b; }     /* Grey */
+        td { 
+            padding: 28px; 
+            border-top: 1px solid #f1f5f9; 
+            border-bottom: 1px solid #f1f5f9; 
+            font-weight: 600; 
+            font-size: 1rem;
+        }
 
+        td:first-child { 
+            border-left: 1px solid #f1f5f9; 
+            border-radius: 24px 0 0 24px; 
+            color: var(--soft-slate); 
+            width: 25%; 
+        }
+
+        td:last-child { 
+            border-right: 1px solid #f1f5f9; 
+            border-radius: 0 24px 24px 0; 
+            text-align: right; 
+        }
+
+        /* TIER BADGES */
+        .badge { 
+            padding: 8px 16px; 
+            border-radius: 100px; 
+            font-size: 0.75rem; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+        }
+
+        .badge-best { background: #ecfdf5; color: #10b981; }        /* Green */
+        .badge-preventative { background: #eff6ff; color: #2563eb; }  /* Blue */
+        .badge-diagnostics { background: #fff7ed; color: #c2410c; }   /* Orange */
+        .badge-essentials { background: #f1f5f9; color: #64748b; }    /* Grey */
+
+        /* CANCEL BUTTON */
         .btn-cancel {
             background: #fff1f2;
             color: #e11d48;
             border: none;
-            padding: 8px 16px;
-            border-radius: 10px;
+            padding: 10px 18px;
+            border-radius: 12px;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: 0.3s;
-            margin-left: 15px;
+            margin-left: 20px;
         }
+
         .btn-cancel:hover { background: #e11d48; color: white; }
-        
-        .dashboard-link { text-decoration: none; font-weight: 700; color: #0f172a; border-bottom: 2px solid #2563eb; padding-bottom: 4px; }
+
+        .empty-state { 
+            text-align: center; 
+            padding: 100px; 
+            color: var(--soft-slate); 
+            font-weight: 600; 
+            background: white;
+            border-radius: 24px;
+            border: 2px dashed #e2e8f0;
+        }
     </style>
 </head>
 <body>
-    <div class="log-container">
-        <div class="header-flex">
-            <div>
-                <h1 style="font-size: 2.5rem; letter-spacing: -2px; margin: 0;">Service Ledger</h1>
-                <p style="color: #64748b; margin-top: 5px;">Verified maintenance history for your Fleet ID.</p>
-            </div>
-            <a href="dashboard.html" class="dashboard-link">Dashboard</a>
-        </div>
 
-        <table class="log-table" id="ledgerTable"></table>
+<div class="log-container">
+    <div class="header-flex">
+        <div>
+            <h1>Service Ledger</h1>
+            <p>Verified maintenance history for your Fleet ID.</p>
+        </div>
+        <a href="dashboard.html" class="dashboard-link">Dashboard</a>
     </div>
 
-    <script>
-        function loadLedger() {
-            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            const table = document.getElementById('ledgerTable');
-            table.innerHTML = "";
+    <table class="log-table" id="ledgerTable">
+        </table>
+</div>
 
-            if (logs.length === 0) {
-                table.innerHTML = "<tr><td colspan='4' style='text-align:center; padding: 50px; color: #94a3b8;'>No services booked yet.</td></tr>";
-                return;
-            }
+<script>
+    function loadLedger() {
+        const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+        const table = document.getElementById('ledgerTable');
+        table.innerHTML = "";
 
-            logs.slice().reverse().forEach((entry, index) => {
-                const originalIndex = logs.length - 1 - index;
-                
-                // Set the badge class based on the card types
-                let badgeClass = "badge-essential";
-                if (entry.type === "Best Value") badgeClass = "badge-best";
-                if (entry.type === "Preventative") badgeClass = "badge-preventative";
-                if (entry.type === "Diagnostic") badgeClass = "badge-diagnostic";
-
-                table.innerHTML += `
-                    <tr class="log-row">
-                        <td>${entry.date}</td>
-                        <td><span class="badge ${badgeClass}">${entry.type}</span></td>
-                        <td style="color: #0f172a;">${entry.service}</td>
-                        <td style="color: #166534; font-weight: 800;">
-                            ${entry.price}
-                            <button class="btn-cancel" onclick="removeEntry(${originalIndex})">Cancel</button>
-                        </td>
-                    </tr>
-                `;
-            });
+        if (logs.length === 0) {
+            table.innerHTML = "<tr><td colspan='4' class='empty-state'>No active service bookings found.</td></tr>";
+            return;
         }
 
-        function removeEntry(index) {
-            if (confirm("Are you sure you want to cancel this scheduled service?")) {
-                let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-                logs.splice(index, 1);
-                localStorage.setItem('fleet_logs', JSON.stringify(logs));
-                loadLedger();
+        // Show latest bookings at the top
+        logs.slice().reverse().forEach((entry, index) => {
+            const originalIndex = logs.length - 1 - index;
+            
+            // Map types to the correct badge class and label
+            let badgeClass = "";
+            let displayLabel = entry.type;
+
+            // Handling case-insensitivity and old names
+            const typeKey = entry.type.toUpperCase();
+
+            if (typeKey.includes("BEST")) {
+                badgeClass = "badge-best";
+                displayLabel = "BEST VALUE";
+            } else if (typeKey.includes("PREVENTATIVE")) {
+                badgeClass = "badge-preventative";
+                displayLabel = "PREVENTATIVE";
+            } else if (typeKey.includes("DIAGNOSTIC") || typeKey.includes("ADVANCED")) {
+                badgeClass = "badge-diagnostics";
+                displayLabel = "DIAGNOSTICS";
+            } else {
+                badgeClass = "badge-essentials";
+                displayLabel = "ESSENTIALS";
             }
+
+            table.innerHTML += `
+                <tr class="log-row">
+                    <td>${entry.date}</td>
+                    <td><span class="badge ${badgeClass}">${displayLabel}</span></td>
+                    <td style="color: var(--deep-slate);">${entry.service}</td>
+                    <td style="color: #166534; font-weight: 800;">
+                        ${entry.price}
+                        <button class="btn-cancel" onclick="removeEntry(${originalIndex})">Cancel</button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function removeEntry(index) {
+        if (confirm("Are you sure you want to cancel this scheduled service?")) {
+            let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+            logs.splice(index, 1);
+            localStorage.setItem('fleet_logs', JSON.stringify(logs));
+            loadLedger(); // Refresh table
         }
-        window.onload = loadLedger;
-    </script>
+    }
+
+    // Load on start
+    window.onload = loadLedger;
+</script>
+
 </body>
 </html>
