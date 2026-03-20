@@ -9,53 +9,43 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fcfdfe; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: white; padding: 45px; border-radius: 28px; border: 1px solid #f1f5f9; width: 400px; text-align: center; }
         .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: -1.5px; color: var(--dark); margin-bottom: 30px; }
-        h2 { font-weight: 800; margin-bottom: 8px; color: var(--dark); }
-        p { color: #64748b; margin-bottom: 30px; font-size: 0.95rem; }
-        input { width: 100%; padding: 16px; margin-bottom: 18px; border: 1.5px solid #f1f5f9; border-radius: 14px; box-sizing: border-box; font-family: inherit; font-weight: 600; background: #f8fafc; outline: none; transition: 0.3s; }
-        input:focus { border-color: var(--brand); background: white; }
-        .btn-login { width: 100%; padding: 18px; background: var(--dark); color: white; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1rem; }
-        .btn-login:hover { background: var(--brand); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15); }
-        .reg-link { margin-top: 25px; color: #64748b; font-size: 0.9rem; }
-        .reg-link a { color: var(--brand); text-decoration: none; font-weight: 700; }
+        input { width: 100%; padding: 16px; margin-bottom: 18px; border: 1.5px solid #f1f5f9; border-radius: 14px; box-sizing: border-box; font-family: inherit; font-weight: 600; background: #f8fafc; outline: none; }
+        .btn-login { width: 100%; padding: 18px; background: var(--dark); color: white; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+        .btn-login:hover { background: var(--brand); }
     </style>
 </head>
 <body>
 
 <div class="card">
     <div class="logo">MechRoute.</div>
-    <h2>Welcome Back</h2>
-    <p>Enter your official Fleet ID to continue.</p>
+    <p style="color: #64748b; margin-bottom: 30px;">Enter your official Fleet ID and Password.</p>
     
     <form id="loginForm">
-        <input type="text" id="loginID" placeholder="fleet.id@mechroute.com" required>
+        <input type="text" id="loginID" placeholder="firstname.lastname@mechroute.com" required>
         <input type="password" id="loginPass" placeholder="Password" required>
         <button type="submit" class="btn-login">Verify & Access</button>
     </form>
-
-    <div class="reg-link">New to the fleet? <a href="register.html">Register here</a></div>
 </div>
 
 <script>
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const inputID = document.getElementById('loginID').value.trim();
+        const inputID = document.getElementById('loginID').value.trim().toLowerCase();
         const inputPass = document.getElementById('loginPass').value;
 
-        // Get the list of registered users
+        // Get the list of all registered users
         const users = JSON.parse(localStorage.getItem('mechroute_users')) || [];
 
-        // Try to find a match
+        // VALIDATION: Checks if the ID and Password match a single entry exactly
         const validUser = users.find(u => u.fleetID === inputID && u.password === inputPass);
 
         if (validUser) {
-            // Save current session data for the dashboard
+            // Save the specific user's info for the dashboard to use
             localStorage.setItem('user_firstName', validUser.firstName);
-            localStorage.setItem('user_lastName', validUser.lastName);
             localStorage.setItem('user_email', validUser.fleetID);
-            
             window.location.href = 'dashboard.html';
         } else {
-            alert("Invalid Fleet ID or Password.\nMake sure you are using the ID generated during registration.");
+            alert("Access Denied: Incorrect Fleet ID or Password.");
         }
     });
 </script>
