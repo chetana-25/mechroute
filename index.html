@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MechRoute | Select Your Portal</title>
+    <title>MechRoute | Portal Selection</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* --- MECHROUTE DESIGN SYSTEM --- */
+        /* --- MECHROUTE SHARED DESIGN SYSTEM --- */
         :root {
             --brand: #2563eb;
+            --brand-gradient: linear-gradient(135deg, #2563eb 0%, #60a5fa 100%);
             --dark: #0f172a;
             --text-muted: #64748b;
-            --bg-soft: #f8fafc;
+            --border: #f1f5f9;
         }
 
         * {
@@ -28,108 +29,115 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         .logo {
             font-size: 2.2rem;
             font-weight: 800;
             letter-spacing: -1.5px;
-            margin-bottom: 50px;
+            margin-bottom: 60px;
             color: var(--dark);
         }
 
         .logo span { color: var(--brand); }
 
-        .header-text {
+        .header-section {
             text-align: center;
-            margin-bottom: 60px;
+            margin-bottom: 50px;
         }
 
-        .header-text h1 {
-            font-size: 2.5rem;
+        .header-section h1 {
+            font-size: 2.8rem;
             font-weight: 800;
             color: var(--dark);
-            letter-spacing: -1px;
+            letter-spacing: -0.04em;
         }
 
-        .header-text p {
+        .header-section p {
             color: var(--text-muted);
-            margin-top: 10px;
             font-size: 1.1rem;
+            margin-top: 12px;
         }
 
-        .gateway-container {
+        .gateway-grid {
             display: flex;
-            gap: 30px;
+            gap: 24px;
             width: 90%;
-            max-width: 1000px;
+            max-width: 900px;
         }
 
-        .portal-card {
+        .role-card {
             flex: 1;
-            padding: 50px 40px;
+            padding: 48px 32px;
             background: #ffffff;
-            border: 1px solid #f1f5f9;
-            border-radius: 32px;
+            border: 1px solid var(--border);
+            border-radius: 28px;
             text-align: center;
             text-decoration: none;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .portal-card:hover {
-            transform: translateY(-12px);
+        .role-card:hover {
+            transform: translateY(-10px);
             border-color: var(--brand);
-            box-shadow: 0 30px 60px -15px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.05);
         }
 
-        .icon-box {
-            font-size: 3.5rem;
-            margin-bottom: 25px;
-            display: block;
-        }
-
-        .portal-card h2 {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: var(--dark);
-            margin-bottom: 15px;
-        }
-
-        .portal-card p {
-            color: var(--text-muted);
-            line-height: 1.6;
-            font-size: 0.95rem;
-        }
-
-        .btn-tag {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 12px 24px;
-            background: var(--bg-soft);
-            color: var(--dark);
-            border-radius: 12px;
-            font-weight: 700;
-            font-size: 0.9rem;
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: #f8fafc;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 24px;
             transition: 0.3s;
         }
 
-        .portal-card:hover .btn-tag {
+        .role-card:hover .icon-circle {
             background: var(--brand);
             color: white;
         }
 
-        /* Subtle background decorations */
-        .bg-glow {
-            position: absolute;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(37, 99, 235, 0.05) 0%, rgba(255,255,255,0) 70%);
-            top: -150px;
-            right: -150px;
-            z-index: -1;
+        .role-card h2 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .role-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+
+        .btn-elite {
+            padding: 12px 24px;
+            background: var(--dark);
+            color: white;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            width: 100%;
+            transition: 0.3s;
+        }
+
+        .role-card:hover .btn-elite {
+            background: var(--brand);
+            transform: scale(1.02);
+        }
+
+        /* Logic for Driver specific Card */
+        .driver-card:hover .btn-elite {
+            background: var(--brand-gradient);
         }
     </style>
 </head>
@@ -137,36 +145,33 @@
 
     <div class="logo">MechRoute<span>.</span></div>
 
-    <div class="header-text">
-        <h1>Select Your Interface</h1>
-        <p>Choose the portal that matches your role in the fleet.</p>
+    <div class="header-section">
+        <h1>Welcome to the Fleet</h1>
+        <p>Identify your role to access the correct terminal.</p>
     </div>
 
-    <div class="gateway-container">
+    <div class="gateway-grid">
         
-        <a href="login.html" class="portal-card" onclick="saveIntendedRole('driver')">
-            <div class="bg-glow"></div>
-            <span class="icon-box">🚘</span>
+        <a href="driver_home.html" class="role-card driver-card" onclick="saveRole('driver')">
+            <div class="icon-circle">🚘</div>
             <h2>Vehicle Owner</h2>
-            <p>Monitor real-time engine health, track service spending, and schedule professional maintenance.</p>
-            <span class="btn-tag">Enter Driver Portal</span>
+            <p>Monitor real-time engine health, track spending, and book services.</p>
+            <div class="btn-elite">Enter Driver Portal</div>
         </a>
 
-        <a href="login.html" class="portal-card" onclick="saveIntendedRole('mechanic')">
-            <div class="bg-glow"></div>
-            <span class="icon-box">🔧</span>
-            <h2>Service Terminal</h2>
-            <p>Access the technician workstation to accept jobs, update repair status, and manage fleet logs.</p>
-            <span class="btn-tag">Staff Login</span>
+        <a href="mechanic_home.html" class="role-card" onclick="saveRole('mechanic')">
+            <div class="icon-circle">🔧</div>
+            <h2>Service Pro</h2>
+            <p>Access the technician workstation to manage fleet repairs and logs.</p>
+            <div class="btn-elite">Staff Login</div>
         </a>
 
     </div>
 
     <script>
-        function saveIntendedRole(role) {
-            // This is the "Brain" of the gateway. 
-            // It saves the user's intent so the login/register pages can adjust accordingly.
-            localStorage.setItem('intended_role', role);
+        function saveRole(role) {
+            // Stores the role in memory so other pages can adapt
+            localStorage.setItem('active_role', role);
         }
     </script>
 
