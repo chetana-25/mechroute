@@ -167,7 +167,12 @@
     
     <center><a href="dashboard.html" style="display:block; margin-top:35px; color:var(--soft-slate); text-decoration:none; font-weight:700; font-size: 0.9rem;">← Back to Dashboard</a></center>
 </div>
-
+<center>
+        <a href="dashboard.html" style="display:block; margin-top:35px; color:var(--soft-slate); text-decoration:none; font-weight:700; font-size: 0.9rem;">
+            ← Back to Dashboard
+        </a>
+    </center>
+</div> 
 <script>
     let selectedData = null;
 
@@ -190,7 +195,6 @@
             return;
         }
 
-        // Store with time included
         const finalDate = `${date} at ${time}`;
 
         const newEntry = {
@@ -204,9 +208,12 @@
         logs.push(newEntry);
         localStorage.setItem('fleet_logs', JSON.stringify(logs));
 
-        window.location.href = 'logs.html';
+        // This will now successfully send the user to the payment page
+        window.location.href = 'payment.html';
     }
 </script>
-
 </body>
 </html>
+</body>
+</html>
+
