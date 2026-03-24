@@ -29,12 +29,13 @@
         .logo span { color: var(--brand); }
 
         .nav-right { display: flex; align-items: center; gap: 20px; }
-        .nav-link { text-decoration: none; color: var(--dark); font-weight: 700; font-size: 0.9rem; }
+        .nav-link { text-decoration: none; color: var(--dark); font-weight: 700; font-size: 0.9rem; transition: 0.2s; }
+        .nav-link:hover { color: var(--brand); }
         
         .btn-switch { 
             text-decoration: none; color: var(--brand); border: 1.5px solid var(--brand);
             padding: 8px 18px; border-radius: 12px; font-weight: 700; font-size: 0.85rem;
-            transition: 0.3s; display: flex; align-items: center; gap: 8px;
+            transition: 0.3s;
         }
         .btn-switch:hover { background: var(--brand); color: white; transform: translateY(-2px); }
 
@@ -96,7 +97,7 @@
     <header class="hero">
         <span class="section-tag">MechRoute Intelligence</span>
         <h1>Redefining the<br><span>Road Ahead.</span></h1>
-        <p>A precision-built ecosystem for vehicle health diagnostics and instant on-spot service connectivity for drivers who value time.</p>
+        <p>Instant on-spot care for drivers who don't have time to wait or get lost. We find you, we fix it, you move on.</p>
         <div class="hero-btns">
             <a href="register.html" class="btn-main">Get Started</a>
             <a href="#architecture" class="btn-secondary">Explore</a>
@@ -112,43 +113,43 @@
         <div class="card-grid">
             <div class="feature-card">
                 <div style="font-size: 2.5rem; margin-bottom: 20px;">⚡</div>
-                <h3>Reactive</h3>
-                <p><strong>On-Spot Recovery.</strong> High-speed technician dispatch for when you're in a hurry or in an unknown location. We come to your GPS coordinates instantly.</p>
+                <h3>On-Spot Recovery</h3>
+                <p>Stuck in an unknown spot or in a hurry? We use precise GPS to send the nearest mechanic straight to your side instantly.</p>
             </div>
+            
             <div class="feature-card" style="border-top: 6px solid var(--brand);">
-                <div style="font-size: 2.5rem; margin-bottom: 20px;">🔍</div>
+                <div style="font-size: 2.5rem; margin-bottom: 20px;">🛡️</div>
                 <h3>Verified Network</h3>
-                <p>Every mechanic is pre-vetted and rated by the community. You get transparent pricing and expert service every single time.</p>
+                <p>Connect with pre-vetted, community-rated experts. You get transparent pricing and reliable service every single time.</p>
             </div>
+
             <div class="feature-card">
                 <div style="font-size: 2.5rem; margin-bottom: 20px;">📅</div>
-                <h3>Preventative</h3>
-                <p>Seamlessly pre-book routine services and manage digital health logs to keep your vehicle in factory-grade condition for years to come.</p>
+                <h3>Scheduled Care</h3>
+                <p>Too busy to visit a workshop? Pre-book your routine service through the app and manage your vehicle on your own schedule.</p>
             </div>
         </div>
     </section>
 
     <section class="section-container how-it-works">
         <span class="section-tag">The MechRoute Journey</span>
-        <h2 style="font-size: 3rem; font-weight: 800; letter-spacing: -2px;">How it Works</h2>
-    
+        <h2 style="font-size: 3.2rem; font-weight: 800; letter-spacing: -2px;">How it Works</h2>
+        
         <div class="steps-grid">
             <div class="step">
                 <div class="step-num">01</div>
                 <div class="step-content">
                     <h4>Request Assistance</h4>
-                    <p style="color: var(--text-muted);">Car stopped? Or just too busy to visit a shop? Request help instantly and we'll connect you to a nearby certified mechanic.</p>
+                    <p style="color: var(--text-muted);">Car stopped? Or just too busy to visit a shop? Request help instantly and we'll connect you to a nearby mechanic.</p>
                 </div>
             </div>
-
             <div class="step">
                 <div class="step-num">02</div>
                 <div class="step-content">
                     <h4>Live GPS Tracking</h4>
-                    <p style="color: var(--text-muted);">Forget explaining landmarks. We share your precise location so the mechanic can navigate straight to your car, wherever you are.</p>
+                    <p style="color: var(--text-muted);">Forget explaining landmarks. We share your precise location so the expert can navigate straight to your car, wherever you are.</p>
                 </div>
             </div>
-
             <div class="step">
                 <div class="step-num">03</div>
                 <div class="step-content">
@@ -157,24 +158,21 @@
                 </div>
             </div>
         </div>
-</section>
-
-    
+    </section>
 
     <footer>
         <div style="margin-bottom: 30px;">
             <a href="#" class="logo">MechRoute<span>.</span></a>
-            <p style="color: var(--text-muted); margin-top: 10px; max-width: 450px; font-size: 0.9rem; font-weight: 500;">
-                Providing seamless on-spot maintenance and predictive care through intelligent vehicle connectivity.
+            <p style="color: var(--text-muted); margin-top: 10px; max-width: 450px; font-size: 1rem; font-weight: 500;">
+                Smart tracking. Instant location. Expert help right where you are.
             </p>
         </div>
 
         <div class="footer-bottom">
-            <span style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">© 2026 Digital Intelligence. All Rights Reserved.</span>
+            <span style="color: var(--text-muted); font-size: 0.85rem; font-weight: 600;">© 2026 MechRoute. All Rights Reserved.</span>
             <div class="footer-links">
                 <a href="#" class="footer-link">Privacy Policy</a>
                 <a href="#" class="footer-link">Terms of Service</a>
-                <a href="#" class="footer-link">Cookie Settings</a>
                 <a href="#" class="footer-link">Contact Support</a>
             </div>
         </div>
