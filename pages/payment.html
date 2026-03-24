@@ -2,34 +2,92 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tracking & Payment | MechRoute</title>
-    <link rel="stylesheet" href="../assets/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Payment | MechRoute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-blue: #2563eb;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #fcfdfe; 
+            display: flex; justify-content: center; align-items: center; min-height: 100vh;
+        }
+
+        .payment-card {
+            background: white; width: 100%; max-width: 450px; padding: 40px;
+            border-radius: 32px; border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        h2 { font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 10px; }
+        .price-display { 
+            font-size: 2.5rem; font-weight: 800; color: var(--brand-blue); 
+            margin: 20px 0; display: block;
+        }
+
+        .method-list { margin: 30px 0; text-align: left; }
+        .method {
+            padding: 15px; border: 1px solid var(--border); border-radius: 16px;
+            margin-bottom: 10px; display: flex; align-items: center; gap: 12px;
+            cursor: pointer; transition: 0.2s; font-weight: 600;
+        }
+        .method:hover { border-color: var(--brand-blue); background: #f8fafc; }
+
+        .btn-pay {
+            width: 100%; padding: 20px; background: var(--deep-slate); color: white;
+            border: none; border-radius: 18px; font-size: 1.1rem; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-pay:hover { background: var(--brand-blue); transform: translateY(-2px); }
+
+        /* Success State */
+        #success-state { display: none; }
+        .check-icon { font-size: 4rem; color: #10b981; margin-bottom: 20px; }
+    </style>
 </head>
-<body style="background: var(--bg);">
-    <div class="container" style="max-width: 600px; padding-top: 50px;">
-        
-        <div id="tracking-section" class="card text-center">
-            <h2 style="color: var(--brand);">Mechanic is En Route</h2>
-            <p>Estimated arrival: 8 minutes</p>
-            <div style="background: #eee; height: 10px; border-radius: 5px; margin: 2rem 0; overflow: hidden;">
-                <div id="progress-fill" style="background: var(--brand); height: 100%; width: 0%; transition: width 0.1s linear;"></div>
+<body>
+
+    <div class="payment-card" id="payment-card">
+        <div id="payment-input">
+            <h2>Confirm Payment</h2>
+            <p style="color: var(--soft-slate);">Pre-booking Authorization</p>
+            
+            <span class="price-display">₹4500</span>
+
+            <div class="method-list">
+                <div class="method"><input type="radio" name="pay" checked> UPI (GPay/PhonePe)</div>
+                <div class="method"><input type="radio" name="pay"> Credit / Debit Card</div>
             </div>
-            <p style="font-size: 0.9rem; color: var(--text-muted);">Please stay with your vehicle.</p>
+
+            <button class="btn-pay" onclick="processPayment()">Confirm & Pay</button>
         </div>
 
-        <div id="payment-section" class="card hidden">
-            <h2 class="text-center">Service Complete</h2>
-            <p class="text-center">Confirm payment to finalize the session.</p>
-            <div style="margin: 2rem 0; padding: 1rem; background: var(--brand-soft); border-radius: 8px;">
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Service Fee</span>
-                    <strong>$45.00</strong>
-                </div>
-            </div>
-            <button class="btn btn-primary" style="width: 100%;" onclick="alert('Payment Successful!')">Pay with Card</button>
+        <div id="success-state">
+            <div class="check-icon">✓</div>
+            <h2>Payment Successful</h2>
+            <p style="color: var(--soft-slate); margin-bottom: 30px;">Your booking is confirmed. Your mechanic will be notified of your GPS location.</p>
+            <a href="dashboard.html" style="color: var(--brand-blue); font-weight: 700; text-decoration: none;">Return to Dashboard</a>
         </div>
-
     </div>
-    <script src="../assets/js/script.js"></script>
+
+    <script>
+        function processPayment() {
+            const btn = document.querySelector('.btn-pay');
+            btn.innerHTML = "Processing...";
+            
+            setTimeout(() => {
+                document.getElementById('payment-input').style.display = 'none';
+                document.getElementById('success-state').style.display = 'block';
+            }, 1500);
+        }
+    </script>
 </body>
 </html>
