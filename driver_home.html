@@ -43,7 +43,9 @@
         .hero { padding: 140px 8% 100px; text-align: center; }
         .hero h1 { font-size: 4.8rem; font-weight: 800; letter-spacing: -4px; line-height: 0.95; margin-bottom: 25px; }
         .hero h1 span { color: var(--brand); }
-        .hero p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 45px; max-width: 600px; margin-left: auto; margin-right: auto; }
+        
+        /* UPDATED: Combined Mission Statement */
+        .hero p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 45px; max-width: 700px; margin-left: auto; margin-right: auto; }
         
         .hero-btns { display: flex; gap: 15px; justify-content: center; position: relative; z-index: 10; }
         .btn-main { 
@@ -52,9 +54,16 @@
         }
         .btn-main:hover { background: var(--brand); transform: translateY(-3px); box-shadow: 0 20px 40px rgba(37, 99, 235, 0.2); }
         
+        /* UPDATED: Secondary Button turns Blue on Hover */
         .btn-secondary {
             padding: 18px 40px; background: transparent; color: var(--dark); border: 2.5px solid var(--dark);
             border-radius: 14px; font-weight: 800; text-decoration: none; font-size: 1.1rem; transition: 0.3s;
+        }
+        .btn-secondary:hover { 
+            background: var(--brand); 
+            border-color: var(--brand); 
+            color: white; 
+            transform: translateY(-3px);
         }
 
         /* --- SECTIONS --- */
@@ -62,11 +71,24 @@
         .section-tag { color: var(--brand); font-weight: 800; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 20px; display: block; }
         
         .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
-        .feature-card { background: white; padding: 50px 40px; border-radius: 32px; border: 1px solid var(--border); }
+        
+        /* UPDATED: Feature Card "Pop" Effect */
+        .feature-card { 
+            background: white; 
+            padding: 50px 40px; 
+            border-radius: 32px; 
+            border: 1px solid var(--border); 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+        }
+        .feature-card:hover { 
+            transform: scale(1.05) translateY(-10px); 
+            box-shadow: 0 30px 60px rgba(15, 23, 42, 0.1);
+            border-color: var(--brand);
+        }
         .feature-card h3 { font-size: 1.6rem; font-weight: 800; margin-bottom: 18px; }
 
-        /* --- HOW IT WORKS --- */
-        .how-it-works { background: var(--bg-light); text-align: center; }
+        /* --- HOW IT WORKS (Updated to White Background) --- */
+        .how-it-works { background: #ffffff; text-align: center; }
         .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 50px; margin-top: 60px; }
         .step { position: relative; }
         .step-num { font-size: 6rem; font-weight: 900; color: #cbd5e1; position: absolute; top: -40px; left: 50%; transform: translateX(-50%); z-index: 1; opacity: 0.3; }
@@ -74,6 +96,8 @@
 
         /* --- FOOTER --- */
         footer { background: #f8fafc; padding: 60px 8% 40px; border-top: 1px solid var(--border); }
+        .footer-link { text-decoration: none; color: var(--text-muted); font-size: 0.85rem; font-weight: 600; margin-right: 25px; transition: 0.2s; }
+        .footer-link:hover { color: var(--brand); }
     </style>
 </head>
 <body>
@@ -89,7 +113,7 @@
     <header class="hero">
         <span class="section-tag">MechRoute Intelligence</span>
         <h1>Redefining the<br><span>Road Ahead.</span></h1>
-        <p>Instant on-spot care for drivers who don't have time to wait or get lost. We find you, we fix it, you move on.</p>
+        <p>Whether it's an urgent roadside recovery or a scheduled expert check-up, we've got you covered. From instant GPS rescue to planned maintenance, we find you, fix it, and keep you moving.</p>
         <div class="hero-btns">
             <a href="pages/register.html" class="btn-main">Get Started</a>
             <a href="#architecture" class="btn-secondary">Explore</a>
@@ -103,19 +127,19 @@
             <div class="feature-card">
                 <div style="font-size: 2.5rem; margin-bottom: 20px;">⚡</div>
                 <h3>On-Spot Recovery</h3>
-                <p style="color: var(--text-muted);">Stuck in an unknown spot or in a hurry? We use precise GPS to send the nearest mechanic straight to your side instantly.</p>
+                <p style="color: var(--text-muted);">Stranded or in a rush? Our precise GPS tracking sends the nearest verified mechanic to your exact coordinates for instant repair.</p>
             </div>
             
             <div class="feature-card" style="border-top: 6px solid var(--brand);">
                 <div style="font-size: 2.5rem; margin-bottom: 20px;">🛡️</div>
                 <h3>Verified Network</h3>
-                <p style="color: var(--text-muted);">Connect with pre-vetted, community-rated experts. You get transparent pricing and reliable service every single time.</p>
+                <p style="color: var(--text-muted);">Quality guaranteed. Connect with a pre-vetted, community-rated network for transparent pricing and dependable automotive expertise.</p>
             </div>
 
             <div class="feature-card">
                 <div style="font-size: 2.5rem; margin-bottom: 20px;">📅</div>
                 <h3>Scheduled Care</h3>
-                <p style="color: var(--text-muted);">Too busy to visit a workshop? Pre-book your routine service through the app and manage your vehicle on your own schedule.</p>
+                <p style="color: var(--text-muted);">Skip the workshop queues. Pre-book routine maintenance at your convenience and manage your vehicle's health on your own terms.</p>
             </div>
         </div>
     </section>
@@ -129,21 +153,21 @@
                 <div class="step-num">01</div>
                 <div class="step-content">
                     <h4>Request Assistance</h4>
-                    <p style="color: var(--text-muted);">Car stopped? Or just too busy to visit a shop? Request help instantly and we'll connect you to a nearby mechanic.</p>
+                    <p style="color: var(--text-muted);">Request an instant rescue or schedule a future service slot with just a few taps on your dashboard.</p>
                 </div>
             </div>
             <div class="step">
                 <div class="step-num">02</div>
                 <div class="step-content">
                     <h4>Live GPS Tracking</h4>
-                    <p style="color: var(--text-muted);">Forget explaining landmarks. We share your precise location so the expert can navigate straight to your car, wherever you are.</p>
+                    <p style="color: var(--text-muted);">No more landmarks. We sync your precise location with our experts to ensure help reaches you exactly where you are.</p>
                 </div>
             </div>
             <div class="step">
                 <div class="step-num">03</div>
                 <div class="step-content">
                     <h4>Service & Feedback</h4>
-                    <p style="color: var(--text-muted);">Once the work is finished, pay securely and leave a rating. Your feedback helps us maintain the highest service standards.</p>
+                    <p style="color: var(--text-muted);">Finalize your session with secure payment and rate your experience to help us maintain top-tier service quality.</p>
                 </div>
             </div>
         </div>
@@ -153,7 +177,7 @@
         <div style="margin-bottom: 30px;">
             <a href="#" class="logo">MechRoute<span>.</span></a>
             <p style="color: var(--text-muted); margin-top: 10px; max-width: 450px; font-size: 1rem; font-weight: 500;">
-                Smart tracking. Instant location. Expert help right where you are.
+                Seamless recovery. Smart scheduling. Expert help right where you are.
             </p>
         </div>
         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); padding-top: 20px;">
