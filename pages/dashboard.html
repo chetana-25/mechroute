@@ -55,8 +55,9 @@
         .stat-card p { font-size: 0.85rem; color: var(--soft-slate); margin: 5px 0 0 0; font-weight: 600; }
 
         /* Sidebar Logout Button Style (Matches your original button layout) */
+        /* Sidebar Logout Button Style - Updated to Blue */
         .btn-logout-sidebar { 
-            background: #e11d48; 
+            background: var(--brand-blue); /* Changed from #e11d48 to your brand blue */
             color: white; 
             padding: 16px; 
             text-align: center; 
@@ -68,7 +69,10 @@
             border: none;
             transition: 0.3s;
         }
-        .btn-logout-sidebar:hover { background: #be123c; }
+        
+        .btn-logout-sidebar:hover { 
+            background: #1d4ed8; /* A slightly darker blue for the hover effect */
+        }
     </style>
 </head>
 <body>
@@ -81,7 +85,7 @@
                 <a href="logs.html" class="nav-link">Service History</a>
             </nav>
         </div>
-        <button onclick="logout()" class="btn-logout-sidebar">Logout from Fleet</button>
+        <button onclick="logout()" class="btn-logout-sidebar">Logout</button>
     </aside>
 
     <main class="main-content">
