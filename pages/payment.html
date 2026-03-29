@@ -58,9 +58,9 @@
     <div class="payment-card" id="payment-card">
         <div id="payment-input">
             <h2>Confirm Payment</h2>
-            <p style="color: var(--soft-slate);">Pre-booking Authorization</p>
+            <p id="serviceName" style="color: var(--soft-slate);">Service Authorization</p>
             
-            <span class="price-display">₹4500</span>
+            <span class="price-display" id="displayPrice">₹0</span>
 
             <div class="method-list">
                 <div class="method"><input type="radio" name="pay" checked> UPI (GPay/PhonePe)</div>
@@ -79,6 +79,20 @@
     </div>
 
     <script>
+        // --- NEW LOGIC TO FETCH BOOKING DATA ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+            
+            if (logs.length > 0) {
+                // Get the very last item added to the logs
+                const latestBooking = logs[logs.length - 1];
+                
+                // Update the UI with the real data
+                document.getElementById('displayPrice').innerText = latestBooking.price;
+                document.getElementById('serviceName').innerText = latestBooking.service;
+            }
+        });
+
         function processPayment() {
             const btn = document.querySelector('.btn-pay');
             btn.innerHTML = "Processing...";
