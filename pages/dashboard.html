@@ -19,6 +19,8 @@
         
         /* Sidebar */
         .sidebar { width: 280px; background-color: var(--sidebar-bg); color: white; display: flex; flex-direction: column; padding: 40px 24px; justify-content: space-between; }
+        .logo { font-size: 1.5rem; font-weight: 800; }
+        .logo span { color: var(--brand-blue); }
         .nav-link { display:block; color:#94a3b8; text-decoration:none; margin-bottom:20px; font-weight:700; transition: 0.3s; }
         .nav-link:hover, .nav-link.active { color: white; }
 
@@ -33,13 +35,12 @@
         .choice-card { 
             text-decoration: none; padding: 32px; border-radius: 24px; border: 2px solid #f1f5f9; 
             transition: all 0.3s ease; display: flex; flex-direction: column; justify-content: space-between;
+            color: inherit;
         }
         
-        /* Scheduled Style */
         .card-planned { background: white; }
         .card-planned:hover { border-color: var(--brand-blue); transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
         
-        /* On-Spot Style (High Priority) */
         .card-onspot { background: var(--sidebar-bg); color: white; border: none; }
         .card-onspot:hover { background: #1e293b; transform: translateY(-5px); box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2); }
 
@@ -53,8 +54,21 @@
         .stat-card h2 { font-size: 1.8rem; margin: 0; color: var(--text-slate); }
         .stat-card p { font-size: 0.85rem; color: var(--soft-slate); margin: 5px 0 0 0; font-weight: 600; }
 
-        .btn-logout { margin-top: 40px; padding: 12px 24px; border: 1px solid #f1f5f9; background: white; color: #e11d48; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-        .btn-logout:hover { background: #fff1f2; border-color: #fda4af; }
+        /* Sidebar Logout Button Style (Matches your original button layout) */
+        .btn-logout-sidebar { 
+            background: #e11d48; 
+            color: white; 
+            padding: 16px; 
+            text-align: center; 
+            border-radius: 14px; 
+            text-decoration: none; 
+            font-weight: 800; 
+            font-size: 0.9rem; 
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+        .btn-logout-sidebar:hover { background: #be123c; }
     </style>
 </head>
 <body>
@@ -65,9 +79,9 @@
             <nav style="margin-top: 60px;">
                 <a href="#" class="nav-link active">Overview</a>
                 <a href="logs.html" class="nav-link">Service History</a>
-                </nav>
+            </nav>
         </div>
-        <a href="booking.html" style="background:var(--brand-blue); color:white; padding:16px; text-align:center; border-radius:14px; text-decoration:none; font-weight:800; font-size: 0.9rem;">+ Book Service</a>
+        <button onclick="logout()" class="btn-logout-sidebar">Logout from Fleet</button>
     </aside>
 
     <main class="main-content">
@@ -105,9 +119,7 @@
                 <div class="stat-card"><h2 id="totalSpentDisplay">₹0</h2><p>Total Spent</p></div>
             </section>
         </div>
-        
-        <button onclick="logout()" class="btn-logout">Logout from Fleet</button>
-    </main>
+        </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -122,9 +134,11 @@
 
             let total = 0;
             logs.forEach(entry => {
-                const priceValue = entry.price.replace('₹', '').replace(',', '');
-                const price = parseInt(priceValue) || 0;
-                total += price;
+                if (entry.price) {
+                    const priceValue = entry.price.replace('₹', '').replace(',', '');
+                    const price = parseInt(priceValue) || 0;
+                    total += price;
+                }
             });
             document.getElementById('totalSpentDisplay').innerText = `₹${total.toLocaleString('en-IN')}`;
         });
