@@ -45,9 +45,8 @@
             justify-content: space-between;
         }
 
-        /* --- LIGHT COLOR CODING --- */
-        .card-best { background-color: #f0fdf4; border-color: #dcfce7; } /* Light Green */
-        .card-preventative { background-color: #eff6ff; border-color: #dbeafe; } /* Light Blue */
+        .card-best { background-color: #f0fdf4; border-color: #dcfce7; }
+        .card-preventative { background-color: #eff6ff; border-color: #dbeafe; }
 
         .service-card:hover { transform: translateY(-5px); border-color: var(--brand-blue); }
         .service-card.selected { border-color: var(--brand-blue); box-shadow: 0 0 0 2px var(--brand-blue); }
@@ -71,7 +70,6 @@
         .service-card p { font-size: 0.95rem; color: var(--soft-slate); line-height: 1.6; margin-bottom: 25px; }
         .price { font-size: 1.6rem; font-weight: 800; color: var(--deep-slate); }
 
-        /* FOOTER AREA */
         .footer-selection {
             display: flex;
             align-items: flex-end;
@@ -165,14 +163,13 @@
         <button class="btn-confirm" onclick="confirmBooking()">Confirm Selection</button>
     </div>
     
-    <center><a href="dashboard.html" style="display:block; margin-top:35px; color:var(--soft-slate); text-decoration:none; font-weight:700; font-size: 0.9rem;">← Back to Dashboard</a></center>
-</div>
-<center>
+    <center>
         <a href="dashboard.html" style="display:block; margin-top:35px; color:var(--soft-slate); text-decoration:none; font-weight:700; font-size: 0.9rem;">
             ← Back to Dashboard
         </a>
     </center>
-</div> 
+</div>
+
 <script>
     let selectedData = null;
 
@@ -208,12 +205,8 @@
         logs.push(newEntry);
         localStorage.setItem('fleet_logs', JSON.stringify(logs));
 
-        // This will now successfully send the user to the payment page
         window.location.href = 'payment.html';
     }
 </script>
 </body>
 </html>
-</body>
-</html>
-
