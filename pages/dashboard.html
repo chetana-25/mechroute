@@ -122,7 +122,9 @@
                 <div class="stat-card"><h2 id="totalSpentDisplay">₹0</h2><p>Total Spent</p></div>
             </section>
         </div>
-    </main> <script>
+    </main>
+
+    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const firstName = localStorage.getItem('user_firstName') || "User";
             const fleetEmail = localStorage.getItem('user_email') || "not registered";
@@ -145,12 +147,12 @@
         });
 
         function logout() {
-            // Clearing user session data
+            // Clear user session data
             localStorage.removeItem('user_firstName');
             localStorage.removeItem('user_email');
             
-            // Redirecting to driver_home.html instead of login.html
-            window.location.href = 'driver_home.html';
+            // Move up one level out of /pages to find driver_home.html in the root
+            window.location.href = '../driver_home.html';
         }
     </script>
 </body>
