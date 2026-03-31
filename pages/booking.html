@@ -46,8 +46,6 @@
         }
 
         .card-best { background-color: #f0fdf4; border-color: #dcfce7; }
-        .card-preventative { background-color: #eff6ff; border-color: #dbeafe; }
-
         .service-card:hover { transform: translateY(-5px); border-color: var(--brand-blue); }
         .service-card.selected { border-color: var(--brand-blue); box-shadow: 0 0 0 2px var(--brand-blue); }
 
@@ -63,12 +61,14 @@
         }
 
         .badge-green { background: #dcfce7; color: #15803d; }
-        .badge-blue { background: #dbeafe; color: #1d4ed8; }
         .badge-slate { background: #f1f5f9; color: var(--soft-slate); }
 
         .service-card h3 { font-size: 1.4rem; font-weight: 800; margin: 0 0 12px 0; color: var(--deep-slate); }
         .service-card p { font-size: 0.95rem; color: var(--soft-slate); line-height: 1.6; margin-bottom: 25px; }
+        
+        .price-container { display: flex; flex-direction: column; }
         .price { font-size: 1.6rem; font-weight: 800; color: var(--deep-slate); }
+        .fee-hint { font-size: 0.75rem; color: var(--soft-slate); font-weight: 600; margin-top: 4px; }
 
         .footer-selection {
             display: flex;
@@ -116,36 +116,48 @@
 <div class="container">
     <div class="header">
         <h1>Schedule Service</h1>
-        <p>Expert maintenance tailored to your vehicle's health requirements.</p>
+        <p>Standardized maintenance packages for your fleet.</p>
     </div>
 
     <div class="service-grid">
-        <div class="service-card card-best" onclick="selectService(this, 'Full Periodic Maintenance', '4500', 'Best')">
-            <span class="badge badge-green">Best Value</span>
+        <div class="service-card card-best" onclick="selectService(this, 'Full Periodic Maintenance', 2500, 'Premium')">
+            <span class="badge badge-green">Recommended</span>
             <h3>Full Service</h3>
-            <p>Engine oil & filter change, 50-point inspection, and fluid top-ups.</p>
-            <div class="price">₹4500</div>
+            <p>Engine oil, filter replacement, and a complete 50-point safety inspection.</p>
+            <div class="price-container">
+                <div class="price">₹2,500</div>
+                <div class="fee-hint">+ ₹199 Valet Fee</div>
+            </div>
         </div>
 
-        <div class="service-card card-preventative" onclick="selectService(this, 'Brake & Tire Safety', '2800', 'Preventative')">
-            <span class="badge badge-blue">Preventative</span>
-            <h3>Safety Check</h3>
-            <p>Brake pad replacement, tire rotation, and wheel alignment.</p>
-            <div class="price">₹2800</div>
+        <div class="service-card" onclick="selectService(this, 'Brake & Tire Safety', 1500, 'Safety')">
+            <span class="badge badge-slate">Safety</span>
+            <h3>Brake & Alignment</h3>
+            <p>Brake pad cleaning, tire rotation, and laser wheel alignment.</p>
+            <div class="price-container">
+                <div class="price">₹1,500</div>
+                <div class="fee-hint">+ ₹199 Valet Fee</div>
+            </div>
         </div>
 
-        <div class="service-card" onclick="selectService(this, 'Advanced Engine Scan', '1500', 'Advanced')">
+        <div class="service-card" onclick="selectService(this, 'Advanced Engine Scan', 1200, 'Diagnostics')">
             <span class="badge badge-slate">Diagnostics</span>
-            <h3>Engine Scan</h3>
-            <p>Comprehensive OBD-II scan and sensor calibration for optimal performance.</p>
-            <div class="price">₹1500</div>
+            <h3>Engine Diagnostics</h3>
+            <p>Full OBD-II sensor scan to detect hidden electrical or engine faults.</p>
+            <div class="price-container">
+                <div class="price">₹1,200</div>
+                <div class="fee-hint">+ ₹199 Valet Fee</div>
+            </div>
         </div>
 
-        <div class="service-card" onclick="selectService(this, 'Deep Cleaning & Wash', '1200', 'Basic')">
+        <div class="service-card" onclick="selectService(this, 'Deep Cleaning & Wash', 1000, 'Essentials')">
             <span class="badge badge-slate">Essentials</span>
-            <h3>Deep Clean</h3>
-            <p>Premium pressure wash, interior vacuuming, and polish.</p>
-            <div class="price">₹1200</div>
+            <h3>Premium Detailing</h3>
+            <p>Full exterior foam wash, wax polish, and deep interior vacuuming.</p>
+            <div class="price-container">
+                <div class="price">₹1,000</div>
+                <div class="fee-hint">+ ₹199 Valet Fee</div>
+            </div>
         </div>
     </div>
 
@@ -172,11 +184,20 @@
 
 <script>
     let selectedData = null;
+    const CONVENIENCE_FEE = 199; // Added automatically to the final bill
 
-    function selectService(element, name, price, type) {
+    function selectService(element, name, basePrice, type) {
         document.querySelectorAll('.service-card').forEach(card => card.classList.remove('selected'));
         element.classList.add('selected');
-        selectedData = { name, price: "₹" + price, type };
+        
+        // Logic: Card Price + Valet Fee
+        const totalPrice = basePrice + CONVENIENCE_FEE;
+        
+        selectedData = { 
+            name: name, 
+            price: totalPrice, 
+            type: type 
+        };
     }
 
     function confirmBooking() {
@@ -184,25 +205,25 @@
         const time = document.getElementById('serviceTime').value;
 
         if (!selectedData) {
-            alert("Please select a service card.");
+            alert("Please pick a service first.");
             return;
         }
         if (!date || !time) {
-            alert("Please provide both a date and a time.");
+            alert("Please select both date and time.");
             return;
         }
 
         const finalDate = `${date} at ${time}`;
 
-        const newEntry = {
+        const newLogEntry = {
             date: finalDate,
             type: selectedData.type,
             service: selectedData.name,
-            price: selectedData.price
+            price: "₹" + selectedData.price // Saved with the fee included
         };
 
         const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-        logs.push(newEntry);
+        logs.push(newLogEntry);
         localStorage.setItem('fleet_logs', JSON.stringify(logs));
 
         window.location.href = 'payment.html';
