@@ -24,6 +24,25 @@
         .nav-link { display:block; color:#94a3b8; text-decoration:none; margin-bottom:20px; font-weight:700; transition: 0.3s; }
         .nav-link:hover, .nav-link.active { color: white; }
 
+        /* Sidebar Logout Button Style */
+        .btn-logout-sidebar { 
+            background: var(--brand-blue); 
+            color: white; 
+            padding: 16px; 
+            text-align: center; 
+            border-radius: 14px; 
+            text-decoration: none; 
+            font-weight: 800; 
+            font-size: 0.9rem; 
+            cursor: pointer;
+            border: none;
+            transition: 0.3s;
+        }
+        
+        .btn-logout-sidebar:hover { 
+            background: #1d4ed8; 
+        }
+
         /* Main Content */
         .main-content { flex-grow: 1; padding: 60px 80px; overflow-y: auto; }
         .welcome-text { font-size: 2.4rem; font-weight: 800; margin: 0; color: var(--text-slate); letter-spacing: -1.5px; }
@@ -53,26 +72,6 @@
         .stat-card { flex: 1; padding: 30px; border-radius: 24px; border: 1px solid #f1f5f9; background: #ffffff; }
         .stat-card h2 { font-size: 1.8rem; margin: 0; color: var(--text-slate); }
         .stat-card p { font-size: 0.85rem; color: var(--soft-slate); margin: 5px 0 0 0; font-weight: 600; }
-
-        /* Sidebar Logout Button Style (Matches your original button layout) */
-        /* Sidebar Logout Button Style - Updated to Blue */
-        .btn-logout-sidebar { 
-            background: var(--brand-blue); /* Changed from #e11d48 to your brand blue */
-            color: white; 
-            padding: 16px; 
-            text-align: center; 
-            border-radius: 14px; 
-            text-decoration: none; 
-            font-weight: 800; 
-            font-size: 0.9rem; 
-            cursor: pointer;
-            border: none;
-            transition: 0.3s;
-        }
-        
-        .btn-logout-sidebar:hover { 
-            background: #1d4ed8; /* A slightly darker blue for the hover effect */
-        }
     </style>
 </head>
 <body>
@@ -123,9 +122,7 @@
                 <div class="stat-card"><h2 id="totalSpentDisplay">₹0</h2><p>Total Spent</p></div>
             </section>
         </div>
-        </main>
-
-    <script>
+    </main> <script>
         document.addEventListener('DOMContentLoaded', () => {
             const firstName = localStorage.getItem('user_firstName') || "User";
             const fleetEmail = localStorage.getItem('user_email') || "not registered";
@@ -148,9 +145,12 @@
         });
 
         function logout() {
+            // Clearing user session data
             localStorage.removeItem('user_firstName');
             localStorage.removeItem('user_email');
-            window.location.href = 'login.html';
+            
+            // Redirecting to driver_home.html instead of login.html
+            window.location.href = 'driver_home.html';
         }
     </script>
 </body>
