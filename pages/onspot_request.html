@@ -1,1 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency SOS | MechRoute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-red: #ef4444;
+            --deep-slate: #0f172a;
+            --soft-slate: #64748b;
+            --bg-light: #fcfdfe;
+        }
 
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            display: flex; justify-content: center; align-items: center;
+            min-height: 100vh; padding: 20px;
+        }
+
+        .recovery-container {
+            background: white; width: 100%; max-width: 480px; padding: 40px;
+            border-radius: 32px; box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            text-align: center; border: 1px solid #e2e8f0;
+        }
+
+        h1 { font-size: 2rem; font-weight: 800; margin: 0; color: var(--deep-slate); letter-spacing: -1px; }
+        p.subtitle { color: var(--soft-slate); margin: 10px 0 30px 0; font-size: 0.95rem; }
+
+        .issue-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;
+        }
+
+        .issue-card {
+            padding: 20px 10px; border: 2px solid #f1f5f9; border-radius: 20px;
+            cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; align-items: center; gap: 8px;
+        }
+
+        .issue-card span { font-size: 1.8rem; }
+        .issue-card label { font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+        .issue-card .price-tag { font-size: 0.7rem; color: var(--soft-slate); }
+
+        .issue-card:hover { border-color: var(--brand-red); background: #fff1f2; }
+        .issue-card.selected { border-color: var(--brand-red); background: #fff1f2; }
+
+        /* The "Other" Textbox - Hidden by default */
+        #other-input-container {
+            display: none; margin-top: 10px; text-align: left; animation: fadeIn 0.4s ease;
+        }
+
+        textarea {
+            width: 100%; padding: 15px; border-radius: 14px; border: 1px solid #e2e8f0;
+            font-family: inherit; font-size: 0.9rem; resize: none; background: #f8fafc; box-sizing: border-box;
+        }
+
+        .btn-dispatch {
+            width: 100%; padding: 22px; background: var(--deep-slate); color: white;
+            border: none; border-radius: 20px; font-size: 1.1rem; font-weight: 800;
+            cursor: pointer; transition: 0.3s; margin-top: 20px;
+        }
+
+        .btn-dispatch:hover { background: var(--brand-red); transform: translateY(-3px); }
+
+        #searching-ui { display: none; padding: 40px 0; }
+        .radar {
+            width: 80px; height: 80px; background: #fee2e2; border-radius: 50%;
+            margin: 0 auto 30px; animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 30px rgba(239, 68, 68, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<div class="recovery-container">
+    <div id="selection-ui">
+        <h1>On-Spot Help</h1>
+        <p class="subtitle">Select your issue for immediate roadside assistance.</p>
+
+        <div class="issue-grid">
+            <div class="issue-card" onclick="selectEmergency(this, 'Flat Tire', 600)">
+                <span>🛞</span><label>Flat Tire</label><div class="price-tag">₹600</div>
+            </div>
+            <div class="issue-card" onclick="selectEmergency(this, 'Battery Jump', 500)">
+                <span>🔋</span><label>Battery</label><div class="price-tag">₹500</div>
+            </div>
+            <div class="issue-card" onclick="selectEmergency(this, 'Out of Fuel', 800)">
+                <span>⛽</span><label>Fuel</label><div class="price-tag">₹800</div>
+            </div>
+            <div class="issue-card" onclick="selectEmergency(this, 'Other Issue', 750, true)">
+                <span>🛠️</span><label>Other</label><div class="price-tag">Starts ₹750</div>
+            </div>
+        </div>
+
+        <div id="other-input-container">
+            <label style="font-size: 0.8rem; font-weight: 700; color: var(--soft-slate); display: block; margin-bottom: 8px;">Describe the problem:</label>
+            <textarea id="other-desc" rows="3" placeholder="Example: Key stuck in ignition, strange noise from engine..."></textarea>
+        </div>
+
+        <button class="btn-dispatch" onclick="triggerDispatch()">Dispatch Now</button>
+        <a href="dashboard.html" style="display:block; margin-top:20px; color:var(--soft-slate); text-decoration:none; font-weight:700; font-size: 0.8rem;">← Cancel</a>
+    </div>
+
+    <div id="searching-ui">
+        <div class="radar"></div>
+        <h1>Locating Help...</h1>
+        <p class="subtitle">Matching you with the closest technician.</p>
+    </div>
+</div>
+
+<script>
+    let selectedSOS = null;
+
+    function selectEmergency(el, name, price, showInput = false) {
+        document.querySelectorAll('.issue-card').forEach(card => card.classList.remove('selected'));
+        el.classList.add('selected');
+        
+        selectedSOS = { name, price };
+
+        // Show/Hide the text area based on "Other" selection
+        const inputContainer = document.getElementById('other-input-container');
+        inputContainer.style.display = showInput ? 'block' : 'none';
+    }
+
+    function triggerDispatch() {
+        if (!selectedSOS) { alert("Please select an issue."); return; }
+
+        let finalServiceName = selectedSOS.name;
+        
+        // If "Other" is chosen, append their description
+        if (selectedSOS.name === "Other Issue") {
+            const desc = document.getElementById('other-desc').value.trim();
+            if (!desc) { alert("Please describe your problem so the mechanic can bring the right tools."); return; }
+            finalServiceName = "SOS: " + desc;
+        }
+
+        document.getElementById('selection-ui').style.display = 'none';
+        document.getElementById('searching-ui').style.display = 'block';
+
+        setTimeout(() => {
+            const newLog = {
+                date: new Date().toLocaleString(),
+                type: "SOS",
+                service: finalServiceName,
+                price: "₹" + selectedSOS.price
+            };
+
+            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+            logs.push(newLog);
+            localStorage.setItem('fleet_logs', JSON.stringify(logs));
+
+            alert("Mechanic Found! Help is on the way.");
+            window.location.href = 'dashboard.html';
+        }, 3000);
+    }
+</script>
+
+</body>
+</html>
