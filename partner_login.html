@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Login | MechRoute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --brand: #2563eb; --dark: #0f172a; --border: #e2e8f0; --bg: #f8fafc; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .login-card { 
+            background: white; padding: 40px; border-radius: 24px; 
+            border: 1px solid var(--border); width: 100%; max-width: 400px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .logo { font-weight: 800; font-size: 1.5rem; margin-bottom: 10px; text-align: center; }
+        .logo span { color: var(--brand); }
+        
+        h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 25px; text-align: center; color: var(--dark); }
+        label { font-size: 0.75rem; font-weight: 800; color: #64748b; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        
+        input { 
+            width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 12px; 
+            border: 1px solid var(--border); background: #fcfdfe; font-weight: 600; 
+        }
+        input:focus { border-color: var(--brand); outline: none; background: white; }
+        
+        .btn-login { 
+            width: 100%; padding: 16px; background: var(--dark); color: white; 
+            border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s;
+        }
+        .btn-login:hover { background: var(--brand); transform: translateY(-2px); }
+        
+        .footer-link { text-align: center; margin-top: 20px; font-size: 0.85rem; color: #64748b; }
+        .footer-link a { color: var(--brand); font-weight: 700; text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="logo">MechRoute<span>.Partner</span></div>
+        <h2>Welcome Back</h2>
+        
+        <form onsubmit="handlePartnerLogin(event)">
+            <label>Partner ID</label>
+            <input type="email" id="partner-email" placeholder="name.partner@mechroute.com" required>
+            
+            <label>Password</label>
+            <input type="password" id="partner-pass" placeholder="••••••••" required>
+            
+            <button type="submit" class="btn-login">Sign In to Dashboard</button>
+        </form>
+        
+        <div class="footer-link">
+            New to the network? <a href="partner_terminal.html">Register Now</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
