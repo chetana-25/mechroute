@@ -26,7 +26,6 @@
         .logo span { color: var(--brand); }
         .nav-links a { text-decoration: none; color: var(--dark); font-weight: 700; font-size: 0.9rem; margin-left: 30px; }
         .btn-login { background: var(--dark); color: white !important; padding: 10px 20px; border-radius: 10px; transition: 0.3s; }
-        .btn-login:hover { background: var(--brand); }
 
         .hero { padding: 100px 8%; display: flex; flex-direction: column; align-items: center; text-align: center; }
         .hero h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.2; margin-bottom: 20px; }
@@ -41,8 +40,13 @@
             background: white; border: 2px solid var(--border); border-radius: 16px;
             padding: 25px; cursor: pointer; transition: 0.3s; text-align: left;
         }
-        .type-card:hover { border-color: var(--brand); transform: translateY(-5px); }
-        .type-card.selected { border-color: var(--brand); background: #eff6ff; }
+        
+        /* This is the class the JS toggles */
+        .type-card.selected { 
+            border-color: var(--brand) !important; 
+            background: #eff6ff !important; 
+            transform: translateY(-5px);
+        }
         
         .legal-tag { 
             font-size: 0.7rem; font-weight: 800; color: var(--brand); 
@@ -89,14 +93,22 @@
         </div>
     </section>
 
+    <script src="script.js"></script>
+
     <script>
         function selectType(role) {
-            // Save choice
+            // 1. Save selection to memory
             localStorage.setItem('partner_type', role);
             
-            // Visual feedback
-            document.querySelectorAll('.type-card').forEach(card => card.classList.remove('selected'));
-            document.getElementById(role + '-card').classList.add('selected');
+            // 2. Remove 'selected' class from all cards
+            const cards = document.querySelectorAll('.type-card');
+            cards.forEach(card => card.classList.remove('selected'));
+            
+            // 3. Add 'selected' class to the one clicked
+            const activeCard = document.getElementById(role + '-card');
+            if (activeCard) {
+                activeCard.classList.add('selected');
+            }
         }
 
         function goToRegister() {
@@ -107,6 +119,11 @@
             }
             window.location.href = 'partner_register.html';
         }
+
+        // On Page Load: Clear any old selection to force a fresh click
+        window.onload = () => {
+            localStorage.removeItem('partner_type');
+        };
     </script>
 </body>
 </html>
