@@ -1,1 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partner Command | MechRoute</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --brand-blue: #2563eb; 
+            --sidebar-bg: #0f172a; 
+            --text-slate: #0f172a; 
+            --soft-slate: #64748b; 
+            --bg-light: #f8fafc;
+            --success-green: #10b981;
+        }
+        
+        * { box-sizing: border-box; }
+        body { margin: 0; display: flex; height: 100vh; font-family: 'Plus Jakarta Sans', sans-serif; background-color: #ffffff; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: 280px; background-color: var(--sidebar-bg); color: white; display: flex; flex-direction: column; padding: 40px 24px; justify-content: space-between; }
+        .logo { font-size: 1.5rem; font-weight: 800; }
+        .logo span { color: var(--brand-blue); }
+        .nav-link { display:block; color:#94a3b8; text-decoration:none; margin-bottom:20px; font-weight:700; transition: 0.3s; }
+        .nav-link:hover, .nav-link.active { color: white; }
 
+        .btn-logout { 
+            background: var(--brand-blue); color: white; padding: 16px; 
+            text-align: center; border-radius: 14px; text-decoration: none; 
+            font-weight: 800; font-size: 0.9rem; cursor: pointer; border: none;
+        }
+
+        /* Main Content */
+        .main-content { flex-grow: 1; padding: 60px 80px; overflow-y: auto; }
+        .welcome-text { font-size: 2.4rem; font-weight: 800; margin: 0; color: var(--text-slate); letter-spacing: -1.5px; }
+        .partner-type-badge { font-size: 0.7rem; font-weight: 800; color: white; background: var(--brand-blue); padding: 4px 10px; border-radius: 6px; text-transform: uppercase; }
+
+        /* Job Cards */
+        .section-title { font-size: 1.1rem; font-weight: 800; color: var(--soft-slate); margin: 40px 0 20px 0; text-transform: uppercase; letter-spacing: 1px; }
+        
+        .job-grid { display: grid; gap: 20px; }
+        .job-card { 
+            background: white; border: 1px solid #f1f5f9; padding: 25px; 
+            border-radius: 24px; display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+
+        .job-info h3 { margin: 0 0 5px 0; font-size: 1.2rem; font-weight: 800; }
+        .job-info p { margin: 0; color: var(--soft-slate); font-size: 0.9rem; font-weight: 600; }
+        .job-price { font-size: 1.4rem; font-weight: 800; color: var(--brand-blue); margin-top: 10px; }
+
+        .btn-accept { 
+            background: var(--text-slate); color: white; padding: 14px 28px; 
+            border-radius: 12px; border: none; font-weight: 800; cursor: pointer; transition: 0.3s;
+        }
+        .btn-accept:hover { background: var(--success-green); transform: scale(1.05); }
+
+        /* Stats Section */
+        .stats-row { display: flex; gap: 20px; margin-top: 20px; }
+        .stat-box { flex: 1; padding: 25px; border-radius: 20px; border: 1px solid #f1f5f9; }
+        .stat-box h2 { font-size: 1.8rem; margin: 0; }
+        .stat-box p { font-size: 0.8rem; color: var(--soft-slate); font-weight: 700; margin: 5px 0 0 0; }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div>
+            <div class="logo">MechRoute<span>.Partner</span></div>
+            <nav style="margin-top: 60px;">
+                <a href="#" class="nav-link active">Job Terminal</a>
+                <a href="#" class="nav-link">Earnings</a>
+                <a href="#" class="nav-link">My Reviews</a>
+            </nav>
+        </div>
+        <button onclick="logout()" class="btn-logout">Logout Terminal</button>
+    </aside>
+
+    <main class="main-content">
+        <header>
+            <h1 id="partnerNameDisplay" class="welcome-text">Partner Portal</h1>
+            <div style="margin-top: 12px;">
+                <span id="typeBadge" class="partner-type-badge">Partner</span>
+                <span id="partnerEmailDisplay" style="margin-left:10px; font-weight:600; color:var(--soft-slate);">loading...</span>
+            </div>
+        </header>
+
+        <div class="stats-row">
+            <div class="stat-box"><h2>₹0</h2><p>TODAY'S EARNINGS</p></div>
+            <div class="stat-box"><h2>0</h2><p>COMPLETED JOBS</p></div>
+            <div class="stat-box"><h2>4.9★</h2><p>PARTNER RATING</p></div>
+        </div>
+
+        <h2 class="section-title">Live Fleet Requests</h2>
+        
+        <div class="job-grid" id="jobContainer">
+            <p id="noJobs" style="color: var(--soft-slate); font-weight: 600;">Scanning for nearby requests...</p>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load Partner Info
+            const partnerData = JSON.parse(localStorage.getItem('active_partner')) || { name: "Partner", email: "Unknown", type: "expert" };
+            document.getElementById('partnerNameDisplay').innerText = `Welcome, ${partnerData.name}`;
+            document.getElementById('partnerEmailDisplay').innerText = partnerData.email;
+            document.getElementById('typeBadge').innerText = partnerData.type;
+
+            // Load Global Fleet Logs (to simulate incoming requests)
+            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+            const container = document.getElementById('jobContainer');
+
+            if (logs.length > 0) {
+                document.getElementById('noJobs').style.display = 'none';
+                
+                // Show the most recent request at the top
+                logs.reverse().forEach((job, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'job-card';
+                    card.innerHTML = `
+                        <div class="job-info">
+                            <p>CLIENT REQUEST #${1024 + index}</p>
+                            <h3>${job.service}</h3>
+                            <p>📅 ${job.date}</p>
+                            <div class="job-price">${job.price}</div>
+                        </div>
+                        <button class="btn-accept" onclick="acceptJob(this)">Accept Job</button>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        });
+
+        function acceptJob(btn) {
+            btn.innerText = "Accepted ✓";
+            btn.style.background = "#10b981";
+            btn.disabled = true;
+            alert("Success! The driver has been notified that you are on the way.");
+        }
+
+        function logout() {
+            localStorage.removeItem('active_partner');
+            window.location.href = 'partner_terminal.html';
+        }
+    </script>
+</body>
+</html>
