@@ -7,29 +7,34 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f8fafc; }
         .reg-card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 450px; }
-        h2 { font-weight: 800; margin-bottom: 20px; }
-        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: #0f172a; }
-        input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 20px; }
-        .btn { width: 100%; padding: 15px; background: #2563eb; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
+        h2 { font-weight: 800; margin-bottom: 20px; letter-spacing: -0.5px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.85rem; color: #64748b; text-transform: uppercase; }
+        input { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 20px; font-weight: 600; transition: 0.3s; }
+        input:focus { border-color: #2563eb; outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
+        .btn { width: 100%; padding: 18px; background: #0f172a; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        .btn:hover { background: #2563eb; transform: translateY(-2px); }
     </style>
 </head>
 <body>
 
     <div class="reg-card">
         <h2 id="reg-title">Verification</h2>
-        <form action="partner_dashboard.html">
-            <label id="name-label">Business Name</label>
-            <input type="text" placeholder="Enter name" required>
+        <form onsubmit="handlePartnerRegistration(event)">
+            
+            <label id="name-label">Workshop Name</label>
+            <input type="text" id="partnerName" placeholder="Enter name" required>
 
             <label id="cred-label">Credential Number</label>
-            <input type="text" placeholder="ID Number" required>
+            <input type="text" id="credentialID" placeholder="ID Number" required>
 
             <label>Contact Email</label>
-            <input type="email" placeholder="email@example.com" required>
+            <input type="email" id="partnerEmail" placeholder="email@example.com" required>
 
             <button type="submit" class="btn">Complete Setup</button>
         </form>
     </div>
+
+    <script src="script.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -40,7 +45,8 @@
 
             if (role === 'workshop') {
                 title.innerText = "Workshop Registration";
-                nameLabel.innerText = "Registered Workshop Name";
+                // 3. Updated label to "Workshop Name" as requested
+                nameLabel.innerText = "Workshop Name";
                 credLabel.innerText = "Trade License Number (GSTIN)";
             } else if (role === 'expert') {
                 title.innerText = "Technician Registration";
