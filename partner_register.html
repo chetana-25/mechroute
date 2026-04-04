@@ -2,115 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Partner Registration | MechRoute</title>
+    <title>Partner Verification | MechRoute</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --brand: #2563eb;
-            --dark: #0f172a;
-            --text-muted: #64748b;
-            --bg-light: #f8fafc;
-            --border: #e2e8f0;
-        }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background-color: var(--bg-light); display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
-
-        .reg-card {
-            background: white; width: 100%; max-width: 500px; padding: 45px;
-            border-radius: 32px; border: 1px solid var(--border);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.03);
-        }
-
-        .reg-card h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: -1px; margin-bottom: 8px; }
-        .reg-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 35px; }
-
-        .input-group { margin-bottom: 20px; display: flex; flex-direction: column; }
-        .input-group label { font-size: 0.75rem; font-weight: 800; text-transform: uppercase; color: var(--text-muted); margin-bottom: 8px; letter-spacing: 0.5px; }
-        
-        input {
-            padding: 14px 18px; border-radius: 12px; border: 1px solid var(--border);
-            font-size: 1rem; font-weight: 600; outline: none; transition: 0.2s;
-            background: #fafbfc;
-        }
-        input:focus { border-color: var(--brand); background: white; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-
-        .btn-submit {
-            width: 100%; padding: 18px; background: var(--dark); color: white;
-            border: none; border-radius: 14px; font-weight: 800; font-size: 1rem;
-            cursor: pointer; transition: 0.3s; margin-top: 10px;
-        }
-        .btn-submit:hover { background: var(--brand); transform: translateY(-2px); }
-
-        .back-link { display: block; text-align: center; margin-top: 25px; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; font-weight: 700; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f8fafc; }
+        .reg-card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 450px; }
+        h2 { font-weight: 800; margin-bottom: 20px; }
+        label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.9rem; color: #0f172a; }
+        input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 10px; margin-bottom: 20px; }
+        .btn { width: 100%; padding: 15px; background: #2563eb; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="reg-card">
-        <h1 id="regTitle">Registration</h1>
-        <p id="regSubtitle">Please provide your professional credentials.</p>
+        <h2 id="reg-title">Verification</h2>
+        <form action="partner_dashboard.html">
+            <label id="name-label">Business Name</label>
+            <input type="text" placeholder="Enter name" required>
 
-        <form onsubmit="handleRegistration(event)">
-            <div class="input-group">
-                <label id="nameLabel">Full Name / Business Name</label>
-                <input type="text" id="partnerName" placeholder="Enter name" required>
-            </div>
+            <label id="cred-label">Credential Number</label>
+            <input type="text" placeholder="ID Number" required>
 
-            <div class="input-group">
-                <label>Contact Email</label>
-                <input type="email" id="partnerEmail" placeholder="name@business.com" required>
-            </div>
+            <label>Contact Email</label>
+            <input type="email" placeholder="email@example.com" required>
 
-            <div class="input-group">
-                <label id="credentialLabel">Professional ID</label>
-                <input type="text" id="credentialID" placeholder="Enter ID number" required>
-            </div>
-
-            <button type="submit" class="btn-submit">Verify & Continue</button>
+            <button type="submit" class="btn">Complete Setup</button>
         </form>
-
-        <a href="partner_terminal.html" class="back-link">← Change Partner Type</a>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Check what the user selected on the previous page
-            const type = localStorage.getItem('partner_type');
-            const title = document.getElementById('regTitle');
-            const subtitle = document.getElementById('regSubtitle');
-            const credLabel = document.getElementById('credentialLabel');
-            const credInput = document.getElementById('credentialID');
+            const role = localStorage.getItem('partner_type');
+            const title = document.getElementById('reg-title');
+            const nameLabel = document.getElementById('name-label');
+            const credLabel = document.getElementById('cred-label');
 
-            if (type === 'workshop') {
-                title.innerText = "Workshop Signup";
-                subtitle.innerText = "Register your physical garage or workshop entity.";
-                credLabel.innerText = "Trade License Number";
-                credInput.placeholder = "TL-XXXX-XXXX";
-            } else {
-                title.innerText = "Expert Technician";
-                subtitle.innerText = "Verify your individual mechanic certifications.";
-                credLabel.innerText = "Mechanical Certification ID";
-                credInput.placeholder = "CERT-XXXX-XXXX";
+            if (role === 'workshop') {
+                title.innerText = "Workshop Registration";
+                nameLabel.innerText = "Registered Workshop Name";
+                credLabel.innerText = "Trade License Number (GSTIN)";
+            } else if (role === 'expert') {
+                title.innerText = "Technician Registration";
+                nameLabel.innerText = "Full Legal Name";
+                credLabel.innerText = "Technical Certification ID (ASE/MECH)";
             }
         });
-
-        function handleRegistration(event) {
-            event.preventDefault();
-            
-            // Save the partner data locally
-            const partnerData = {
-                name: document.getElementById('partnerName').value,
-                email: document.getElementById('partnerEmail').value,
-                type: localStorage.getItem('partner_type')
-            };
-            
-            localStorage.setItem('active_partner', JSON.stringify(partnerData));
-            
-            // Redirect to the Partner Dashboard
-            window.location.href = 'partner_dashboard.html';
-        }
     </script>
 </body>
 </html>
