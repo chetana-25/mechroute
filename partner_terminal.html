@@ -88,13 +88,13 @@
                 </div>
 
                 <div class="type-grid">
-                    <div class="type-card" onclick="selectType('workshop')">
+                    <div class="type-card" onclick="selectPartnerType('workshop')">
                         <span class="legal-tag">BUSINESS ENTITY</span>
                         <h3 style="margin-top:10px;">Workshop / Store</h3>
                         <p>For physical garages with multiple technicians.</p>
                     </div>
 
-                    <div class="type-card" onclick="selectType('expert')">
+                    <div class="type-card" onclick="selectPartnerType('expert')">
                         <span class="legal-tag">FREELANCE EXPERT</span>
                         <h3 style="margin-top:10px;">Individual Tech</h3>
                         <p>For certified independent mechanical experts.</p>
@@ -108,24 +108,16 @@
         </div>
     </section>
 
+    <script src="script.js"></script>
+
     <script>
-        let selectedType = '';
-
-        function selectType(type) {
-            selectedType = type;
-            // Visual feedback for selection
-            const cards = document.querySelectorAll('.type-card');
-            cards.forEach(card => card.style.borderColor = 'transparent');
-            event.currentTarget.style.borderColor = '#2563eb';
-        }
-
+        // Check if a type is actually in storage before letting them move forward
         function goToRegister() {
-            if (!selectedType) {
-                alert("Please select your partner type first.");
+            const type = localStorage.getItem('partner_type');
+            if (!type) {
+                alert("Please select your partner type (Workshop or Individual) first.");
                 return;
             }
-            // Redirect based on choice to your registration page
-            localStorage.setItem('partner_type', selectedType);
             window.location.href = 'partner_register.html';
         }
     </script>
