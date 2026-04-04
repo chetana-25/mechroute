@@ -88,14 +88,59 @@ function selectPartnerType(type) {
     } catch(e) {}
 }
 
+// 1. REGISTRATION: Generates ID and Default Password
 function handlePartnerRegistration(event) {
     event.preventDefault();
+
+    const fullName = document.getElementById('partnerName').value;
+    const personalEmail = document.getElementById('partnerEmail').value;
+    const type = localStorage.getItem('partner_type');
+    const credID = document.getElementById('credentialID').value;
+
+    // GENERATE CREDENTIALS
+    // We take the first name and add .partner@mechroute.com
+    const cleanName = fullName.split(' ')[0].toLowerCase(); 
+    const generatedID = `${cleanName}.partner@mechroute.com`;
+    const defaultPass = "MECH2026"; // The password we give everyone to start
+
     const partnerData = {
-        name: document.getElementById('partnerName').value,
-        email: document.getElementById('partnerEmail').value,
-        type: localStorage.getItem('partner_type'),
-        id: document.getElementById('credentialID').value
+        name: fullName,
+        workID: generatedID,
+        password: defaultPass,
+        role: type,
+        status: 'Active'
     };
-    localStorage.setItem('active_partner', JSON.stringify(partnerData));
-    window.location.href = 'partner_dashboard.html';
+
+    // STORE DATA (Using the generated email as the key)
+    localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
+    
+    // Alert the user of their NEW credentials
+    alert(`REGISTRATION SUCCESSFUL!\n\nYour Login ID: ${generatedID}\nYour Password: ${defaultPass}\n\nPlease save these to sign in.`);
+
+    // Move to Login Page
+    window.location.href = 'partner_login.html';
+}
+
+// 2. LOGIN: Checks if they exist in our "Database"
+function handlePartnerLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('partner-email').value;
+    const pass = document.getElementById('partner-pass').value;
+
+    // Try to find them in localStorage
+    const savedUser = localStorage.getItem('db_' + email);
+
+    if (savedUser) {
+        const user = JSON.parse(savedUser);
+        if (user.password === pass) {
+            // Success! Save session and go to dashboard
+            localStorage.setItem('current_partner_session', JSON.stringify(user));
+            window.location.href = 'partner_dashboard.html';
+        } else {
+            alert("Invalid Password. Please use the one provided (MECH2026).");
+        }
+    } else {
+        alert("Account not found. Please register as a partner first.");
+    }
 }
