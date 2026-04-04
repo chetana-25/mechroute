@@ -36,16 +36,23 @@
         }
 
         .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
-        .type-card {
-            background: white; border: 2px solid var(--border); border-radius: 16px;
-            padding: 25px; cursor: pointer; transition: 0.3s; text-align: left;
-        }
         
-        /* This is the class the JS toggles */
+        .type-card {
+            background: white; 
+            border: 2px solid var(--border); 
+            border-radius: 16px;
+            padding: 25px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            text-align: left;
+        }
+
+        /* The Visual "Selected" State */
         .type-card.selected { 
             border-color: var(--brand) !important; 
             background: #eff6ff !important; 
             transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.1);
         }
         
         .legal-tag { 
@@ -93,18 +100,18 @@
         </div>
     </section>
 
-    <script src="script.js"></script>
-
     <script>
+        // Make sure this is globally accessible
         function selectType(role) {
-            // 1. Save selection to memory
+            console.log("Selected role:", role); // For debugging
             localStorage.setItem('partner_type', role);
             
-            // 2. Remove 'selected' class from all cards
-            const cards = document.querySelectorAll('.type-card');
-            cards.forEach(card => card.classList.remove('selected'));
+            // Remove selection from all
+            document.querySelectorAll('.type-card').forEach(card => {
+                card.classList.remove('selected');
+            });
             
-            // 3. Add 'selected' class to the one clicked
+            // Add to current
             const activeCard = document.getElementById(role + '-card');
             if (activeCard) {
                 activeCard.classList.add('selected');
@@ -113,17 +120,12 @@
 
         function goToRegister() {
             const role = localStorage.getItem('partner_type');
-            if (!role) {
-                alert("Please select a registration type first.");
+            if (!role || role === "null") {
+                alert("Please select a registration type (Workshop or Individual) first.");
                 return;
             }
             window.location.href = 'partner_register.html';
         }
-
-        // On Page Load: Clear any old selection to force a fresh click
-        window.onload = () => {
-            localStorage.removeItem('partner_type');
-        };
     </script>
 </body>
 </html>
