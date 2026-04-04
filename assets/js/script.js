@@ -1,68 +1,43 @@
-/* 🛠 MECHROUTE - CORE LOGIC ENGINE (Updated) */
+/* 🛠 MECHROUTE - CORE LOGIC ENGINE */
 
-// --- 1. THE CONVERSION LOGIC (Gmail -> Pro ID) ---
+// --- 1. GMAIL TO PRO ID CONVERSION ---
 function generateCredentials(event) {
     event.preventDefault();
     const gmailInput = document.getElementById('user-gmail').value;
-    const firstName = gmailInput.split('@')[0];
+    const prefix = gmailInput.split('@')[0];
     
-    // Create the professional MechRoute identity
-    const generatedEmail = `${firstName}.mr@mechroute.com`;
+    const generatedEmail = `${prefix}.mr@mechroute.com`;
     const tempPass = "START2026"; 
 
-    // Save to Local Storage (Better than Session for persistent logins)
-    localStorage.setItem('user_firstName', firstName.charAt(0).toUpperCase() + firstName.slice(1));
-    localStorage.setItem('user_email', generatedEmail);
-    localStorage.setItem('user_pass', tempPass);
+    localStorage.setItem('mechEmail', generatedEmail);
+    localStorage.setItem('mechPass', tempPass);
+    localStorage.setItem('user_firstName', prefix.charAt(0).toUpperCase() + prefix.slice(1));
     
     window.location.href = 'account-setup.html';
 }
 
-// --- 2. THE SECURITY CHECK (Login) ---
+// --- 2. LOGIN SECURITY ---
 function handleLogin(event) {
     event.preventDefault();
     const inputEmail = document.getElementById('email').value;
     const inputPass = document.getElementById('password').value;
 
-    const savedEmail = localStorage.getItem('user_email');
-    const savedPass = localStorage.getItem('user_pass');
+    const savedEmail = localStorage.getItem('mechEmail');
+    const savedPass = localStorage.getItem('mechPass');
 
     if ((inputEmail === savedEmail && inputPass === savedPass) || 
         (inputEmail === "admin@mechroute.com" && inputPass === "service2026")) {
         window.location.href = "dashboard.html";
     } else {
-        alert("Access Denied! Check your credentials.");
+        alert("Access Denied! Use your generated ID and the password START2026.");
     }
 }
 
-// --- 3. THE MECHANIC SEARCH (Simulation) ---
-function startMechanicSearch() {
-    const resultsArea = document.getElementById('search-results');
-    if (!resultsArea) return;
-
-    resultsArea.innerHTML = `
-        <div class="card text-center" style="padding: 2rem;">
-            <div class="loader" style="margin: 0 auto 1rem;"></div>
-            <p>Locating nearest certified mechanics...</p>
-        </div>`;
-
-    setTimeout(() => {
-        resultsArea.innerHTML = `
-            <div class="card" style="display:flex; justify-content:space-between; align-items:center; border-left: 5px solid var(--brand-blue);">
-                <div>
-                    <h3 style="margin:0;">Elite Auto Care</h3>
-                    <p style="margin:0; color:var(--soft-slate);">⭐ 4.9 • 0.8 miles away</p>
-                </div>
-                <button class="btn-pay" style="width:auto; padding:10px 20px;" onclick="window.location.href='payment.html?mode=tracking'">Request</button>
-            </div>`;
-    }, 2000);
-}
-
-// --- 4. THE LIVE TRACKING & DYNAMIC PRICING ---
+// --- 3. DYNAMIC PRICING & TRACKING (Runs on page load) ---
 window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     
-    // Logic for Payment Page: Fetch real price from logs
+    // Update Payment Page with real Booking Data
     const displayPrice = document.getElementById('displayPrice');
     if (displayPrice) {
         const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
@@ -75,33 +50,42 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Logic for Live Progress Bar
+    // Progress Bar Simulation
     if (urlParams.get('mode') === 'tracking') {
         const progressBar = document.getElementById('progress-fill');
         let width = 0;
-        
         const interval = setInterval(() => {
             if (width >= 100) {
                 clearInterval(interval);
-                const trackSec = document.getElementById('tracking-section');
-                const paySec = document.getElementById('payment-section');
-                if(trackSec) trackSec.classList.add('hidden');
-                if(paySec) paySec.classList.remove('hidden');
+                document.getElementById('tracking-section').classList.add('hidden');
+                document.getElementById('payment-section').classList.remove('hidden');
             } else {
                 width++;
                 if(progressBar) progressBar.style.width = width + '%';
             }
-        }, 50); 
+        }, 50);
     }
 });
 
-// --- 5. PARTNER TERMINAL LOGIC ---
+// --- 4. PARTNER SELECTION & REGISTRATION ---
 function selectPartnerType(type) {
     localStorage.setItem('partner_type', type);
-    // Visual feedback
+    
+    // Visual Highlight
     const cards = document.querySelectorAll('.type-card');
-    cards.forEach(c => c.style.borderColor = 'transparent');
-    event.currentTarget.style.borderColor = '#2563eb';
+    cards.forEach(card => {
+        card.style.borderColor = 'transparent';
+        card.style.background = 'white';
+    });
+
+    // We use a try/catch in case IDs aren't on the specific page
+    try {
+        const selected = document.getElementById(`${type}-card`);
+        if(selected) {
+            selected.style.borderColor = '#2563eb';
+            selected.style.background = '#f8fafc';
+        }
+    } catch(e) {}
 }
 
 function handlePartnerRegistration(event) {
