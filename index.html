@@ -142,14 +142,14 @@
 
     <div class="gateway-grid">
         
-        <a href="driver_home.html" class="role-card" onclick="saveRole('driver')">
+        <a href="login.html" class="role-card" onclick="saveRole('driver')">
             <div class="icon-circle">🚘</div>
             <h2>Vehicle Driver</h2>
             <p>Monitor your fleet health, track maintenance costs, and book professional services.</p>
             <div class="btn-action">Enter Driver Portal</div>
         </a>
 
-        <a href="service_home.html" class="role-card" onclick="saveRole('partner')">
+        <a href="partner_terminal.html" class="role-card" onclick="saveRole('partner')">
             <div class="icon-circle">🛠️</div>
             <h2>Service Partner</h2>
             <p>Authorized terminal for workshops and certified experts to manage repair jobs.</p>
@@ -162,6 +162,13 @@
         function saveRole(role) {
             // Stores the choice so the app "remembers" who is using it
             localStorage.setItem('active_role', role);
+            
+            // Clear any old session data to prevent role-mixing
+            if(role === 'partner') {
+                localStorage.removeItem('user_email'); // Clear driver login
+            } else {
+                localStorage.removeItem('active_partner'); // Clear partner login
+            }
         }
     </script>
 
