@@ -95,7 +95,13 @@
                 <span id="fleetEmailDisplay" class="fleet-email">loading...</span>
             </div>
         </header>
-
+        <div id="jobNotification" style="display: none; background: #ecfdf5; border: 1px solid #10b981; padding: 20px; border-radius: 16px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px;">
+            <div style="font-size: 1.5rem;">✅</div>
+            <div>
+                <h4 style="margin: 0; color: #065f46; font-weight: 800;">Service Accepted!</h4>
+                <p id="notificationMessage" style="margin: 5px 0 0 0; color: #047857; font-size: 0.9rem;">A partner is on their way to help you.</p>
+            </div>
+        </div>
         <section class="choice-container">
             <a href="booking.html" class="choice-card card-planned">
                 <div>
@@ -126,6 +132,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // 1. --- USER PROFILE & STATS LOGIC ---
             const firstName = localStorage.getItem('user_firstName') || "User";
             const fleetEmail = localStorage.getItem('user_email') || "not registered";
 
@@ -144,14 +151,29 @@
                 }
             });
             document.getElementById('totalSpentDisplay').innerText = `₹${total.toLocaleString('en-IN')}`;
+
+
+            // 2. --- NEW: PARTNER NOTIFICATION LOGIC ---
+            const jobData = localStorage.getItem('active_job_status');
+    
+            if (jobData) {
+                const data = JSON.parse(jobData);
+                if (data.status === 'accepted') {
+                    const banner = document.getElementById('jobNotification');
+                    const message = document.getElementById('notificationMessage');
+            
+                    if (banner && message) {
+                        banner.style.display = 'flex'; // This makes the green box appear
+                        message.innerText = `${data.partnerName} has accepted your request and is starting the service.`;
+                    }
+                }
+            }
         });
 
+        // --- LOGOUT FUNCTION ---
         function logout() {
-            // Clear user session data
             localStorage.removeItem('user_firstName');
             localStorage.removeItem('user_email');
-            
-            // Move up one level out of /pages to find driver_home.html in the root
             window.location.href = '../driver_home.html';
         }
     </script>
