@@ -90,35 +90,45 @@ function selectPartnerType(type) {
 
 // 1. REGISTRATION: Generates ID and Default Password
 function handlePartnerRegistration(event) {
-    // 1. CRITICAL: This stops the form from clearing/reloading the page
+    // Stop the page from refreshing
     event.preventDefault();
+    console.log("Registration started...");
 
-    const fullName = document.getElementById('partnerName').value;
-    const personalEmail = document.getElementById('partnerEmail').value;
-    const type = localStorage.getItem('partner_type');
-    const credID = document.getElementById('credentialID').value;
+    try {
+        // Get values from the form
+        const fullName = document.getElementById('partnerName').value;
+        const personalEmail = document.getElementById('partnerEmail').value;
+        const type = localStorage.getItem('partner_type') || "partner";
+        const credID = document.getElementById('credentialID').value;
 
-    // 2. GENERATE THE CREDENTIALS
-    const cleanName = fullName.split(' ')[0].toLowerCase(); 
-    const generatedID = `${cleanName}.partner@mechroute.com`;
-    const defaultPass = "MECH2026"; 
+        // Generate ID: "John Doe" -> "john.partner@mechroute.com"
+        const cleanName = fullName.split(' ')[0].toLowerCase(); 
+        const generatedID = `${cleanName}.partner@mechroute.com`;
+        const defaultPass = "MECH2026"; 
 
-    const partnerData = {
-        name: fullName,
-        workID: generatedID,
-        password: defaultPass,
-        role: type,
-        credentialID: credID
-    };
+        const partnerData = {
+            name: fullName,
+            workID: generatedID,
+            password: defaultPass,
+            role: type,
+            credentialID: credID
+        };
 
-    // 3. STORE DATA
-    localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
-    
-    // 4. FEEDBACK ALERT
-    alert(`REGISTRATION SUCCESSFUL!\n\nYour Login ID: ${generatedID}\nYour Password: ${defaultPass}\n\nPlease use these to sign in.`);
+        // Save to LocalStorage
+        localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
+        console.log("Data saved for:", generatedID);
+        
+        // Show the alert
+        alert("REGISTRATION SUCCESSFUL!\n\nYour Login ID: " + generatedID + "\nYour Password: " + defaultPass);
 
-    // 5. REDIRECT: This takes you to the login page automatically
-    window.location.href = 'partner_login.html';
+        // Redirect
+        console.log("Redirecting to login...");
+        window.location.href = 'partner_login.html';
+
+    } catch (error) {
+        console.error("Registration Error:", error);
+        alert("Something went wrong. Check the console (F12).");
+    }
 }
 // 2. LOGIN: Checks if they exist in our "Database"
 function handlePartnerLogin(event) {
