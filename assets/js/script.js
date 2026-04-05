@@ -127,32 +127,53 @@ function handlePartnerLogin(event) {
     if (savedData) {
         const user = JSON.parse(savedData);
         if (user.pass === inputPass) {
+            // WE SAVE THE WHOLE USER OBJECT (including the Name!)
+            localStorage.setItem('active_partner', JSON.stringify({
+                name: user.name,  // This is the Company or Individual name
+                email: user.id,
+                type: user.type
+            }));
             window.location.href = 'partner_dashboard.html';
         } else {
-            alert("Invalid Password. Use: MECH2026");
+            alert("Invalid Password.");
         }
     } else {
-        alert("Account not found. Please register first.");
+        alert("Account not found.");
     }
 }
 
 // --- 6. THE INITIALIZER (The "Glue") ---
 document.addEventListener('DOMContentLoaded', () => {
-    // Hook the Register Form
-    const regForm = document.getElementById('regForm');
-    if (regForm) regForm.addEventListener('submit', handlePartnerRegistration);
+    // 1. PULL DATA FROM STORAGE
+    // This looks for the 'db_email' we saved during registration
+    // Or the 'active_partner' session from the login page
+    const sessionData = JSON.parse(localStorage.getItem('active_partner'));
 
-    // Hook the Login Form
-    const loginForm = document.getElementById('loginForm');
-    if (loginForm) loginForm.addEventListener('submit', handlePartnerLogin);
+    if (sessionData) {
+        // DISPLAY THE COMPANY OR INDIVIDUAL NAME
+        document.getElementById('partnerNameDisplay').innerText = `Welcome, ${sessionData.name}`;
+        
+        // DISPLAY THE EMAIL
+        document.getElementById('partnerEmailDisplay').innerText = sessionData.email;
+        
+        // UPDATE THE BADGE (Individual Technician vs Service Company)
+        const badge = document.getElementById('typeBadge');
+        badge.innerText = sessionData.type || "Expert Partner";
+        
+        // Visual touch: Change badge color if it's a Company
+        if(sessionData.type === 'company' || sessionData.type === 'Workshop') {
+            badge.style.background = '#059669'; // Emerald Green for Companies
+        }
+    } else {
+        // If someone reaches this page without logging in
+        document.getElementById('partnerNameDisplay').innerText = "Welcome, MechRoute Partner";
+    }
 
-    // Hook User Credential Form
-    const userForm = document.getElementById('userForm');
-    if (userForm) userForm.addEventListener('submit', generateCredentials);
-    
-    // Add event listener to any 'Accept' buttons on the partner dashboard
-    const acceptBtn = document.getElementById('acceptJobBtn');
-    if (acceptBtn) {
-        acceptBtn.addEventListener('click', acceptJob);
+    // ... rest of your Job Loading logic ...
+    const currentJob = localStorage.getItem('active_job_status');
+    if (currentJob) {
+        showServiceTerminal(JSON.parse(currentJob));
+    } else {
+        loadAvailableJobs();
     }
 });
