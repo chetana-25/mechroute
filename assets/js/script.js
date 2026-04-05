@@ -15,6 +15,21 @@ function generateCredentials(event) {
     
     window.location.href = 'account-setup.html';
 }
+function acceptJob(jobId) {
+    // 1. Create the notification data
+    const notification = {
+        status: "Accepted",
+        partnerName: "Drive Mechanics", // Or get this from your session
+        time: new Date().toLocaleTimeString(),
+        message: "Your repair request has been accepted!"
+    };
+
+    // 2. Put it in the 'Post Office'
+    localStorage.setItem('driver_notification', JSON.stringify(notification));
+
+    // 3. UI Feedback for the partner
+    alert("Driver has been notified!");
+}
 
 // --- 2. PARTNER SELECTION ---
 function selectPartnerType(type) {
