@@ -1,4 +1,4 @@
-/* 🛠 MECHROUTE - CORE LOGIC ENGINE (Updated) */
+/* 🛠 MECHROUTE - CORE LOGIC ENGINE */
 
 // --- 1. GMAIL TO PRO ID CONVERSION (For Users) ---
 function generateCredentials(event) {
@@ -23,7 +23,6 @@ function selectPartnerType(type) {
     const cards = document.querySelectorAll('.type-card');
     cards.forEach(card => {
         card.classList.remove('selected');
-        // Manual fallback if CSS class isn't loaded
         card.style.borderColor = '#e2e8f0';
         card.style.background = 'white';
     });
@@ -40,7 +39,7 @@ function selectPartnerType(type) {
 
 // --- 3. PARTNER REGISTRATION (The "Once and Done" Logic) ---
 function handlePartnerRegistration(event) {
-    event.preventDefault(); // STOPS the form from clearing/reloading
+    event.preventDefault(); 
     console.log("Partner Registration sequence triggered.");
 
     try {
@@ -50,7 +49,6 @@ function handlePartnerRegistration(event) {
         const credID = document.getElementById('credentialID').value;
 
         // GENERATE EASY CREDENTIALS
-        // "Arjun Sharma" -> "arjun.partner@mechroute.com"
         const firstName = fullName.split(' ')[0].toLowerCase(); 
         const generatedID = `${firstName}.partner@mechroute.com`;
         const defaultPass = "MECH2026"; 
@@ -67,22 +65,19 @@ function handlePartnerRegistration(event) {
 
         // SAVE TO LOCAL DATABASE
         localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
-        console.log("Account created:", generatedID);
         
-        // SHOW ALERT (Code waits here until user clicks OK)
         alert(
             "REGISTRATION SUCCESSFUL!\n\n" +
             "Your Partner ID: " + generatedID + "\n" +
             "Your Password: " + defaultPass + "\n\n" +
-            "Please use these to Sign In on the next page."
+            "Click OK to go to the Login Page."
         );
 
-        // REDIRECT AFTER ALERT
         window.location.href = 'partner_login.html';
 
     } catch (error) {
         console.error("Critical Reg Error:", error);
-        alert("System Error: Check if all fields are filled correctly.");
+        alert("System Error: Please ensure all fields are filled.");
     }
 }
 
@@ -98,23 +93,35 @@ function handlePartnerLogin(event) {
     if (savedUser) {
         const user = JSON.parse(savedUser);
         if (user.password === pass) {
-            // Create session
             localStorage.setItem('current_partner_session', JSON.stringify(user));
             window.location.href = 'partner_dashboard.html';
         } else {
-            alert("Invalid Password! Please use the generated password: MECH2026");
+            alert("Invalid Password! Please use: MECH2026");
         }
     } else {
-        alert("Partner ID not found. Please register as a Workshop or Tech first.");
+        alert("Partner ID not found. Please register first.");
     }
 }
 
-// --- 5. DYNAMIC PRICING & PROGRESS (Shared UI Logic) ---
-window.addEventListener('DOMContentLoaded', () => {
+// --- 5. THE REFRESH PROTECTOR & INITIALIZATION ---
+// This section ensures the buttons actually trigger the functions above
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if we are on the Register Page
+    const regForm = document.getElementById('regForm');
+    if (regForm) {
+        regForm.addEventListener('submit', handlePartnerRegistration);
+    }
+
+    // Check if we are on the Login Page
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', handlePartnerLogin);
+    }
+
+    // --- Dynamic Pricing & Progress Logic ---
     const urlParams = new URLSearchParams(window.location.search);
-    
-    // Auto-fill price from fleet logs
     const displayPrice = document.getElementById('displayPrice');
+    
     if (displayPrice) {
         const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
         if (logs.length > 0) {
@@ -126,7 +133,6 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Tracking Progress
     if (urlParams.get('mode') === 'tracking') {
         const progressBar = document.getElementById('progress-fill');
         let width = 0;
