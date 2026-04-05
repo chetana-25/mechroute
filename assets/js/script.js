@@ -63,7 +63,8 @@ function generateServiceOTP() {
     if(status) {
         status.status = "awaiting_otp";
         localStorage.setItem('active_job_status', JSON.stringify(status));
-        alert("OTP Generated! Code is now visible on Driver's Dashboard.");
+        alert("OTP Generated! Driver can now see it on their dashboard.");
+        location.reload(); 
     }
 }
 
@@ -74,49 +75,39 @@ function verifyOTP() {
         const status = JSON.parse(localStorage.getItem('active_job_status'));
         status.status = "completed";
         localStorage.setItem('active_job_status', JSON.stringify(status));
-        alert("Verified! Service Complete.");
+        alert("Verified! Service Complete. Payment portal unlocked for driver.");
         
-        // Cleanup
         localStorage.removeItem('active_job_status');
         localStorage.removeItem('active_otp');
         location.reload();
-    } else { alert("Invalid OTP."); }
+    } else { alert("Invalid OTP. Try again."); }
 }
 
-// --- 4. CANCELLATION LOGIC ---
-
+// --- 4. CANCELLATION HANDSHAKE ---
 function cancelRequest() {
     if(confirm("Are you sure you want to cancel this service?")) {
-        // 1. Signal to Partner
         localStorage.setItem('job_cancelled_by_driver', 'true');
-        
-        // 2. Clear Fleet Logs (so the job disappears from the 'Live' list)
         localStorage.removeItem('fleet_logs'); 
-        
-        // 3. Clear active status
         localStorage.removeItem('active_job_status');
         localStorage.removeItem('active_otp');
-        
-        alert("Request Cancelled. Returning to Dashboard.");
+        alert("Request Cancelled.");
         location.reload();
     }
 }
 
-// This function runs only on the Partner Dashboard to listen for cancellations
 function startCancellationListener() {
     setInterval(() => {
         if (localStorage.getItem('job_cancelled_by_driver') === 'true') {
             localStorage.removeItem('job_cancelled_by_driver');
             localStorage.removeItem('active_job_status');
             localStorage.removeItem('active_otp');
-            
-            alert("⚠️ NOTICE: The driver has cancelled this service request.");
-            location.reload(); // Returns partner to the job list
+            alert("⚠️ ORDER CANCELLED: The driver has cancelled this request.");
+            location.reload(); 
         }
     }, 2000);
 }
 
-// --- 5. THE INITIALIZER ---
+// --- 5. INITIALIZER ---
 document.addEventListener('DOMContentLoaded', () => {
     const regForm = document.getElementById('regForm');
     if (regForm) regForm.addEventListener('submit', handlePartnerRegistration);
@@ -127,7 +118,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const userForm = document.getElementById('userForm');
     if (userForm) userForm.addEventListener('submit', generateCredentials);
 
-    // If we are on the Partner Dashboard, start listening for cancellations
     if (window.location.pathname.includes('partner_dashboard.html')) {
         startCancellationListener();
     }
