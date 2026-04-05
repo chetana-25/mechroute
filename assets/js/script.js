@@ -1,6 +1,6 @@
 /* 🛠 MECHROUTE - CORE LOGIC ENGINE */
 
-// --- 1. USER GMAIL TO PRO ID ---
+// --- 1. USER GMAIL TO PRO ID (For Driver Registration) ---
 function generateCredentials(event) {
     event.preventDefault();
     const gmailInput = document.getElementById('user-gmail').value;
@@ -9,33 +9,36 @@ function generateCredentials(event) {
     const generatedEmail = `${prefix}.mr@mechroute.com`;
     const tempPass = "START2026"; 
 
-    localStorage.setItem('mechEmail', generatedEmail);
+    localStorage.setItem('user_email', generatedEmail); // Changed to match dashboard key
     localStorage.setItem('mechPass', tempPass);
     localStorage.setItem('user_firstName', prefix.charAt(0).toUpperCase() + prefix.slice(1));
     
     window.location.href = 'account-setup.html';
 }
-function acceptJob(jobId) {
-    // 1. Create the notification data
+
+// --- 2. THE BRIDGE: PARTNER ACCEPTS JOB ---
+function acceptJob() {
+    // This creates the "Message" for the Driver's Dashboard
     const notification = {
-        status: "Accepted",
-        partnerName: "Drive Mechanics", // Or get this from your session
+        status: "accepted",
+        partnerName: "Drive Mechanics Workshop", 
         time: new Date().toLocaleTimeString(),
-        message: "Your repair request has been accepted!"
+        message: "A certified technician has accepted your request and is en route."
     };
 
-    // 2. Put it in the 'Post Office'
-    localStorage.setItem('driver_notification', JSON.stringify(notification));
+    // We use 'active_job_status' so the pages/dashboard.html can find it
+    localStorage.setItem('active_job_status', JSON.stringify(notification));
 
-    // 3. UI Feedback for the partner
-    alert("Driver has been notified!");
+    alert("SUCCESS: Driver has been notified via their Fleet Command dashboard!");
+    
+    // Optional: Refresh the partner page to show 'In Progress' status
+    location.reload();
 }
 
-// --- 2. PARTNER SELECTION ---
+// --- 3. PARTNER SELECTION LOGIC ---
 function selectPartnerType(type) {
     localStorage.setItem('partner_type', type);
     
-    // UI Feedback for cards
     const cards = document.querySelectorAll('.type-card');
     cards.forEach(card => {
         card.style.borderColor = '#e2e8f0';
@@ -48,25 +51,22 @@ function selectPartnerType(type) {
         selected.style.background = '#eff6ff';
     }
     
-    // Redirect to registration after selection
     setTimeout(() => {
         window.location.href = 'partner_register.html';
     }, 300);
 }
 
-// --- 3. PARTNER REGISTRATION ---
+// --- 4. PARTNER REGISTRATION ---
 function handlePartnerRegistration(event) {
-    event.preventDefault(); // STOPS REFRESH
+    event.preventDefault(); 
 
     const fullName = document.getElementById('partnerName').value;
     const role = localStorage.getItem('partner_type') || "Partner";
 
-    // Generate ID
     const prefix = fullName.split(' ')[0].toLowerCase();
     const generatedID = `${prefix}.partner@mechroute.com`;
     const defaultPass = "MECH2026"; 
 
-    // Save to Data
     const partnerData = {
         id: generatedID,
         pass: defaultPass,
@@ -78,14 +78,13 @@ function handlePartnerRegistration(event) {
     alert(
         "REGISTRATION SUCCESSFUL!\n\n" +
         "PARTNER ID: " + generatedID + "\n" +
-        "PASSWORD: " + defaultPass + "\n\n" +
-        "Click OK to Login."
+        "PASSWORD: " + defaultPass
     );
 
     window.location.href = 'partner_login.html';
 }
 
-// --- 4. LOGIN LOGIC ---
+// --- 5. PARTNER LOGIN ---
 function handlePartnerLogin(event) {
     event.preventDefault();
     const inputID = document.getElementById('partner-email').value;
@@ -105,23 +104,23 @@ function handlePartnerLogin(event) {
     }
 }
 
-// --- 5. THE INITIALIZER (The "Glue") ---
+// --- 6. THE INITIALIZER (The "Glue") ---
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Hook the Register Form
+    // Hook the Register Form
     const regForm = document.getElementById('regForm');
-    if (regForm) {
-        regForm.addEventListener('submit', handlePartnerRegistration);
-    }
+    if (regForm) regForm.addEventListener('submit', handlePartnerRegistration);
 
-    // 2. Hook the Login Form
+    // Hook the Login Form
     const loginForm = document.getElementById('loginForm');
-    if (loginForm) {
-        loginForm.addEventListener('submit', handlePartnerLogin);
-    }
+    if (loginForm) loginForm.addEventListener('submit', handlePartnerLogin);
 
-    // 3. Hook User Credential Form
+    // Hook User Credential Form
     const userForm = document.getElementById('userForm');
-    if (userForm) {
-        userForm.addEventListener('submit', generateCredentials);
+    if (userForm) userForm.addEventListener('submit', generateCredentials);
+    
+    // Add event listener to any 'Accept' buttons on the partner dashboard
+    const acceptBtn = document.getElementById('acceptJobBtn');
+    if (acceptBtn) {
+        acceptBtn.addEventListener('click', acceptJob);
     }
 });
