@@ -24,7 +24,6 @@
         .nav-link { display:block; color:#94a3b8; text-decoration:none; margin-bottom:20px; font-weight:700; transition: 0.3s; }
         .nav-link:hover, .nav-link.active { color: white; }
 
-        /* Sidebar Logout Button Style */
         .btn-logout-sidebar { 
             background: var(--brand-blue); 
             color: white; 
@@ -39,9 +38,7 @@
             transition: 0.3s;
         }
         
-        .btn-logout-sidebar:hover { 
-            background: #1d4ed8; 
-        }
+        .btn-logout-sidebar:hover { background: #1d4ed8; }
 
         /* Main Content */
         .main-content { flex-grow: 1; padding: 60px 80px; overflow-y: auto; }
@@ -72,6 +69,33 @@
         .stat-card { flex: 1; padding: 30px; border-radius: 24px; border: 1px solid #f1f5f9; background: #ffffff; }
         .stat-card h2 { font-size: 1.8rem; margin: 0; color: var(--text-slate); }
         .stat-card p { font-size: 0.85rem; color: var(--soft-slate); margin: 5px 0 0 0; font-weight: 600; }
+
+        /* Cancellation Button */
+        .btn-cancel {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            cursor: pointer;
+            margin-left: auto;
+            transition: 0.2s;
+        }
+        .btn-cancel:hover { background: #fecaca; }
+
+        /* OTP Badge */
+        .otp-badge {
+            background: var(--brand-blue);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            display: inline-block;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -95,13 +119,20 @@
                 <span id="fleetEmailDisplay" class="fleet-email">loading...</span>
             </div>
         </header>
-        <div id="jobNotification" style="display: none; background: #ecfdf5; border: 1px solid #10b981; padding: 20px; border-radius: 16px; margin-bottom: 30px; display: flex; align-items: center; gap: 15px;">
-            <div style="font-size: 1.5rem;">✅</div>
-            <div>
-                <h4 style="margin: 0; color: #065f46; font-weight: 800;">Service Accepted!</h4>
-                <p id="notificationMessage" style="margin: 5px 0 0 0; color: #047857; font-size: 0.9rem;">A partner is on their way to help you.</p>
+
+        <div id="jobNotification" style="display: none; background: #ecfdf5; border: 1px solid #10b981; padding: 25px; border-radius: 20px; margin-bottom: 30px; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);">
+            <div style="font-size: 2rem;">🛠️</div>
+            <div style="flex: 1;">
+                <h4 id="notificationTitle" style="margin: 0; color: #065f46; font-weight: 800; font-size: 1.1rem;">Service Accepted!</h4>
+                <p id="notificationMessage" style="margin: 5px 0 0 0; color: #047857; font-size: 0.95rem;">A partner is on their way.</p>
+                <div id="otpDisplayArea" style="display: none; margin-top: 10px;">
+                    <p style="margin:0; font-size: 0.8rem; font-weight: 800; color: #065f46;">SHARE OTP WITH PARTNER:</p>
+                    <div id="otpValue" class="otp-badge">----</div>
+                </div>
             </div>
+            <button onclick="cancelRequest()" class="btn-cancel">Cancel Service</button>
         </div>
+
         <section class="choice-container">
             <a href="booking.html" class="choice-card card-planned">
                 <div>
@@ -130,9 +161,11 @@
         </div>
     </main>
 
+    <script src="../assets/js/script.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. --- USER PROFILE & STATS LOGIC ---
+            // 1. --- USER PROFILE & STATS ---
             const firstName = localStorage.getItem('user_firstName') || "User";
             const fleetEmail = localStorage.getItem('user_email') || "not registered";
 
@@ -145,32 +178,46 @@
             let total = 0;
             logs.forEach(entry => {
                 if (entry.price) {
-                    const priceValue = entry.price.replace('₹', '').replace(',', '');
-                    const price = parseInt(priceValue) || 0;
-                    total += price;
+                    const priceValue = entry.price.replace(/[₹,]/g, '');
+                    total += (parseInt(priceValue) || 0);
                 }
             });
             document.getElementById('totalSpentDisplay').innerText = `₹${total.toLocaleString('en-IN')}`;
 
-
-            // 2. --- NEW: PARTNER NOTIFICATION LOGIC ---
-            const jobData = localStorage.getItem('active_job_status');
-    
-            if (jobData) {
-                const data = JSON.parse(jobData);
-                if (data.status === 'accepted') {
-                    const banner = document.getElementById('jobNotification');
-                    const message = document.getElementById('notificationMessage');
-            
-                    if (banner && message) {
-                        banner.style.display = 'flex'; // This makes the green box appear
-                        message.innerText = `${data.partnerName} has accepted your request and is starting the service.`;
-                    }
-                }
-            }
+            // 2. --- LIVE STATUS POLLING (Checks for updates every 2s) ---
+            setInterval(checkJobStatus, 2000);
+            checkJobStatus(); // Initial check
         });
 
-        // --- LOGOUT FUNCTION ---
+        function checkJobStatus() {
+            const jobData = localStorage.getItem('active_job_status');
+            const banner = document.getElementById('jobNotification');
+            const message = document.getElementById('notificationMessage');
+            const title = document.getElementById('notificationTitle');
+            const otpArea = document.getElementById('otpDisplayArea');
+            const otpValue = document.getElementById('otpValue');
+
+            if (jobData) {
+                const data = JSON.parse(jobData);
+                banner.style.display = 'flex';
+
+                if (data.status === 'accepted') {
+                    title.innerText = "Mechanic En Route";
+                    message.innerText = `${data.partnerName} is heading to your location.`;
+                    otpArea.style.display = 'none';
+                } 
+                
+                else if (data.status === 'awaiting_otp') {
+                    title.innerText = "Mechanic Arrived!";
+                    message.innerText = `${data.partnerName} is at your spot. Give them this code:`;
+                    otpArea.style.display = 'block';
+                    otpValue.innerText = localStorage.getItem('active_otp') || "----";
+                }
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+
         function logout() {
             localStorage.removeItem('user_firstName');
             localStorage.removeItem('user_email');
