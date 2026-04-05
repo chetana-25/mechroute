@@ -64,7 +64,6 @@
     </style>
 </head>
 <body>
-
     <aside class="sidebar">
         <div>
             <div class="logo">MechRoute<span>.Partner</span></div>
@@ -92,29 +91,60 @@
             <div class="stat-box"><h2>4.9★</h2><p>PARTNER RATING</p></div>
         </div>
 
-        <h2 class="section-title">Live Fleet Requests</h2>
-        
-        <div class="job-grid" id="jobContainer">
-            <p id="noJobs" style="color: var(--soft-slate); font-weight: 600;">Scanning for nearby requests...</p>
+        <div id="activeJobSection" style="display: none; margin-top: 40px; padding: 30px; background: #f8fafc; border-radius: 24px; border: 2px dashed #cbd5e1;">
+            <h2 class="section-title" style="margin-top:0;">Active Service in Progress</h2>
+            <div id="activeJobDetails"></div>
+            
+            <hr style="margin: 25px 0; border: 0; border-top: 1px solid #e2e8f0;">
+            
+            <div id="serviceControl">
+                <p style="font-size: 0.8rem; font-weight: 800; color: var(--brand-blue); margin-bottom: 10px; text-transform: uppercase;">Verification Handshake</p>
+                <button onclick="generateServiceOTP()" class="btn-accept" style="width: 100%; margin-bottom: 15px; background: var(--sidebar-bg);">
+                    Arrived at Spot (Generate OTP)
+                </button>
+                
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" id="otpInput" placeholder="Enter 4-digit OTP" 
+                           style="flex: 1; padding: 14px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: 700; text-align: center;">
+                    <button onclick="verifyOTP()" class="btn-accept" style="background: var(--brand-blue);">Verify & Finish</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="availableJobsSection">
+            <h2 class="section-title">Live Fleet Requests</h2>
+            <div class="job-grid" id="jobContainer">
+                <p id="noJobs" style="color: var(--soft-slate); font-weight: 600;">Scanning for nearby requests...</p>
+            </div>
         </div>
     </main>
+
+    <script src="../assets/js/script.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Load Partner Info
-            const partnerData = JSON.parse(localStorage.getItem('active_partner')) || { name: "Partner", email: "Unknown", type: "expert" };
+            const partnerData = JSON.parse(localStorage.getItem('active_partner')) || { name: "Partner", email: "Unknown", type: "Expert" };
             document.getElementById('partnerNameDisplay').innerText = `Welcome, ${partnerData.name}`;
             document.getElementById('partnerEmailDisplay').innerText = partnerData.email;
             document.getElementById('typeBadge').innerText = partnerData.type;
 
-            // Load Global Fleet Logs (to simulate incoming requests)
+            // Check if a job is already in progress
+            const currentJob = localStorage.getItem('active_job_status');
+            if (currentJob) {
+                showServiceTerminal(JSON.parse(currentJob));
+            } else {
+                loadAvailableJobs();
+            }
+        });
+
+        function loadAvailableJobs() {
             const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             const container = document.getElementById('jobContainer');
+            container.innerHTML = "";
 
             if (logs.length > 0) {
                 document.getElementById('noJobs').style.display = 'none';
-                
-                // Show the most recent request at the top
                 logs.reverse().forEach((job, index) => {
                     const card = document.createElement('div');
                     card.className = 'job-card';
@@ -122,21 +152,70 @@
                         <div class="job-info">
                             <p>CLIENT REQUEST #${1024 + index}</p>
                             <h3>${job.service}</h3>
-                            <p>📅 ${job.date}</p>
                             <div class="job-price">${job.price}</div>
                         </div>
-                        <button class="btn-accept" onclick="acceptJob(this)">Accept Job</button>
+                        <button class="btn-accept" onclick="acceptJobProcess('${job.service}', '${job.price}')">Accept Job</button>
                     `;
                     container.appendChild(card);
                 });
             }
-        });
+        }
 
-        function acceptJob(btn) {
-            btn.innerText = "Accepted ✓";
-            btn.style.background = "#10b981";
-            btn.disabled = true;
-            alert("Success! The driver has been notified that you are on the way.");
+        function acceptJobProcess(service, price) {
+            const jobUpdate = {
+                status: 'accepted',
+                partnerName: document.getElementById('partnerNameDisplay').innerText.replace('Welcome, ', ''),
+                service: service,
+                price: price
+            };
+
+            // Save to shared memory for Driver
+            localStorage.setItem('active_job_status', JSON.stringify(jobUpdate));
+            
+            alert("Driver notified! Terminal opening...");
+            showServiceTerminal(jobUpdate);
+        }
+
+        function showServiceTerminal(job) {
+            document.getElementById('availableJobsSection').style.display = 'none';
+            const terminal = document.getElementById('activeJobSection');
+            terminal.style.display = 'block';
+            
+            document.getElementById('activeJobDetails').innerHTML = `
+                <h3 style="margin:0;">${job.service}</h3>
+                <p style="color:var(--soft-slate); font-weight:700;">Payout: ${job.price}</p>
+            `;
+        }
+
+        // --- THE OTP LOGIC ---
+        function generateServiceOTP() {
+            const newOTP = Math.floor(1000 + Math.random() * 9000);
+            localStorage.setItem('active_otp', newOTP);
+            
+            const status = JSON.parse(localStorage.getItem('active_job_status'));
+            status.status = "awaiting_otp";
+            localStorage.setItem('active_job_status', JSON.stringify(status));
+
+            alert("OTP Generated! Ask the driver for the 4-digit code on their dashboard.");
+        }
+
+        function verifyOTP() {
+            const enteredOTP = document.getElementById('otpInput').value;
+            const savedOTP = localStorage.getItem('active_otp');
+
+            if (enteredOTP === savedOTP) {
+                const status = JSON.parse(localStorage.getItem('active_job_status'));
+                status.status = "completed";
+                localStorage.setItem('active_job_status', JSON.stringify(status));
+                
+                alert("Verified! Service Complete. Payment unlocked for Driver.");
+                // Clean up for next job
+                localStorage.removeItem('active_job_status');
+                localStorage.removeItem('active_otp');
+                location.reload();
+            } else {
+                alert("Incorrect OTP. Please check with the driver.");
+            }
         }
 
         function logout() {
