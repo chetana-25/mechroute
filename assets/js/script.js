@@ -14,7 +14,7 @@ function generateCredentials(event) {
 function selectPartnerType(type) {
     localStorage.setItem('partner_type', type);
     const selected = document.getElementById(`${type}-card`);
-    if(selected) { // Safety check
+    if(selected) { 
         document.querySelectorAll('.type-card').forEach(c => {
             c.style.borderColor = '#e2e8f0';
             c.style.background = 'white';
@@ -75,13 +75,48 @@ function verifyOTP() {
         status.status = "completed";
         localStorage.setItem('active_job_status', JSON.stringify(status));
         alert("Verified! Service Complete.");
+        
+        // Cleanup
         localStorage.removeItem('active_job_status');
         localStorage.removeItem('active_otp');
         location.reload();
     } else { alert("Invalid OTP."); }
 }
 
-// --- 4. THE INITIALIZER ---
+// --- 4. CANCELLATION LOGIC ---
+
+function cancelRequest() {
+    if(confirm("Are you sure you want to cancel this service?")) {
+        // 1. Signal to Partner
+        localStorage.setItem('job_cancelled_by_driver', 'true');
+        
+        // 2. Clear Fleet Logs (so the job disappears from the 'Live' list)
+        localStorage.removeItem('fleet_logs'); 
+        
+        // 3. Clear active status
+        localStorage.removeItem('active_job_status');
+        localStorage.removeItem('active_otp');
+        
+        alert("Request Cancelled. Returning to Dashboard.");
+        location.reload();
+    }
+}
+
+// This function runs only on the Partner Dashboard to listen for cancellations
+function startCancellationListener() {
+    setInterval(() => {
+        if (localStorage.getItem('job_cancelled_by_driver') === 'true') {
+            localStorage.removeItem('job_cancelled_by_driver');
+            localStorage.removeItem('active_job_status');
+            localStorage.removeItem('active_otp');
+            
+            alert("⚠️ NOTICE: The driver has cancelled this service request.");
+            location.reload(); // Returns partner to the job list
+        }
+    }, 2000);
+}
+
+// --- 5. THE INITIALIZER ---
 document.addEventListener('DOMContentLoaded', () => {
     const regForm = document.getElementById('regForm');
     if (regForm) regForm.addEventListener('submit', handlePartnerRegistration);
@@ -91,4 +126,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const userForm = document.getElementById('userForm');
     if (userForm) userForm.addEventListener('submit', generateCredentials);
+
+    // If we are on the Partner Dashboard, start listening for cancellations
+    if (window.location.pathname.includes('partner_dashboard.html')) {
+        startCancellationListener();
+    }
 });
