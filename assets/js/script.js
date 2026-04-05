@@ -1,6 +1,6 @@
-/* 🛠 MECHROUTE - CORE LOGIC ENGINE */
+/* 🛠 MECHROUTE - CORE LOGIC ENGINE (Updated) */
 
-// --- 1. GMAIL TO PRO ID CONVERSION ---
+// --- 1. GMAIL TO PRO ID CONVERSION (For Users) ---
 function generateCredentials(event) {
     event.preventDefault();
     const gmailInput = document.getElementById('user-gmail').value;
@@ -16,28 +16,104 @@ function generateCredentials(event) {
     window.location.href = 'account-setup.html';
 }
 
-// --- 2. LOGIN SECURITY ---
-function handleLogin(event) {
-    event.preventDefault();
-    const inputEmail = document.getElementById('email').value;
-    const inputPass = document.getElementById('password').value;
+// --- 2. PARTNER SELECTION & REGISTRATION ---
+function selectPartnerType(type) {
+    localStorage.setItem('partner_type', type);
+    
+    const cards = document.querySelectorAll('.type-card');
+    cards.forEach(card => {
+        card.classList.remove('selected');
+        // Manual fallback if CSS class isn't loaded
+        card.style.borderColor = '#e2e8f0';
+        card.style.background = 'white';
+    });
 
-    const savedEmail = localStorage.getItem('mechEmail');
-    const savedPass = localStorage.getItem('mechPass');
+    try {
+        const selected = document.getElementById(`${type}-card`);
+        if(selected) {
+            selected.classList.add('selected');
+            selected.style.borderColor = '#2563eb';
+            selected.style.background = '#eff6ff';
+        }
+    } catch(e) { console.log("Card ID not found on this page."); }
+}
 
-    if ((inputEmail === savedEmail && inputPass === savedPass) || 
-        (inputEmail === "admin@mechroute.com" && inputPass === "service2026")) {
-        window.location.href = "dashboard.html";
-    } else {
-        alert("Access Denied! Use your generated ID and the password START2026.");
+// --- 3. PARTNER REGISTRATION (The "Once and Done" Logic) ---
+function handlePartnerRegistration(event) {
+    event.preventDefault(); // STOPS the form from clearing/reloading
+    console.log("Partner Registration sequence triggered.");
+
+    try {
+        const fullName = document.getElementById('partnerName').value;
+        const personalEmail = document.getElementById('partnerEmail').value;
+        const type = localStorage.getItem('partner_type') || "expert";
+        const credID = document.getElementById('credentialID').value;
+
+        // GENERATE EASY CREDENTIALS
+        // "Arjun Sharma" -> "arjun.partner@mechroute.com"
+        const firstName = fullName.split(' ')[0].toLowerCase(); 
+        const generatedID = `${firstName}.partner@mechroute.com`;
+        const defaultPass = "MECH2026"; 
+
+        const partnerData = {
+            name: fullName,
+            contactEmail: personalEmail,
+            workID: generatedID,
+            password: defaultPass,
+            role: type,
+            credentialID: credID,
+            regDate: new Date().toLocaleDateString()
+        };
+
+        // SAVE TO LOCAL DATABASE
+        localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
+        console.log("Account created:", generatedID);
+        
+        // SHOW ALERT (Code waits here until user clicks OK)
+        alert(
+            "REGISTRATION SUCCESSFUL!\n\n" +
+            "Your Partner ID: " + generatedID + "\n" +
+            "Your Password: " + defaultPass + "\n\n" +
+            "Please use these to Sign In on the next page."
+        );
+
+        // REDIRECT AFTER ALERT
+        window.location.href = 'partner_login.html';
+
+    } catch (error) {
+        console.error("Critical Reg Error:", error);
+        alert("System Error: Check if all fields are filled correctly.");
     }
 }
 
-// --- 3. DYNAMIC PRICING & TRACKING (Runs on page load) ---
+// --- 4. PARTNER LOGIN SECURITY ---
+function handlePartnerLogin(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('partner-email').value;
+    const pass = document.getElementById('partner-pass').value;
+
+    const savedUser = localStorage.getItem('db_' + email);
+
+    if (savedUser) {
+        const user = JSON.parse(savedUser);
+        if (user.password === pass) {
+            // Create session
+            localStorage.setItem('current_partner_session', JSON.stringify(user));
+            window.location.href = 'partner_dashboard.html';
+        } else {
+            alert("Invalid Password! Please use the generated password: MECH2026");
+        }
+    } else {
+        alert("Partner ID not found. Please register as a Workshop or Tech first.");
+    }
+}
+
+// --- 5. DYNAMIC PRICING & PROGRESS (Shared UI Logic) ---
 window.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     
-    // Update Payment Page with real Booking Data
+    // Auto-fill price from fleet logs
     const displayPrice = document.getElementById('displayPrice');
     if (displayPrice) {
         const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
@@ -50,15 +126,15 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Progress Bar Simulation
+    // Tracking Progress
     if (urlParams.get('mode') === 'tracking') {
         const progressBar = document.getElementById('progress-fill');
         let width = 0;
         const interval = setInterval(() => {
             if (width >= 100) {
                 clearInterval(interval);
-                document.getElementById('tracking-section').classList.add('hidden');
-                document.getElementById('payment-section').classList.remove('hidden');
+                document.getElementById('tracking-section')?.classList.add('hidden');
+                document.getElementById('payment-section')?.classList.remove('hidden');
             } else {
                 width++;
                 if(progressBar) progressBar.style.width = width + '%';
@@ -66,90 +142,3 @@ window.addEventListener('DOMContentLoaded', () => {
         }, 50);
     }
 });
-
-// --- 4. PARTNER SELECTION & REGISTRATION ---
-function selectPartnerType(type) {
-    localStorage.setItem('partner_type', type);
-    
-    // Visual Highlight
-    const cards = document.querySelectorAll('.type-card');
-    cards.forEach(card => {
-        card.style.borderColor = 'transparent';
-        card.style.background = 'white';
-    });
-
-    // We use a try/catch in case IDs aren't on the specific page
-    try {
-        const selected = document.getElementById(`${type}-card`);
-        if(selected) {
-            selected.style.borderColor = '#2563eb';
-            selected.style.background = '#f8fafc';
-        }
-    } catch(e) {}
-}
-
-// 1. REGISTRATION: Generates ID and Default Password
-function handlePartnerRegistration(event) {
-    // Stop the page from refreshing
-    event.preventDefault();
-    console.log("Registration started...");
-
-    try {
-        // Get values from the form
-        const fullName = document.getElementById('partnerName').value;
-        const personalEmail = document.getElementById('partnerEmail').value;
-        const type = localStorage.getItem('partner_type') || "partner";
-        const credID = document.getElementById('credentialID').value;
-
-        // Generate ID: "John Doe" -> "john.partner@mechroute.com"
-        const cleanName = fullName.split(' ')[0].toLowerCase(); 
-        const generatedID = `${cleanName}.partner@mechroute.com`;
-        const defaultPass = "MECH2026"; 
-
-        const partnerData = {
-            name: fullName,
-            workID: generatedID,
-            password: defaultPass,
-            role: type,
-            credentialID: credID
-        };
-
-        // Save to LocalStorage
-        localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
-        console.log("Data saved for:", generatedID);
-        
-        // Show the alert
-        alert("REGISTRATION SUCCESSFUL!\n\nYour Login ID: " + generatedID + "\nYour Password: " + defaultPass);
-
-        // Redirect
-        console.log("Redirecting to login...");
-        window.location.href = 'partner_login.html';
-
-    } catch (error) {
-        console.error("Registration Error:", error);
-        alert("Something went wrong. Check the console (F12).");
-    }
-}
-// 2. LOGIN: Checks if they exist in our "Database"
-function handlePartnerLogin(event) {
-    event.preventDefault();
-    
-    const email = document.getElementById('partner-email').value;
-    const pass = document.getElementById('partner-pass').value;
-
-    // Try to find them in localStorage
-    const savedUser = localStorage.getItem('db_' + email);
-
-    if (savedUser) {
-        const user = JSON.parse(savedUser);
-        if (user.password === pass) {
-            // Success! Save session and go to dashboard
-            localStorage.setItem('current_partner_session', JSON.stringify(user));
-            window.location.href = 'partner_dashboard.html';
-        } else {
-            alert("Invalid Password. Please use the one provided (MECH2026).");
-        }
-    } else {
-        alert("Account not found. Please register as a partner first.");
-    }
-}
