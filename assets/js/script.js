@@ -55,7 +55,39 @@ function selectPartnerType(type) {
         window.location.href = 'partner_register.html';
     }, 300);
 }
+// --- 7. OTP & PAYMENT FLOW ---
 
+function generateServiceOTP() {
+    // 1. Generate a random 4-digit number
+    const newOTP = Math.floor(1000 + Math.random() * 9000);
+    
+    // 2. Save it to the shared 'Post Office'
+    localStorage.setItem('active_otp', newOTP);
+    
+    // 3. Update the job status so the driver knows to look for the OTP
+    const status = JSON.parse(localStorage.getItem('active_job_status'));
+    status.status = "awaiting_otp";
+    localStorage.setItem('active_job_status', JSON.stringify(status));
+
+    alert("OTP Generated! Ask the driver for the code shown on their dashboard.");
+}
+
+function verifyOTP() {
+    const enteredOTP = document.getElementById('otpInput').value;
+    const savedOTP = localStorage.getItem('active_otp');
+
+    if (enteredOTP === savedOTP) {
+        // Success! Update status to 'completed'
+        const status = JSON.parse(localStorage.getItem('active_job_status'));
+        status.status = "completed";
+        localStorage.setItem('active_job_status', JSON.stringify(status));
+        
+        alert("Verification Successful! Payment portal is now open for the driver.");
+        location.reload(); // Refresh to show success
+    } else {
+        alert("Invalid OTP. Please try again.");
+    }
+}
 // --- 4. PARTNER REGISTRATION ---
 function handlePartnerRegistration(event) {
     event.preventDefault(); 
