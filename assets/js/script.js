@@ -90,6 +90,7 @@ function selectPartnerType(type) {
 
 // 1. REGISTRATION: Generates ID and Default Password
 function handlePartnerRegistration(event) {
+    // 1. CRITICAL: This stops the form from clearing/reloading the page
     event.preventDefault();
 
     const fullName = document.getElementById('partnerName').value;
@@ -97,30 +98,28 @@ function handlePartnerRegistration(event) {
     const type = localStorage.getItem('partner_type');
     const credID = document.getElementById('credentialID').value;
 
-    // GENERATE CREDENTIALS
-    // We take the first name and add .partner@mechroute.com
+    // 2. GENERATE THE CREDENTIALS
     const cleanName = fullName.split(' ')[0].toLowerCase(); 
     const generatedID = `${cleanName}.partner@mechroute.com`;
-    const defaultPass = "MECH2026"; // The password we give everyone to start
+    const defaultPass = "MECH2026"; 
 
     const partnerData = {
         name: fullName,
         workID: generatedID,
         password: defaultPass,
         role: type,
-        status: 'Active'
+        credentialID: credID
     };
 
-    // STORE DATA (Using the generated email as the key)
+    // 3. STORE DATA
     localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
     
-    // Alert the user of their NEW credentials
-    alert(`REGISTRATION SUCCESSFUL!\n\nYour Login ID: ${generatedID}\nYour Password: ${defaultPass}\n\nPlease save these to sign in.`);
+    // 4. FEEDBACK ALERT
+    alert(`REGISTRATION SUCCESSFUL!\n\nYour Login ID: ${generatedID}\nYour Password: ${defaultPass}\n\nPlease use these to sign in.`);
 
-    // Move to Login Page
+    // 5. REDIRECT: This takes you to the login page automatically
     window.location.href = 'partner_login.html';
 }
-
 // 2. LOGIN: Checks if they exist in our "Database"
 function handlePartnerLogin(event) {
     event.preventDefault();
