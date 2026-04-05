@@ -7,20 +7,17 @@
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; background: #f8fafc; }
         .reg-card { background: white; padding: 40px; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); width: 100%; max-width: 450px; }
-        h2 { font-weight: 800; margin-bottom: 20px; letter-spacing: -0.5px; }
+        h2 { font-weight: 800; margin-bottom: 20px; }
         label { display: block; font-weight: 700; margin-bottom: 8px; font-size: 0.85rem; color: #64748b; text-transform: uppercase; }
-        input { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 20px; font-weight: 600; transition: 0.3s; }
-        input:focus { border-color: #2563eb; outline: none; box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1); }
-        .btn { width: 100%; padding: 18px; background: #0f172a; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; transition: 0.3s; }
-        .btn:hover { background: #2563eb; transform: translateY(-2px); }
+        input { width: 100%; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 20px; font-weight: 600; }
+        .btn { width: 100%; padding: 18px; background: #0f172a; color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="reg-card">
         <h2 id="reg-title">Verification</h2>
-        <form onsubmit="handlePartnerRegistration(event)">
-            
+        <form id="regForm">
             <label id="name-label">Workshop Name</label>
             <input type="text" id="partnerName" placeholder="Enter name" required>
 
@@ -37,22 +34,23 @@
     <script src="script.js"></script>
 
     <script>
+        // Internal script for UI labels
         document.addEventListener('DOMContentLoaded', () => {
             const role = localStorage.getItem('partner_type');
-            const title = document.getElementById('reg-title');
-            const nameLabel = document.getElementById('name-label');
-            const credLabel = document.getElementById('cred-label');
-
             if (role === 'workshop') {
-                title.innerText = "Workshop Registration";
-                // 3. Updated label to "Workshop Name" as requested
-                nameLabel.innerText = "Workshop Name";
-                credLabel.innerText = "Trade License Number (GSTIN)";
-            } else if (role === 'expert') {
-                title.innerText = "Technician Registration";
-                nameLabel.innerText = "Full Legal Name";
-                credLabel.innerText = "Technical Certification ID (ASE/MECH)";
+                document.getElementById('reg-title').innerText = "Workshop Registration";
+                document.getElementById('name-label').innerText = "Workshop Name";
+                document.getElementById('cred-label').innerText = "Trade License Number (GSTIN)";
+            } else {
+                document.getElementById('reg-title').innerText = "Technician Registration";
+                document.getElementById('name-label').innerText = "Full Legal Name";
+                document.getElementById('cred-label').innerText = "Technical Certification ID (ASE/MECH)";
             }
+        });
+
+        // 2. Attach the listener directly to the form ID
+        document.getElementById('regForm').addEventListener('submit', function(e) {
+            handlePartnerRegistration(e);
         });
     </script>
 </body>
