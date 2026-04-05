@@ -38,68 +38,63 @@ function selectPartnerType(type) {
 }
 
 // --- 3. PARTNER REGISTRATION (The "Once and Done" Logic) ---
+/* 🛠 MECHROUTE - PARTNER ENGINE */
+
 function handlePartnerRegistration(event) {
-    event.preventDefault(); 
-    console.log("Partner Registration sequence triggered.");
+    // 1. Prevent the page from refreshing/clearing
+    event.preventDefault();
 
-    try {
-        const fullName = document.getElementById('partnerName').value;
-        const personalEmail = document.getElementById('partnerEmail').value;
-        const type = localStorage.getItem('partner_type') || "expert";
-        const credID = document.getElementById('credentialID').value;
+    // 2. Get the values from your form fields
+    const fullName = document.getElementById('partnerName').value;
+    const personalEmail = document.getElementById('partnerEmail').value;
+    const role = localStorage.getItem('partner_type') || "Partner";
 
-        // GENERATE EASY CREDENTIALS
-        const firstName = fullName.split(' ')[0].toLowerCase(); 
-        const generatedID = `${firstName}.partner@mechroute.com`;
-        const defaultPass = "MECH2026"; 
+    // 3. Generate "Easy to Remember" Credentials
+    // Example: "Drive Mechanics" -> "drive.partner@mechroute.com"
+    const prefix = fullName.split(' ')[0].toLowerCase();
+    const generatedID = `${prefix}.partner@mechroute.com`;
+    const defaultPass = "MECH2026"; 
 
-        const partnerData = {
-            name: fullName,
-            contactEmail: personalEmail,
-            workID: generatedID,
-            password: defaultPass,
-            role: type,
-            credentialID: credID,
-            regDate: new Date().toLocaleDateString()
-        };
+    // 4. Save to LocalStorage so the Login page can find it later
+    const partnerData = {
+        id: generatedID,
+        pass: defaultPass,
+        name: fullName,
+        type: role
+    };
+    localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
 
-        // SAVE TO LOCAL DATABASE
-        localStorage.setItem('db_' + generatedID, JSON.stringify(partnerData));
-        
-        alert(
-            "REGISTRATION SUCCESSFUL!\n\n" +
-            "Your Partner ID: " + generatedID + "\n" +
-            "Your Password: " + defaultPass + "\n\n" +
-            "Click OK to go to the Login Page."
-        );
+    // 5. THE KEY STEP: Show credentials in an alert
+    // The code WILL NOT redirect until the user clicks OK.
+    alert(
+        "REGISTRATION SUCCESSFUL!\n\n" +
+        "Please remember your Login details:\n" +
+        "PARTNER ID: " + generatedID + "\n" +
+        "PASSWORD: " + defaultPass + "\n\n" +
+        "Click OK to proceed to the Login Page."
+    );
 
-        window.location.href = 'partner_login.html';
-
-    } catch (error) {
-        console.error("Critical Reg Error:", error);
-        alert("System Error: Please ensure all fields are filled.");
-    }
+    // 6. Redirect to your Login Page (image 3)
+    window.location.href = 'partner_login.html';
 }
 
-// --- 4. PARTNER LOGIN SECURITY ---
+// --- LOGIN LOGIC ---
 function handlePartnerLogin(event) {
     event.preventDefault();
-    
-    const email = document.getElementById('partner-email').value;
-    const pass = document.getElementById('partner-pass').value;
+    const inputID = document.getElementById('partner-email').value;
+    const inputPass = document.getElementById('partner-pass').value;
 
-    const savedUser = localStorage.getItem('db_' + email);
+    const savedData = localStorage.getItem('db_' + inputID);
 
-    if (savedUser) {
-        const user = JSON.parse(savedUser);
-        if (user.password === pass) {
-            localStorage.setItem('current_partner_session', JSON.stringify(user));
+    if (savedData) {
+        const user = JSON.parse(savedData);
+        if (user.pass === inputPass) {
             window.location.href = 'partner_dashboard.html';
         } else {
-            alert("Invalid Password! Please use: MECH2026");
+            alert("Invalid Password. Please use MECH2026.");
         }
     } else {
-        alert("Partner ID not found. Please register first.");
+        alert("Account not found. Please register first.");
     }
 }
 
