@@ -19,6 +19,10 @@
         .btn-accept:hover { background: var(--brand-blue); transform: translateY(-2px); }
         .stat-box { flex: 1; padding: 25px; border-radius: 20px; border: 1px solid #f1f5f9; }
         .btn-logout { background: #334155; color: white; padding: 16px; border-radius: 14px; border: none; font-weight: 800; cursor: pointer; }
+        
+        /* New UI States */
+        #otpVerificationArea { display: none; margin-top: 20px; }
+        #workInProgressArea { display: none; margin-top: 20px; }
     </style>
 </head>
 <body>
@@ -28,7 +32,6 @@
             <nav style="margin-top: 60px;">
                 <a href="#" class="nav-link active">Job Terminal</a>
                 <a href="#" class="nav-link">Earnings</a>
-                <a href="#" class="nav-link">Reviews</a>
             </nav>
         </div>
         <button onclick="logout()" class="btn-logout">Logout Terminal</button>
@@ -46,21 +49,34 @@
         <div class="stats-row" style="display: flex; gap: 20px; margin-top: 30px;">
             <div class="stat-box"><h2>₹0</h2><p style="font-size:0.7rem; font-weight:800; color:var(--soft-slate);">TODAY'S EARNINGS</p></div>
             <div class="stat-box"><h2>0</h2><p style="font-size:0.7rem; font-weight:800; color:var(--soft-slate);">COMPLETED JOBS</p></div>
-            <div class="stat-box"><h2>4.9★</h2><p style="font-size:0.7rem; font-weight:800; color:var(--soft-slate);">RATING</p></div>
         </div>
 
         <div id="activeJobSection" style="display: none; margin-top: 40px; padding: 40px; background: #f8fafc; border-radius: 30px; border: 2px dashed #cbd5e1;">
-            <p style="color: var(--brand-blue); font-weight: 800; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 10px;">Service in Progress</p>
+            <p style="color: var(--brand-blue); font-weight: 800; text-transform: uppercase; font-size: 0.8rem; margin-bottom: 10px;">Service Workflow</p>
             <div id="activeJobDetails"></div>
             <hr style="margin:25px 0; border:0; border-top:1px solid #e2e8f0;">
             
             <div id="terminalControls">
-                <button id="arriveBtn" onclick="generateServiceOTP()" class="btn-accept" style="width: 100%; margin-bottom: 15px; background: var(--sidebar-bg);">
-                    Arrived at Spot (Generate OTP)
+                <button id="arriveBtn" onclick="markArrival()" class="btn-accept" style="width: 100%; background: var(--sidebar-bg);">
+                    I Have Arrived at Spot
                 </button>
-                <div style="display: flex; gap: 10px;">
-                    <input type="text" id="otpInput" placeholder="Enter 4-digit OTP" style="flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: 700; text-align: center;">
-                    <button onclick="verifyOTP()" class="btn-accept" style="background: var(--brand-blue);">Verify & Finish</button>
+
+                <div id="otpVerificationArea">
+                    <p style="font-weight: 700; color: var(--text-slate); margin-bottom: 10px;">Ask Driver for the OTP shown on their screen:</p>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" id="otpInput" placeholder="4-digit code" maxlength="4" style="flex: 1; padding: 15px; border-radius: 12px; border: 1px solid #cbd5e1; font-weight: 700; text-align: center; font-size: 1.2rem;">
+                        <button onclick="verifyDriverOTP()" class="btn-accept" style="background: var(--brand-blue);">Verify OTP</button>
+                    </div>
+                </div>
+
+                <div id="workInProgressArea">
+                    <div style="background: #ecfdf5; padding: 20px; border-radius: 15px; border: 1px solid #10b981; margin-bottom: 15px;">
+                        <p style="color: #065f46; font-weight: 800; margin: 0;">WORK IN PROGRESS</p>
+                        <p style="font-size: 0.8rem; color: #065f46; margin: 5px 0 0 0;">Perform the mechanical service now.</p>
+                    </div>
+                    <button onclick="finishServiceAndBill()" class="btn-accept" style="width: 100%; background: #10b981;">
+                        Work Completed (Request Payment)
+                    </button>
                 </div>
             </div>
         </div>
@@ -71,9 +87,9 @@
         </div>
     </main>
 
-    <script src="../assets/js/script.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+            // Load Partner Profile
             const sessionData = JSON.parse(localStorage.getItem('active_partner'));
             if (sessionData) {
                 document.getElementById('partnerNameDisplay').innerText = `Welcome, ${sessionData.name}`;
@@ -81,124 +97,137 @@
                 document.getElementById('typeBadge').innerText = sessionData.type;
             }
 
+            // Sync with existing active job
+            syncUI();
+            setInterval(syncUI, 2000); // Keep in sync if driver cancels or pays
+        });
+
+        function syncUI() {
             const currentJob = localStorage.getItem('active_job_status');
             if (currentJob) {
-                showServiceTerminal(JSON.parse(currentJob));
+                const job = JSON.parse(currentJob);
+                renderJobTerminal(job);
             } else {
+                document.getElementById('availableJobsSection').style.display = 'block';
+                document.getElementById('activeJobSection').style.display = 'none';
                 loadAvailableJobs();
             }
-        });
+        }
 
         function loadAvailableJobs() {
             const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             const container = document.getElementById('jobContainer');
-            container.innerHTML = logs.length ? "" : "<p style='color:var(--soft-slate); font-weight:600;'>No active requests in your area.</p>";
+            // Show jobs that aren't already completed/accepted by others
+            container.innerHTML = logs.length ? "" : "<p>No active requests.</p>";
 
-            logs.reverse().forEach((job, index) => {
+            logs.forEach((job, index) => {
                 const card = document.createElement('div');
                 card.className = 'job-card';
                 card.innerHTML = `
                     <div>
-                        <p style="font-size:0.7rem; font-weight:800; color:var(--soft-slate); margin:0;">CLIENT REQUEST</p>
-                        <h3 style="margin:5px 0;">${job.service}</h3>
-                        <p style="color:var(--brand-blue); font-weight:800; margin:0;">${job.price}</p>
+                        <h3>${job.service}</h3>
+                        <p style="color:var(--brand-blue); font-weight:800;">${job.price}</p>
                     </div>
-                    <button class="btn-accept" onclick="acceptJobProcess('${job.service}', '${job.price}', ${index})">Accept Job</button>
+                    <button class="btn-accept" onclick="acceptJob('${job.service}', '${job.price}', ${index})">Accept</button>
                 `;
                 container.appendChild(card);
             });
         }
 
-        function acceptJobProcess(service, price, index) {
-            const partnerName = JSON.parse(localStorage.getItem('active_partner')).name;
-            const jobUpdate = { status: 'accepted', partnerName, service, price };
+        function acceptJob(service, price, index) {
+            const partner = JSON.parse(localStorage.getItem('active_partner'));
+            const jobData = { 
+                status: 'accepted', 
+                partnerName: partner.name, 
+                service, 
+                price 
+            };
             
-            // Remove from global list
-            let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            logs.splice(logs.length - 1 - index, 1);
+            // Remove from list and set as active
+            let logs = JSON.parse(localStorage.getItem('fleet_logs'));
+            logs.splice(index, 1);
             localStorage.setItem('fleet_logs', JSON.stringify(logs));
-
-            // Set as active
-            localStorage.setItem('active_job_status', JSON.stringify(jobUpdate));
-            showServiceTerminal(jobUpdate);
+            localStorage.setItem('active_job_status', JSON.stringify(jobData));
+            
+            syncUI();
         }
 
-        function showServiceTerminal(job) {
+        function renderJobTerminal(job) {
             document.getElementById('availableJobsSection').style.display = 'none';
             document.getElementById('activeJobSection').style.display = 'block';
             document.getElementById('activeJobDetails').innerHTML = `
-                <h2 style="margin:0; font-size:1.8rem;">${job.service}</h2>
-                <p style="font-weight:700; color:var(--soft-slate);">Client expects arrival shortly • ${job.price}</p>
+                <h2 style="margin:0;">${job.service}</h2>
+                <p>Status: <b style="color:var(--brand-blue)">${job.status.toUpperCase()}</b></p>
             `;
-            
-            if(job.status === "awaiting_otp") {
-                document.getElementById('arriveBtn').style.display = 'none';
+
+            // Control Visibility based on Status
+            const arriveBtn = document.getElementById('arriveBtn');
+            const otpArea = document.getElementById('otpVerificationArea');
+            const workArea = document.getElementById('workInProgressArea');
+
+            if (job.status === 'accepted') {
+                arriveBtn.style.display = 'block';
+                otpArea.style.display = 'none';
+                workArea.style.display = 'none';
+            } 
+            else if (job.status === 'arrived') {
+                arriveBtn.style.display = 'none';
+                otpArea.style.display = 'block';
+                workArea.style.display = 'none';
+            } 
+            else if (job.status === 'in_progress') {
+                arriveBtn.style.display = 'none';
+                otpArea.style.display = 'none';
+                workArea.style.display = 'block';
             }
+        }
+
+        // --- CORE LOGIC STEPS ---
+
+        function markArrival() {
+            // 1. Generate OTP and store it
+            const otp = Math.floor(1000 + Math.random() * 9000);
+            localStorage.setItem('active_otp', otp);
+
+            // 2. Update status to 'arrived'. Driver Dashboard will see this and show the OTP.
+            let job = JSON.parse(localStorage.getItem('active_job_status'));
+            job.status = 'arrived';
+            localStorage.setItem('active_job_status', JSON.stringify(job));
+            
+            syncUI();
+        }
+
+        function verifyDriverOTP() {
+            const entered = document.getElementById('otpInput').value;
+            const actual = localStorage.getItem('active_otp');
+
+            if (entered === actual) {
+                let job = JSON.parse(localStorage.getItem('active_job_status'));
+                job.status = 'in_progress';
+                localStorage.setItem('active_job_status', JSON.stringify(job));
+                alert("Identity Verified! You may start working.");
+                syncUI();
+            } else {
+                alert("Incorrect OTP. Please ask the driver to read the code on their screen.");
+            }
+        }
+
+        function finishServiceAndBill() {
+            let job = JSON.parse(localStorage.getItem('active_job_status'));
+            // This triggers the "Pay Now" button on the Driver's side
+            job.status = 'awaiting_payment';
+            localStorage.setItem('active_job_status', JSON.stringify(job));
+            
+            alert("Work Completed. Waiting for Driver's payment.");
+            
+            // Optional: The partner can stay on this screen or clear it to take new jobs
+            // Usually, we wait for payment before clearing.
         }
 
         function logout() {
             localStorage.removeItem('active_partner');
             window.location.href = 'partner_terminal.html';
         }
-        // ... existing DOMContentLoaded and loadAvailableJobs functions ...
-
-        function generateServiceOTP() {
-            // Generate a random 4-digit code
-            const otp = Math.floor(1000 + Math.random() * 9000);
-            localStorage.setItem('active_otp', otp);
-
-            // Update job status so Driver sees the OTP
-            let job = JSON.parse(localStorage.getItem('active_job_status'));
-            job.status = 'awaiting_otp';
-            localStorage.setItem('active_job_status', JSON.stringify(job));
-
-            alert(`OTP Generated: ${otp}. Please ask the driver for this code once you arrive.`);
-            document.getElementById('arriveBtn').style.display = 'none'; // Hide arrival button
-        }
-
-        function verifyOTP() {
-            const enteredOTP = document.getElementById('otpInput').value;
-            const savedOTP = localStorage.getItem('active_otp');
-
-            if (enteredOTP === savedOTP) {
-                let job = JSON.parse(localStorage.getItem('active_job_status'));
-        
-                // 1. Change status to 'in_progress' while you work
-                job.status = 'in_progress';
-                localStorage.setItem('active_job_status', JSON.stringify(job));
-        
-                // 2. Change the UI to show a "Complete Work" button instead
-                const terminal = document.getElementById('terminalControls');
-                terminal.innerHTML = `
-                <div style="background: #ecfdf5; padding: 20px; border-radius: 15px; border: 1px solid #10b981; margin-bottom: 15px;">
-                    <p style="color: #065f46; font-weight: 800; margin: 0;">WORK IN PROGRESS</p>
-                    <p style="font-size: 0.8rem; color: #065f46; margin: 5px 0 0 0;">Click below once you have finished the mechanical work.</p>
-                </div>
-                <button onclick="finishJob()" class="btn-accept" style="width: 100%; background: #10b981;">
-                    Work Completed (Request Payment)
-                </button>
-            `;
-             alert("OTP Verified! You can now start the service.");
-        } else {
-            alert("Invalid OTP. Please check with the driver.");
-        }
-    }
-
-    function finishJob() {
-        let job = JSON.parse(localStorage.getItem('active_job_status'));
-    
-        // THIS IS THE CRITICAL STEP:
-        // Change status to 'awaiting_payment' so the Driver gets the "Pay Now" button
-        job.status = 'awaiting_payment';
-        localStorage.setItem('active_job_status', JSON.stringify(job));
-
-        alert("Work marked as complete! The Driver has been notified to make the payment.");
-    
-        // Reset the Partner dashboard to look for new jobs
-        localStorage.removeItem('active_job_status');
-        localStorage.removeItem('active_otp');
-        location.reload(); 
-    }
     </script>
 </body>
 </html>
