@@ -36,6 +36,8 @@
             cursor: pointer;
             border: none;
             transition: 0.3s;
+            display: block;
+            width: 100%;
         }
         
         .btn-logout-sidebar:hover { background: #1d4ed8; }
@@ -90,11 +92,12 @@
             color: white;
             padding: 10px 20px;
             border-radius: 12px;
-            font-size: 1.2rem;
+            font-size: 1.8rem;
             font-weight: 900;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             display: inline-block;
             margin-top: 10px;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
         }
     </style>
 </head>
@@ -123,14 +126,21 @@
         <div id="jobNotification" style="display: none; background: #ecfdf5; border: 1px solid #10b981; padding: 25px; border-radius: 20px; margin-bottom: 30px; align-items: center; gap: 15px; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);">
             <div style="font-size: 2rem;">🛠️</div>
             <div style="flex: 1;">
-                <h4 id="notificationTitle" style="margin: 0; color: #065f46; font-weight: 800; font-size: 1.1rem;">Service Accepted!</h4>
-                <p id="notificationMessage" style="margin: 5px 0 0 0; color: #047857; font-size: 0.95rem;">A partner is on their way.</p>
-                <div id="otpDisplayArea" style="display: none; margin-top: 10px;">
-                    <p style="margin:0; font-size: 0.8rem; font-weight: 800; color: #065f46;">SHARE OTP WITH PARTNER:</p>
+                <h4 id="notificationTitle" style="margin: 0; color: #065f46; font-weight: 800; font-size: 1.1rem;">Service Active</h4>
+                <p id="notificationMessage" style="margin: 5px 0 0 0; color: #047857; font-size: 0.95rem;">Checking status...</p>
+                
+                <div id="otpDisplayArea" style="display: none; margin-top: 15px;">
+                    <p style="margin:0; font-size: 0.75rem; font-weight: 800; color: #065f46; text-transform: uppercase;">Share this OTP with Partner:</p>
                     <div id="otpValue" class="otp-badge">----</div>
                 </div>
+
+                <div id="paymentActionArea" style="display: none; margin-top: 15px;">
+                    <button onclick="window.location.href='payment.html'" class="btn-logout-sidebar" style="max-width: 200px;">
+                        Pay Now
+                    </button>
+                </div>
             </div>
-            <button onclick="cancelRequest()" class="btn-cancel">Cancel Service</button>
+            <button id="cancelBtn" onclick="cancelRequest()" class="btn-cancel">Cancel</button>
         </div>
 
         <section class="choice-container">
@@ -161,8 +171,6 @@
         </div>
     </main>
 
-    <script src="../assets/js/script.js"></script>
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // 1. --- USER PROFILE & STATS ---
@@ -172,45 +180,89 @@
             document.getElementById('userNameDisplay').innerText = `Welcome, ${firstName}`;
             document.getElementById('fleetEmailDisplay').innerText = fleetEmail;
 
+            updateStats();
+
+            // 2. --- LIVE STATUS POLLING ---
+            setInterval(checkJobStatus, 2000);
+            checkJobStatus(); 
+        });
+
+        function updateStats() {
             const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             document.getElementById('totalServicesCount').innerText = logs.length;
 
             let total = 0;
             logs.forEach(entry => {
                 if (entry.price) {
-                    const priceValue = entry.price.replace(/[₹,]/g, '');
+                    const priceValue = String(entry.price).replace(/[₹,]/g, '');
                     total += (parseInt(priceValue) || 0);
                 }
             });
             document.getElementById('totalSpentDisplay').innerText = `₹${total.toLocaleString('en-IN')}`;
-
-            // 2. --- LIVE STATUS POLLING (Checks for updates every 2s) ---
-            setInterval(checkJobStatus, 2000);
-            checkJobStatus(); // Initial check
-        });
+        }
 
         function checkJobStatus() {
             const jobData = localStorage.getItem('active_job_status');
-            // ... existing banner code ...
+            const banner = document.getElementById('jobNotification');
+            const title = document.getElementById('notificationTitle');
+            const message = document.getElementById('notificationMessage');
+            const otpArea = document.getElementById('otpDisplayArea');
+            const otpVal = document.getElementById('otpValue');
+            const payArea = document.getElementById('paymentActionArea');
+            const cancelBtn = document.getElementById('cancelBtn');
 
-            if (jobData) {
-                const data = JSON.parse(jobData);
-        
-                if (data.status === 'awaiting_payment') {
-                    title.innerText = "Work Completed!";
-                    message.innerHTML = `Please complete the payment of <b>${data.price}</b> to finish the service.`;
-                    otpArea.style.display = 'none';
+            if (!jobData) {
+                banner.style.display = 'none';
+                return;
+            }
+
+            const data = JSON.parse(jobData);
+            banner.style.display = 'flex';
+
+            // --- STATE MACHINE LOGIC ---
             
-                    // Show a Pay Now button
-                    const payBtn = document.createElement('button');
-                    payBtn.innerText = "Pay Now";
-                    payBtn.className = "btn-logout-sidebar"; // Use your existing blue button style
-                    payBtn.onclick = () => { window.location.href = 'payment.html'; };
-                    message.appendChild(payBtn);
-                }
-                // ... rest of your status logic ...
+            if (data.status === 'accepted') {
+                title.innerText = "Partner Assigned!";
+                message.innerText = `Mechanic ${data.partnerName || 'Expert'} is heading to your location.`;
+                otpArea.style.display = 'none';
+                payArea.style.display = 'none';
+                cancelBtn.style.display = 'block';
+            } 
+            
+            else if (data.status === 'arrived') {
+                title.innerText = "Mechanic is Here!";
+                message.innerText = "Please share the following code with the partner to verify and start work:";
+                otpArea.style.display = 'block';
+                otpVal.innerText = localStorage.getItem('active_otp') || "----";
+                payArea.style.display = 'none';
+                cancelBtn.style.display = 'none'; // Prevent cancellation once arrived
+            } 
+            
+            else if (data.status === 'in_progress') {
+                title.innerText = "Work in Progress...";
+                message.innerText = "The technician is currently servicing your vehicle. Stay tuned!";
+                otpArea.style.display = 'none';
+                payArea.style.display = 'none';
+                cancelBtn.style.display = 'none';
+            } 
+            
+            else if (data.status === 'awaiting_payment') {
+                title.innerText = "Work Finished!";
+                message.innerHTML = `Service complete. Please settle the bill for <b>${data.price}</b>.`;
+                otpArea.style.display = 'none';
+                payArea.style.display = 'block';
+                cancelBtn.style.display = 'none';
             }
         }
+
+        function cancelRequest() {
+            if(confirm("Are you sure you want to cancel this service request?")) {
+                localStorage.removeItem('active_job_status');
+                localStorage.removeItem('active_otp');
+                location.reload();
+            }
+        }
+
         function logout() {
             localStorage.removeItem('user_firstName');
             localStorage.removeItem('user_email');
