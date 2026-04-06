@@ -71,18 +71,27 @@ function generateServiceOTP() {
 function verifyOTP() {
     const enteredOTP = document.getElementById('otpInput').value;
     const savedOTP = localStorage.getItem('active_otp');
+    
     if (enteredOTP === savedOTP) {
         const status = JSON.parse(localStorage.getItem('active_job_status'));
-        status.status = "completed";
-        localStorage.setItem('active_job_status', JSON.stringify(status));
-        alert("Verified! Service Complete. Payment portal unlocked for driver.");
         
-        localStorage.removeItem('active_job_status');
-        localStorage.removeItem('active_otp');
-        location.reload();
-    } else { alert("Invalid OTP. Try again."); }
+        // Change status to 'in_progress' instead of deleting it
+        status.status = "in_progress"; 
+        localStorage.setItem('active_job_status', JSON.stringify(status));
+        
+        alert("Verified! Work started.");
+        location.reload(); 
+    } else { alert("Invalid OTP."); }
 }
 
+// Add this function for the Partner to click when they are DONE
+function completeWork() {
+    const status = JSON.parse(localStorage.getItem('active_job_status'));
+    status.status = "awaiting_payment"; // Trigger for driver
+    localStorage.setItem('active_job_status', JSON.stringify(status));
+    alert("Work marked as complete. Awaiting Driver's payment.");
+    location.reload();
+}
 // --- 4. CANCELLATION HANDSHAKE ---
 function cancelRequest() {
     if(confirm("Are you sure you want to cancel this service?")) {
