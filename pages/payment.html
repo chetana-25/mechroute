@@ -40,6 +40,7 @@
             cursor: pointer; transition: 0.2s; font-weight: 600;
         }
         .method:hover { border-color: var(--brand-blue); background: #f8fafc; }
+        .method input { cursor: pointer; width: 18px; height: 18px; }
 
         .btn-pay {
             width: 100%; padding: 20px; background: var(--deep-slate); color: white;
@@ -47,12 +48,14 @@
             cursor: pointer; transition: 0.3s;
         }
         .btn-pay:hover { background: var(--brand-blue); transform: translateY(-2px); }
+        .btn-pay:disabled { background: var(--soft-slate); cursor: not-allowed; }
 
-        #success-state, #tracking-section, .hidden { display: none; }
-        .check-icon { font-size: 4rem; color: #10b981; margin-bottom: 20px; }
-        
-        .progress-container { background: #f1f5f9; height: 8px; border-radius: 10px; margin: 20px 0; overflow: hidden; }
-        #progress-fill { background: var(--brand-blue); height: 100%; width: 0%; transition: width 0.1s linear; }
+        #success-state { display: none; }
+        .check-icon { 
+            font-size: 4rem; color: #10b981; margin-bottom: 20px; 
+            background: #ecfdf5; width: 80px; height: 80px; line-height: 80px;
+            border-radius: 50%; margin: 0 auto 20px auto;
+        }
     </style>
 </head>
 <body>
@@ -66,9 +69,9 @@
                 <span class="price-display" id="displayPrice">₹0</span>
 
                 <div class="method-list">
-                    <div class="method"><input type="radio" name="pay" checked> UPI (GPay/PhonePe)</div>
-                    <div class="method"><input type="radio" name="pay"> Credit / Debit Card</div>
-                    <div class="method"><input type="radio" name="pay"> Cash on Delivery</div>
+                    <label class="method"><input type="radio" name="pay" checked> UPI (GPay/PhonePe)</label>
+                    <label class="method"><input type="radio" name="pay"> Credit / Debit Card</label>
+                    <label class="method"><input type="radio" name="pay"> Cash on Delivery</label>
                 </div>
 
                 <button class="btn-pay" onclick="handlePaymentFlow()">Confirm & Pay</button>
@@ -77,8 +80,8 @@
             <div id="success-state">
                 <div class="check-icon">✓</div>
                 <h2>Payment Successful</h2>
-                <p style="color: var(--soft-slate); margin-bottom: 30px;">Your transaction is complete. Thank you for using MechRoute.</p>
-                <button onclick="finishAndRedirect()" style="background: none; border: none; color: var(--brand-blue); font-weight: 700; cursor: pointer; font-size: 1rem;">Return to Dashboard</button>
+                <p style="color: var(--soft-slate); margin-bottom: 30px;">Your transaction is complete. A receipt has been sent to your email.</p>
+                <button onclick="finishAndRedirect()" style="background: var(--brand-blue); border: none; color: white; padding: 15px 30px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%;">Return to Dashboard</button>
             </div>
         </div>
     </div>
@@ -88,7 +91,7 @@
             const amountDisplay = document.getElementById('displayPrice'); 
             const serviceLabel = document.getElementById('serviceName');
 
-            // 1. Try to find the price in the active session
+            // Get the live job data
             const jobData = localStorage.getItem('active_job_status');
             
             if (jobData) {
@@ -96,35 +99,42 @@
                 if (data.price) {
                     amountDisplay.innerText = data.price;
                     if (data.service) serviceLabel.innerText = data.service;
-                    return; // Stop here if found
                 }
-            }
-
-            // 2. FALLBACK: If active_job is missing the price, check the Service History (fleet_logs)
-            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            if (logs.length > 0) {
-                // Get the most recent log entry
-                const latestJob = logs[logs.length - 1];
-                if (latestJob.price) {
-                    amountDisplay.innerText = latestJob.price;
-                    serviceLabel.innerText = latestJob.service || "Standard Service";
-                }
+            } else {
+                // If no active job, redirect back (security check)
+                window.location.href = 'dashboard.html';
             }
         });
 
         function handlePaymentFlow() {
             const btn = document.querySelector('.btn-pay');
-            btn.innerHTML = "Processing...";
+            btn.innerHTML = "Verifying Transaction...";
             btn.disabled = true;
             
             setTimeout(() => {
+                // --- ARCHIVING LOGIC ---
+                const jobData = localStorage.getItem('active_job_status');
+                if (jobData) {
+                    const completedJob = JSON.parse(jobData);
+                    
+                    // Add completion metadata
+                    completedJob.status = "Completed";
+                    completedJob.paymentDate = new Date().toLocaleString();
+                    
+                    // Save to Permanent Logs
+                    let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+                    logs.push(completedJob);
+                    localStorage.setItem('fleet_logs', JSON.stringify(logs));
+                }
+
+                // Show Success UI
                 document.getElementById('payment-input').style.display = 'none';
                 document.getElementById('success-state').style.display = 'block';
-            }, 1500);
+            }, 2000);
         }
 
         function finishAndRedirect() {
-            // Clear current job so the dashboard can reset
+            // CRITICAL: Clear the active session so the dashboard resets for the next service
             localStorage.removeItem('active_job_status');
             localStorage.removeItem('active_otp');
             window.location.href = 'dashboard.html';
