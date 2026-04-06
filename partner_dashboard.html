@@ -140,6 +140,65 @@
             localStorage.removeItem('active_partner');
             window.location.href = 'partner_terminal.html';
         }
+        // ... existing DOMContentLoaded and loadAvailableJobs functions ...
+
+        function generateServiceOTP() {
+            // Generate a random 4-digit code
+            const otp = Math.floor(1000 + Math.random() * 9000);
+            localStorage.setItem('active_otp', otp);
+
+            // Update job status so Driver sees the OTP
+            let job = JSON.parse(localStorage.getItem('active_job_status'));
+            job.status = 'awaiting_otp';
+            localStorage.setItem('active_job_status', JSON.stringify(job));
+
+            alert(`OTP Generated: ${otp}. Please ask the driver for this code once you arrive.`);
+            document.getElementById('arriveBtn').style.display = 'none'; // Hide arrival button
+        }
+
+        function verifyOTP() {
+            const enteredOTP = document.getElementById('otpInput').value;
+            const savedOTP = localStorage.getItem('active_otp');
+
+            if (enteredOTP === savedOTP) {
+                let job = JSON.parse(localStorage.getItem('active_job_status'));
+        
+                // 1. Change status to 'in_progress' while you work
+                job.status = 'in_progress';
+                localStorage.setItem('active_job_status', JSON.stringify(job));
+        
+                // 2. Change the UI to show a "Complete Work" button instead
+                const terminal = document.getElementById('terminalControls');
+                terminal.innerHTML = `
+                <div style="background: #ecfdf5; padding: 20px; border-radius: 15px; border: 1px solid #10b981; margin-bottom: 15px;">
+                    <p style="color: #065f46; font-weight: 800; margin: 0;">WORK IN PROGRESS</p>
+                    <p style="font-size: 0.8rem; color: #065f46; margin: 5px 0 0 0;">Click below once you have finished the mechanical work.</p>
+                </div>
+                <button onclick="finishJob()" class="btn-accept" style="width: 100%; background: #10b981;">
+                    Work Completed (Request Payment)
+                </button>
+            `;
+             alert("OTP Verified! You can now start the service.");
+        } else {
+            alert("Invalid OTP. Please check with the driver.");
+        }
+    }
+
+    function finishJob() {
+        let job = JSON.parse(localStorage.getItem('active_job_status'));
+    
+        // THIS IS THE CRITICAL STEP:
+        // Change status to 'awaiting_payment' so the Driver gets the "Pay Now" button
+        job.status = 'awaiting_payment';
+        localStorage.setItem('active_job_status', JSON.stringify(job));
+
+        alert("Work marked as complete! The Driver has been notified to make the payment.");
+    
+        // Reset the Partner dashboard to look for new jobs
+        localStorage.removeItem('active_job_status');
+        localStorage.removeItem('active_otp');
+        location.reload(); 
+    }
     </script>
 </body>
 </html>
