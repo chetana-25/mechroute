@@ -120,45 +120,59 @@
 <script>
     let selectedSOS = null;
 
-    function selectEmergency(el, name, price, showInput = false) {
+    function selectEmergency(el, name, price) {
+        // Toggle UI selection
         document.querySelectorAll('.issue-card').forEach(card => card.classList.remove('selected'));
         el.classList.add('selected');
         
+        // Save selection to variable
         selectedSOS = { name, price };
 
-        // Show/Hide the text area based on "Other" selection
+        // Handle the "Other" input box visibility
         const inputContainer = document.getElementById('other-input-container');
-        inputContainer.style.display = showInput ? 'block' : 'none';
+        if (name === 'Other Issue') {
+            inputContainer.style.display = 'block';
+        } else {
+            inputContainer.style.display = 'none';
+        }
     }
 
     function triggerDispatch() {
-        if (!selectedSOS) { alert("Please select an issue."); return; }
-
-        let finalServiceName = selectedSOS.name;
-        
-        // If "Other" is chosen, append their description
-        if (selectedSOS.name === "Other Issue") {
-            const desc = document.getElementById('other-desc').value.trim();
-            if (!desc) { alert("Please describe your problem so the mechanic can bring the right tools."); return; }
-            finalServiceName = "SOS: " + desc;
+        if (!selectedSOS) { 
+            alert("Please select an issue first!"); 
+            return; 
         }
 
+        let finalName = selectedSOS.name;
+        if (selectedSOS.name === "Other Issue") {
+            const desc = document.getElementById('other-desc').value.trim();
+            if (!desc) { alert("Please describe the issue."); return; }
+            finalName = desc;
+        }
+
+        // Show the Radar/Searching UI
         document.getElementById('selection-ui').style.display = 'none';
         document.getElementById('searching-ui').style.display = 'block';
 
+        // CREATE THE JOB OBJECT
+        const newJobRequest = {
+            id: "SOS-" + Date.now(),
+            service: finalName,
+            price: "₹" + selectedSOS.price, // This is what payment.html looks for!
+            status: "pending", // Partner dashboard looks for 'pending' jobs
+            type: "Emergency",
+            time: new Date().toLocaleTimeString()
+        };
+
+        // SAVE TO THE GLOBAL LIST (For the Partner to see)
+        let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+        logs.push(newJobRequest);
+        localStorage.setItem('fleet_logs', JSON.stringify(logs));
+
+        // SIMULATE DISPATCH
         setTimeout(() => {
-            const newLog = {
-                date: new Date().toLocaleString(),
-                type: "SOS",
-                service: finalServiceName,
-                price: "₹" + selectedSOS.price
-            };
-
-            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            logs.push(newLog);
-            localStorage.setItem('fleet_logs', JSON.stringify(logs));
-
-            alert("Mechanic Found! Help is on the way.");
+            alert("Request broadcasted to nearby partners!");
+            // Go back to dashboard where the "Waiting for Partner" logic lives
             window.location.href = 'dashboard.html';
         }, 3000);
     }
