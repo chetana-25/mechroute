@@ -48,11 +48,9 @@
         }
         .btn-pay:hover { background: var(--brand-blue); transform: translateY(-2px); }
 
-        /* Success & Tracking States */
         #success-state, #tracking-section, .hidden { display: none; }
         .check-icon { font-size: 4rem; color: #10b981; margin-bottom: 20px; }
         
-        /* Progress Bar Style */
         .progress-container { background: #f1f5f9; height: 8px; border-radius: 10px; margin: 20px 0; overflow: hidden; }
         #progress-fill { background: var(--brand-blue); height: 100%; width: 0%; transition: width 0.1s linear; }
     </style>
@@ -61,14 +59,6 @@
 
     <div class="payment-card">
         
-        <div id="tracking-section">
-            <h2>Connecting...</h2>
-            <p style="color: var(--soft-slate);">Securing your mechanic's availability</p>
-            <div class="progress-container">
-                <div id="progress-fill"></div>
-            </div>
-        </div>
-
         <div id="payment-section">
             <div id="payment-input">
                 <h2>Confirm Payment</h2>
@@ -79,33 +69,58 @@
                 <div class="method-list">
                     <div class="method"><input type="radio" name="pay" checked> UPI (GPay/PhonePe)</div>
                     <div class="method"><input type="radio" name="pay"> Credit / Debit Card</div>
+                    <div class="method"><input type="radio" name="pay"> Cash on Delivery</div>
                 </div>
 
-                <button class="btn-pay" onclick="processPayment()">Confirm & Pay</button>
+                <button class="btn-pay" onclick="handlePaymentFlow()">Confirm & Pay</button>
             </div>
 
             <div id="success-state">
                 <div class="check-icon">✓</div>
                 <h2>Payment Successful</h2>
-                <p style="color: var(--soft-slate); margin-bottom: 30px;">Your booking is confirmed. Your mechanic will be notified of your GPS location.</p>
-                <a href="dashboard.html" style="color: var(--brand-blue); font-weight: 700; text-decoration: none;">Return to Dashboard</a>
+                <p style="color: var(--soft-slate); margin-bottom: 30px;">Your transaction is complete. Thank you for using MechRoute.</p>
+                <button onclick="finishAndRedirect()" style="background: none; border: none; color: var(--brand-blue); font-weight: 700; cursor: pointer; font-size: 1rem;">Return to Dashboard</button>
             </div>
         </div>
     </div>
 
-    <script src="script.js"></script>
-    
     <script>
-        // Local UI toggle (The heavy lifting is done in script.js)
-        function processPayment() {
+        document.addEventListener('DOMContentLoaded', () => {
+            // Grab the active job data to show the correct price
+            const jobData = localStorage.getItem('active_job_status');
+            const amountDisplay = document.getElementById('displayPrice'); 
+            const serviceLabel = document.getElementById('serviceName');
+
+            if (jobData) {
+                const data = JSON.parse(jobData);
+                if (data.price) {
+                    amountDisplay.innerText = data.price; 
+                }
+                if (data.service) {
+                    serviceLabel.innerText = data.service;
+                }
+            }
+        });
+
+        function handlePaymentFlow() {
             const btn = document.querySelector('.btn-pay');
             btn.innerHTML = "Processing...";
             btn.disabled = true;
             
+            // Simulate bank processing time
             setTimeout(() => {
                 document.getElementById('payment-input').style.display = 'none';
                 document.getElementById('success-state').style.display = 'block';
             }, 1500);
+        }
+
+        function finishAndRedirect() {
+            // CRITICAL: Clear active session data AFTER successful payment
+            localStorage.removeItem('active_job_status');
+            localStorage.removeItem('active_otp');
+            
+            // Redirect back to dashboard
+            window.location.href = 'dashboard.html';
         }
     </script>
 </body>
