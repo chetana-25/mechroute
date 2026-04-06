@@ -191,33 +191,26 @@
 
         function checkJobStatus() {
             const jobData = localStorage.getItem('active_job_status');
-            const banner = document.getElementById('jobNotification');
-            const message = document.getElementById('notificationMessage');
-            const title = document.getElementById('notificationTitle');
-            const otpArea = document.getElementById('otpDisplayArea');
-            const otpValue = document.getElementById('otpValue');
+            // ... existing banner code ...
 
             if (jobData) {
                 const data = JSON.parse(jobData);
-                banner.style.display = 'flex';
-
-                if (data.status === 'accepted') {
-                    title.innerText = "Mechanic En Route";
-                    message.innerText = `${data.partnerName} is heading to your location.`;
+        
+                if (data.status === 'awaiting_payment') {
+                    title.innerText = "Work Completed!";
+                    message.innerHTML = `Please complete the payment of <b>${data.price}</b> to finish the service.`;
                     otpArea.style.display = 'none';
-                } 
-                
-                else if (data.status === 'awaiting_otp') {
-                    title.innerText = "Mechanic Arrived!";
-                    message.innerText = `${data.partnerName} is at your spot. Give them this code:`;
-                    otpArea.style.display = 'block';
-                    otpValue.innerText = localStorage.getItem('active_otp') || "----";
+            
+                    // Show a Pay Now button
+                    const payBtn = document.createElement('button');
+                    payBtn.innerText = "Pay Now";
+                    payBtn.className = "btn-logout-sidebar"; // Use your existing blue button style
+                    payBtn.onclick = () => { window.location.href = 'payment.html'; };
+                    message.appendChild(payBtn);
                 }
-            } else {
-                banner.style.display = 'none';
+                // ... rest of your status logic ...
             }
         }
-
         function logout() {
             localStorage.removeItem('user_firstName');
             localStorage.removeItem('user_email');
