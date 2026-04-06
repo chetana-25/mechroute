@@ -48,9 +48,11 @@
             cursor: pointer; transition: 0.3s;
         }
         .btn-pay:hover { background: var(--brand-blue); transform: translateY(-2px); }
-        .btn-pay:disabled { background: var(--soft-slate); cursor: not-allowed; }
+        .btn-pay:disabled { background: var(--soft-slate); cursor: not-allowed; opacity: 0.7; }
 
-        #success-state { display: none; }
+        #success-state { display: none; animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
         .check-icon { 
             font-size: 4rem; color: #10b981; margin-bottom: 20px; 
             background: #ecfdf5; width: 80px; height: 80px; line-height: 80px;
@@ -64,24 +66,24 @@
         <div id="payment-section">
             <div id="payment-input">
                 <h2>Confirm Payment</h2>
-                <p id="serviceName" style="color: var(--soft-slate);">Service Authorization</p>
+                <p id="serviceName" style="color: var(--soft-slate);">Finalizing Service</p>
                 
                 <span class="price-display" id="displayPrice">₹0</span>
 
                 <div class="method-list">
-                    <label class="method"><input type="radio" name="pay" checked> UPI (GPay/PhonePe)</label>
+                    <label class="method"><input type="radio" name="pay" checked> UPI (GPay/PhonePe/Paytm)</label>
                     <label class="method"><input type="radio" name="pay"> Credit / Debit Card</label>
-                    <label class="method"><input type="radio" name="pay"> Cash on Delivery</label>
+                    <label class="method"><input type="radio" name="pay"> Cash to Partner</label>
                 </div>
 
-                <button class="btn-pay" onclick="handlePaymentFlow()">Confirm & Pay</button>
+                <button class="btn-pay" id="mainPayBtn" onclick="handlePaymentFlow()">Pay & Complete Service</button>
             </div>
 
             <div id="success-state">
                 <div class="check-icon">✓</div>
                 <h2>Payment Successful</h2>
-                <p style="color: var(--soft-slate); margin-bottom: 30px;">Your transaction is complete. A receipt has been sent to your email.</p>
-                <button onclick="finishAndRedirect()" style="background: var(--brand-blue); border: none; color: white; padding: 15px 30px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%;">Return to Dashboard</button>
+                <p style="color: var(--soft-slate); margin-bottom: 30px;">The service has been successfully logged. Your technician has been notified.</p>
+                <button onclick="finishAndRedirect()" style="background: var(--brand-blue); border: none; color: white; padding: 15px 30px; border-radius: 12px; font-weight: 700; cursor: pointer; width: 100%;">Return to Fleet Dashboard</button>
             </div>
         </div>
     </div>
@@ -91,52 +93,56 @@
             const amountDisplay = document.getElementById('displayPrice'); 
             const serviceLabel = document.getElementById('serviceName');
 
-            // Get the live job data
+            // Pull active job data to show correct price
             const jobData = localStorage.getItem('active_job_status');
             
             if (jobData) {
                 const data = JSON.parse(jobData);
-                if (data.price) {
-                    amountDisplay.innerText = data.price;
-                    if (data.service) serviceLabel.innerText = data.service;
-                }
+                amountDisplay.innerText = data.price || "₹0";
+                serviceLabel.innerText = data.service || "Mechanical Service";
             } else {
-                // If no active job, redirect back (security check)
+                // Security: If someone tries to access payment without an active job
                 window.location.href = 'dashboard.html';
             }
         });
 
         function handlePaymentFlow() {
-            const btn = document.querySelector('.btn-pay');
-            btn.innerHTML = "Verifying Transaction...";
+            const btn = document.getElementById('mainPayBtn');
+            btn.innerHTML = "Processing Payment...";
             btn.disabled = true;
             
+            // Simulate payment processing time
             setTimeout(() => {
-                // --- ARCHIVING LOGIC ---
                 const jobData = localStorage.getItem('active_job_status');
+                
                 if (jobData) {
-                    const completedJob = JSON.parse(jobData);
+                    let completedJob = JSON.parse(jobData);
                     
-                    // Add completion metadata
+                    // 1. Mark as completed and add a timestamp
                     completedJob.status = "Completed";
-                    completedJob.paymentDate = new Date().toLocaleString();
-                    
-                    // Save to Permanent Logs
-                    let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-                    logs.push(completedJob);
-                    localStorage.setItem('fleet_logs', JSON.stringify(logs));
+                    completedJob.date = new Date().toLocaleDateString('en-IN', {
+                        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                    });
+
+                    // 2. Add to Permanent History (fleet_logs)
+                    // Note: This is what feeds the "Total Spent" and "Total Services" on your dashboard
+                    let history = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+                    history.push(completedJob);
+                    localStorage.setItem('fleet_logs', JSON.stringify(history));
                 }
 
-                // Show Success UI
+                // Show Success Screen
                 document.getElementById('payment-input').style.display = 'none';
                 document.getElementById('success-state').style.display = 'block';
-            }, 2000);
+            }, 2500);
         }
 
         function finishAndRedirect() {
-            // CRITICAL: Clear the active session so the dashboard resets for the next service
+            // CRITICAL: Wipe the active job status so the dashboard knows the flow is finished
+            // This is what resets the Partner's terminal and the Driver's dashboard
             localStorage.removeItem('active_job_status');
             localStorage.removeItem('active_otp');
+            
             window.location.href = 'dashboard.html';
         }
     </script>
