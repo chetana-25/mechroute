@@ -134,23 +134,46 @@
             });
         }
 
+        // ... (inside your partner_dashboard.html script tag)
+
         function acceptJob(service, price, index) {
             const partner = JSON.parse(localStorage.getItem('active_partner'));
+    
+            // Create the active job object
             const jobData = { 
-                status: 'accepted', 
-                partnerName: partner.name, 
-                service, 
-                price 
+            status: 'accepted', 
+            partnerName: partner.name, // The Driver will see this name
+            service: service, 
+            price: price,
+            timestamp: new Date().getTime()
             };
-            
-            // Remove from list and set as active
-            let logs = JSON.parse(localStorage.getItem('fleet_logs'));
+    
+            // 1. Remove from the global "Available" list
+            let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             logs.splice(index, 1);
             localStorage.setItem('fleet_logs', JSON.stringify(logs));
+
+            // 2. Set as the ACTIVE job
             localStorage.setItem('active_job_status', JSON.stringify(jobData));
-            
+    
+            alert("Service Accepted! Navigate to the client.");
             syncUI();
         }
+
+        function markArrival() {
+            // 1. Generate the OTP that the DRIVER will see
+            const generatedOtp = Math.floor(1000 + Math.random() * 9000);
+            localStorage.setItem('active_otp', generatedOtp);
+
+            // 2. Update status to 'arrived'
+            let job = JSON.parse(localStorage.getItem('active_job_status'));
+            job.status = 'arrived'; 
+            localStorage.setItem('active_job_status', JSON.stringify(job));
+    
+            syncUI(); // This will hide the Arrive button and show the OTP input field
+        }
+
+        // ... (verifyDriverOTP and finishService functions remain the same)
 
         function renderJobTerminal(job) {
             document.getElementById('availableJobsSection').style.display = 'none';
