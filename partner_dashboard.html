@@ -97,17 +97,23 @@
                 document.getElementById('typeBadge').innerText = sessionData.type;
             }
 
-            // Sync with existing active job
+            // Initial Sync
             syncUI();
-            setInterval(syncUI, 2000); // Keep in sync if driver cancels or pays
+            // Polling: Check every 2 seconds if the driver has paid or cancelled
+            setInterval(syncUI, 2000); 
         });
 
         function syncUI() {
             const currentJob = localStorage.getItem('active_job_status');
+            
             if (currentJob) {
                 const job = JSON.parse(currentJob);
+                // Hide the list of new requests and show the active terminal
+                document.getElementById('availableJobsSection').style.display = 'none';
+                document.getElementById('activeJobSection').style.display = 'block';
                 renderJobTerminal(job);
             } else {
+                // Show the list of new requests and hide the active terminal
                 document.getElementById('availableJobsSection').style.display = 'block';
                 document.getElementById('activeJobSection').style.display = 'none';
                 loadAvailableJobs();
@@ -115,79 +121,65 @@
         }
 
         function loadAvailableJobs() {
+            // This pulls requests sent by drivers (from onspot_request.html)
             const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             const container = document.getElementById('jobContainer');
-            // Show jobs that aren't already completed/accepted by others
-            container.innerHTML = logs.length ? "" : "<p>No active requests.</p>";
+            
+            // We only show jobs that are in "Pending" status
+            const pendingJobs = logs.filter(j => !j.status || j.status === "Pending");
+            
+            container.innerHTML = pendingJobs.length ? "" : "<p>Scanning for nearby requests...</p>";
 
-            logs.forEach((job, index) => {
+            pendingJobs.forEach((job, index) => {
                 const card = document.createElement('div');
                 card.className = 'job-card';
                 card.innerHTML = `
                     <div>
-                        <h3>${job.service}</h3>
-                        <p style="color:var(--brand-blue); font-weight:800;">${job.price}</p>
+                        <h3 style="margin:0;">${job.service}</h3>
+                        <p style="color:var(--brand-blue); font-weight:800; margin:5px 0 0 0;">${job.price}</p>
                     </div>
-                    <button class="btn-accept" onclick="acceptJob('${job.service}', '${job.price}', ${index})">Accept</button>
+                    <button class="btn-accept" onclick="acceptJob('${job.service}', '${job.price}', ${index})">Accept Service</button>
                 `;
                 container.appendChild(card);
             });
         }
 
-        // ... (inside your partner_dashboard.html script tag)
-
         function acceptJob(service, price, index) {
             const partner = JSON.parse(localStorage.getItem('active_partner'));
-    
-            // Create the active job object
+            
             const jobData = { 
-            status: 'accepted', 
-            partnerName: partner.name, // The Driver will see this name
-            service: service, 
-            price: price,
-            timestamp: new Date().getTime()
+                status: 'accepted', 
+                partnerName: partner.name, 
+                service: service, 
+                price: price,
+                timestamp: new Date().getTime()
             };
-    
-            // 1. Remove from the global "Available" list
+            
+            // Remove from global list so others can't take it
             let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             logs.splice(index, 1);
             localStorage.setItem('fleet_logs', JSON.stringify(logs));
 
-            // 2. Set as the ACTIVE job
+            // Set as the ACTIVE job for this browser session
             localStorage.setItem('active_job_status', JSON.stringify(jobData));
-    
-            alert("Service Accepted! Navigate to the client.");
+            
             syncUI();
         }
 
-        function markArrival() {
-            // 1. Generate the OTP that the DRIVER will see
-            const generatedOtp = Math.floor(1000 + Math.random() * 9000);
-            localStorage.setItem('active_otp', generatedOtp);
-
-            // 2. Update status to 'arrived'
-            let job = JSON.parse(localStorage.getItem('active_job_status'));
-            job.status = 'arrived'; 
-            localStorage.setItem('active_job_status', JSON.stringify(job));
-    
-            syncUI(); // This will hide the Arrive button and show the OTP input field
-        }
-
-        // ... (verifyDriverOTP and finishService functions remain the same)
-
         function renderJobTerminal(job) {
-            document.getElementById('availableJobsSection').style.display = 'none';
-            document.getElementById('activeJobSection').style.display = 'block';
             document.getElementById('activeJobDetails').innerHTML = `
-                <h2 style="margin:0;">${job.service}</h2>
-                <p>Status: <b style="color:var(--brand-blue)">${job.status.toUpperCase()}</b></p>
+                <h2 style="margin:0; font-size: 1.8rem;">${job.service}</h2>
+                <p style="margin: 10px 0 0 0; font-weight: 600; color: var(--soft-slate);">
+                    Current Status: <span style="color:var(--brand-blue); text-transform: uppercase;">${job.status.replace('_', ' ')}</span>
+                </p>
             `;
 
-            // Control Visibility based on Status
+            // Elements
             const arriveBtn = document.getElementById('arriveBtn');
             const otpArea = document.getElementById('otpVerificationArea');
             const workArea = document.getElementById('workInProgressArea');
 
+            // State Machine for UI
             if (job.status === 'accepted') {
                 arriveBtn.style.display = 'block';
                 otpArea.style.display = 'none';
@@ -203,16 +195,23 @@
                 otpArea.style.display = 'none';
                 workArea.style.display = 'block';
             }
+            else if (job.status === 'awaiting_payment') {
+                arriveBtn.style.display = 'none';
+                otpArea.style.display = 'none';
+                workArea.style.display = 'block';
+                // Update the button text to show we are waiting
+                workArea.querySelector('button').innerText = "Waiting for Driver Payment...";
+                workArea.querySelector('button').disabled = true;
+                workArea.querySelector('button').style.background = "#cbd5e1";
+            }
         }
 
-        // --- CORE LOGIC STEPS ---
-
         function markArrival() {
-            // 1. Generate OTP and store it
+            // 1. Generate OTP for the driver
             const otp = Math.floor(1000 + Math.random() * 9000);
             localStorage.setItem('active_otp', otp);
 
-            // 2. Update status to 'arrived'. Driver Dashboard will see this and show the OTP.
+            // 2. Update status
             let job = JSON.parse(localStorage.getItem('active_job_status'));
             job.status = 'arrived';
             localStorage.setItem('active_job_status', JSON.stringify(job));
@@ -224,27 +223,24 @@
             const entered = document.getElementById('otpInput').value;
             const actual = localStorage.getItem('active_otp');
 
-            if (entered === actual) {
+            if (entered === String(actual)) {
                 let job = JSON.parse(localStorage.getItem('active_job_status'));
                 job.status = 'in_progress';
                 localStorage.setItem('active_job_status', JSON.stringify(job));
-                alert("Identity Verified! You may start working.");
                 syncUI();
             } else {
-                alert("Incorrect OTP. Please ask the driver to read the code on their screen.");
+                alert("Invalid Verification Code. Please check the Driver's dashboard.");
             }
         }
 
         function finishServiceAndBill() {
             let job = JSON.parse(localStorage.getItem('active_job_status'));
-            // This triggers the "Pay Now" button on the Driver's side
+            // This triggers the "Pay Now" logic on the Driver Dashboard
             job.status = 'awaiting_payment';
             localStorage.setItem('active_job_status', JSON.stringify(job));
             
-            alert("Work Completed. Waiting for Driver's payment.");
-            
-            // Optional: The partner can stay on this screen or clear it to take new jobs
-            // Usually, we wait for payment before clearing.
+            alert("Bill generated. Redirecting driver to payment gateway.");
+            syncUI();
         }
 
         function logout() {
