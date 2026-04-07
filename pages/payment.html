@@ -138,13 +138,29 @@
         }
 
         function finishAndRedirect() {
-            // CRITICAL: Wipe the active job status so the dashboard knows the flow is finished
-            // This is what resets the Partner's terminal and the Driver's dashboard
-            localStorage.removeItem('active_job_status');
-            localStorage.removeItem('active_otp');
-            
-            window.location.href = 'dashboard.html';
-        }
+            // 1. ARCHIVE THE DATA (For the Stats Grid)
+            const jobData = localStorage.getItem('active_job_status');
+            if (jobData) {
+                let history = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+                let completedJob = JSON.parse(jobData);
+        
+                // Mark as officially finished for the logs
+                completedJob.status = "Completed";
+                completedJob.completionTime = new Date().toLocaleString();
+        
+                history.push(completedJob);
+                localStorage.setItem('fleet_logs', JSON.stringify(history));
+            }
+
+        // 2. WIPE THE ACTIVE SESSION (The "Reset")
+        // This is what makes the green "Service Active" banner disappear
+        localStorage.removeItem('active_job_status');
+        localStorage.removeItem('active_otp');
+
+        // 3. REDIRECT
+        // This takes the user back to the fresh Overview page
+        window.location.href = 'dashboard.html';
+        }        
     </script>
 </body>
 </html>
