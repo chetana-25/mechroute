@@ -118,23 +118,24 @@
         function loadAvailableJobs() {
             const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
             const container = document.getElementById('jobContainer');
-            const pendingJobs = logs.filter(j => !j.status || j.status === "Pending");
-            container.innerHTML = pendingJobs.length ? "" : "<p>Scanning for nearby requests...</p>";
+    
+            // Filter for jobs that haven't been accepted yet
+            const pendingJobs = logs.filter(j => j.status === "Pending");
 
-            pendingJobs.forEach((job, index) => {
-                const card = document.createElement('div');
-                card.className = 'job-card';
-                card.innerHTML = `
-                    <div>
-                        <h3 style="margin:0;">${job.service}</h3>
-                        <p style="color:var(--brand-blue); font-weight:800; margin:5px 0 0 0;">${job.price}</p>
-                    </div>
-                    <button class="btn-accept" onclick="acceptJob('${job.service}', '${job.price}', ${index})">Accept Service</button>
-                `;
-                container.appendChild(card);
-            });
+            if (pendingJobs.length > 0) {
+                container.innerHTML = ""; // Clear the "Scanning..." text
+                pendingJobs.forEach((job, index) => {
+                    container.innerHTML += `
+                        <div class="job-card">
+                            <div>
+                                <h3>${job.service}</h3>
+                                <p>${job.price}</p>
+                            </div>
+                            <button class="btn-accept" onclick="acceptJob(${index})">Accept</button>
+                        </div>`;
+                });
+            }
         }
-
         function acceptJob(service, price, index) {
             const partner = JSON.parse(localStorage.getItem('active_partner'));
             const jobData = { status: 'accepted', partnerName: partner.name, service: service, price: price, timestamp: new Date().getTime() };
