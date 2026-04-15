@@ -121,35 +121,16 @@
     let selectedSOS = null;
 
     function selectEmergency(el, name, price) {
-        // Toggle UI selection
         document.querySelectorAll('.issue-card').forEach(card => card.classList.remove('selected'));
         el.classList.add('selected');
-        
-        // Save selection to variable
         selectedSOS = { name, price };
 
-        // Handle the "Other" input box visibility
         const inputContainer = document.getElementById('other-input-container');
         if (name === 'Other Issue') {
             inputContainer.style.display = 'block';
         } else {
             inputContainer.style.display = 'none';
         }
-    }
-    function sendRequest() {
-        const newJob = {
-            service: "On-Spot Assistance",
-            price: "₹600",
-            status: "Pending",
-            id: Date.now()
-        };
-
-        // This puts the request into the shared browser memory
-        let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-        logs.push(newJob);
-        localStorage.setItem('fleet_logs', JSON.stringify(logs));
-
-        alert("Request sent to nearby Partners!");
     }
 
     function triggerDispatch() {
@@ -165,31 +146,34 @@
             finalName = desc;
         }
 
-        // Show the Radar/Searching UI
+        // 1. UI Feedback
         document.getElementById('selection-ui').style.display = 'none';
         document.getElementById('searching-ui').style.display = 'block';
 
-        // CREATE THE JOB OBJECT
+        // 2. CREATE THE JOB OBJECT
         const newJobRequest = {
             id: "SOS-" + Date.now(),
             service: finalName,
-            price: "₹" + selectedSOS.price, // This is what payment.html looks for!
-            status: "pending", // Partner dashboard looks for 'pending' jobs
+            price: "₹" + selectedSOS.price,
+            status: "Pending", // Corrected to capital 'P'
             type: "Emergency",
-            time: new Date().toLocaleTimeString()
+            time: new Date().toLocaleTimeString(),
+            partnerName: "Searching..."
         };
 
-        // SAVE TO THE GLOBAL LIST (For the Partner to see)
+        // 3. BROADCAST TO PARTNER (fleet_logs)
         let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
         logs.push(newJobRequest);
         localStorage.setItem('fleet_logs', JSON.stringify(logs));
 
-        // SIMULATE DISPATCH
+        // 4. ACTIVATE DRIVER NOTIFICATION (active_job_status)
+        // This is what your dashboard.html checkJobStatus() looks for
+        localStorage.setItem('active_job_status', JSON.stringify(newJobRequest));
+
+        // 5. SIMULATE NETWORK LATENCY
         setTimeout(() => {
-            alert("Request broadcasted to nearby partners!");
-            // Go back to dashboard where the "Waiting for Partner" logic lives
             window.location.href = 'dashboard.html';
-        }, 3000);
+        }, 2500);
     }
 </script>
 
