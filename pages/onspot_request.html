@@ -136,6 +136,21 @@
             inputContainer.style.display = 'none';
         }
     }
+    function sendRequest() {
+        const newJob = {
+            service: "On-Spot Assistance",
+            price: "₹600",
+            status: "Pending",
+            id: Date.now()
+        };
+
+        // This puts the request into the shared browser memory
+        let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+        logs.push(newJob);
+        localStorage.setItem('fleet_logs', JSON.stringify(logs));
+
+        alert("Request sent to nearby Partners!");
+    }
 
     function triggerDispatch() {
         if (!selectedSOS) { 
