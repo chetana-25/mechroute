@@ -117,6 +117,7 @@
     </div>
 </div>
 
+<script src="../assets/js/api.js"></script>
 <script>
     let selectedSOS = null;
 
@@ -133,7 +134,7 @@
         }
     }
 
-    function triggerDispatch() {
+    async function triggerDispatch() {
         if (!selectedSOS) { 
             alert("Please select an issue first!"); 
             return; 
@@ -146,34 +147,35 @@
             finalName = desc;
         }
 
-        // 1. UI Feedback
         document.getElementById('selection-ui').style.display = 'none';
         document.getElementById('searching-ui').style.display = 'block';
 
-        // 2. CREATE THE JOB OBJECT
-        const newJobRequest = {
-            id: "SOS-" + Date.now(),
-            service: finalName,
-            price: "₹" + selectedSOS.price,
-            status: "Pending", // Corrected to capital 'P'
-            type: "Emergency",
-            time: new Date().toLocaleTimeString(),
-            partnerName: "Searching..."
+        const submitRequest = async (latitude = null, longitude = null) => {
+            const response = await window.MechRouteAPI.createRequest({
+                serviceMode: 'emergency',
+                serviceName: finalName,
+                serviceType: 'Emergency',
+                issueDescription: finalName,
+                priceAmount: selectedSOS.price,
+                pickupLocation: latitude && longitude ? `GPS:${latitude},${longitude}` : 'Emergency dispatch',
+                latitude,
+                longitude,
+            });
+
+            localStorage.setItem('mr_active_request_id', response.request.id);
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1000);
         };
 
-        // 3. BROADCAST TO PARTNER (fleet_logs)
-        let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-        logs.push(newJobRequest);
-        localStorage.setItem('fleet_logs', JSON.stringify(logs));
-
-        // 4. ACTIVATE DRIVER NOTIFICATION (active_job_status)
-        // This is what your dashboard.html checkJobStatus() looks for
-        localStorage.setItem('active_job_status', JSON.stringify(newJobRequest));
-
-        // 5. SIMULATE NETWORK LATENCY
-        setTimeout(() => {
-            window.location.href = 'dashboard.html';
-        }, 2500);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => submitRequest(position.coords.latitude, position.coords.longitude),
+                () => submitRequest()
+            );
+        } else {
+            submitRequest();
+        }
     }
 </script>
 

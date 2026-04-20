@@ -37,44 +37,50 @@
         <p style="color: #64748b; font-size: 0.9rem;">Securing your transaction via UPI/Card Gateway</p>
     </div>
 
+    <script src="../assets/js/api.js"></script>
     <script>
-        window.onload = function() {
-            const name = localStorage.getItem('pending_service');
-            const priceStr = localStorage.getItem('pending_price'); // e.g., "₹2499"
-            const currency = localStorage.getItem('pending_currency') || "₹";
+        let activeRequest = null;
 
-            if(!name) { window.location.href = 'booking.html'; return; }
+        window.onload = async function() {
+            try {
+                const dashboard = await window.MechRouteAPI.getDriverDashboard();
+                activeRequest = dashboard.activeRequest;
 
-            const basePrice = parseInt(priceStr.replace(/[^0-9]/g, ''));
-            const gst = Math.round(basePrice * 0.18);
-            const total = basePrice + gst;
+                if (!activeRequest) {
+                    window.location.href = 'booking.html';
+                    return;
+                }
 
-            document.getElementById('outName').innerText = name;
-            document.getElementById('outBase').innerText = currency + basePrice;
-            document.getElementById('outGST').innerText = currency + gst;
-            document.getElementById('outTotal').innerText = currency + total;
+                const basePrice = activeRequest.priceAmount || 0;
+                const gst = Math.round(basePrice * 0.18);
+                const total = basePrice + gst;
+
+                document.getElementById('outName').innerText = activeRequest.service;
+                document.getElementById('outBase').innerText = '₹' + basePrice;
+                document.getElementById('outGST').innerText = '₹' + gst;
+                document.getElementById('outTotal').innerText = '₹' + total;
+            } catch (error) {
+                window.location.href = 'booking.html';
+            }
         }
 
-        function processPayment() {
+        async function processPayment() {
             document.getElementById('invoice').style.display = 'none';
             document.getElementById('processing').style.display = 'block';
 
-            setTimeout(() => {
-                // Permanent Log Entry
-                const logEntry = {
-                    date: localStorage.getItem('pending_date'),
-                    service: localStorage.getItem('pending_service'),
-                    price: document.getElementById('outTotal').innerText,
-                    type: "PROACTIVE"
-                };
+            try {
+                if (!activeRequest) {
+                    throw new Error('No active request found.');
+                }
 
-                let history = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-                history.push(logEntry);
-                localStorage.setItem('fleet_logs', JSON.stringify(history));
+                await new Promise((resolve) => setTimeout(resolve, 1200));
+                await window.MechRouteAPI.payForRequest(activeRequest.id, 'UPI');
 
-                alert("Payment Successful! Logged to your Fleet History.");
+                alert('Payment Successful! Logged to your Fleet History.');
                 window.location.href = 'logs.html';
-            }, 2500);
+            } catch (error) {
+                alert(error.message);
+            }
         }
     </script>
 </body>

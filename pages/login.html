@@ -27,25 +27,18 @@
     </form>
 </div>
 
+<script src="../assets/js/api.js"></script>
 <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const inputID = document.getElementById('loginID').value.trim().toLowerCase();
         const inputPass = document.getElementById('loginPass').value;
 
-        // Get the list of all registered users
-        const users = JSON.parse(localStorage.getItem('mechroute_users')) || [];
-
-        // VALIDATION: Checks if the ID and Password match a single entry exactly
-        const validUser = users.find(u => u.fleetID === inputID && u.password === inputPass);
-
-        if (validUser) {
-            // Save the specific user's info for the dashboard to use
-            localStorage.setItem('user_firstName', validUser.firstName);
-            localStorage.setItem('user_email', validUser.fleetID);
+        try {
+            await window.MechRouteAPI.loginDriver(inputID, inputPass);
             window.location.href = 'dashboard.html';
-        } else {
-            alert("Access Denied: Incorrect Fleet ID or Password.");
+        } catch (error) {
+            alert(error.message);
         }
     });
 </script>

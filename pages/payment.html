@@ -88,78 +88,55 @@
         </div>
     </div>
 
+    <script src="../assets/js/api.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const amountDisplay = document.getElementById('displayPrice'); 
+        let activeRequest = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const amountDisplay = document.getElementById('displayPrice');
             const serviceLabel = document.getElementById('serviceName');
 
-            // Pull active job data to show correct price
-            const jobData = localStorage.getItem('active_job_status');
-            
-            if (jobData) {
-                const data = JSON.parse(jobData);
-                amountDisplay.innerText = data.price || "₹0";
-                serviceLabel.innerText = data.service || "Mechanical Service";
-            } else {
-                // Security: If someone tries to access payment without an active job
+            try {
+                const dashboard = await window.MechRouteAPI.getDriverDashboard();
+                activeRequest = dashboard.activeRequest;
+
+                if (activeRequest) {
+                    amountDisplay.innerText = activeRequest.price || '₹0';
+                    serviceLabel.innerText = activeRequest.service || 'Mechanical Service';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
                 window.location.href = 'dashboard.html';
             }
         });
 
-        function handlePaymentFlow() {
+        async function handlePaymentFlow() {
             const btn = document.getElementById('mainPayBtn');
+            const paymentChoice = document.querySelector('input[name="pay"]:checked');
             btn.innerHTML = "Processing Payment...";
             btn.disabled = true;
-            
-            // Simulate payment processing time
-            setTimeout(() => {
-                const jobData = localStorage.getItem('active_job_status');
-                
-                if (jobData) {
-                    let completedJob = JSON.parse(jobData);
-                    
-                    // 1. Mark as completed and add a timestamp
-                    completedJob.status = "Completed";
-                    completedJob.date = new Date().toLocaleDateString('en-IN', {
-                        day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
-                    });
 
-                    // 2. Add to Permanent History (fleet_logs)
-                    // Note: This is what feeds the "Total Spent" and "Total Services" on your dashboard
-                    let history = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-                    history.push(completedJob);
-                    localStorage.setItem('fleet_logs', JSON.stringify(history));
+            try {
+                if (!activeRequest) {
+                    throw new Error('No active service request found.');
                 }
 
-                // Show Success Screen
+                await new Promise((resolve) => setTimeout(resolve, 1200));
+                await window.MechRouteAPI.payForRequest(activeRequest.id, paymentChoice ? paymentChoice.parentElement.innerText.trim() : 'UPI');
+
                 document.getElementById('payment-input').style.display = 'none';
                 document.getElementById('success-state').style.display = 'block';
-            }, 2500);
+            } catch (error) {
+                btn.innerHTML = 'Pay & Complete Service';
+                btn.disabled = false;
+                alert(error.message);
+            }
         }
 
         function finishAndRedirect() {
-            // 1. ARCHIVE THE DATA (For the Stats Grid)
-            const jobData = localStorage.getItem('active_job_status');
-            if (jobData) {
-                let history = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-                let completedJob = JSON.parse(jobData);
-        
-                // Mark as officially finished for the logs
-                completedJob.status = "Completed";
-                completedJob.completionTime = new Date().toLocaleString();
-        
-                history.push(completedJob);
-                localStorage.setItem('fleet_logs', JSON.stringify(history));
-            }
-
-        // 2. WIPE THE ACTIVE SESSION (The "Reset")
-        // This is what makes the green "Service Active" banner disappear
-        localStorage.removeItem('active_job_status');
-        localStorage.removeItem('active_otp');
-
-        // 3. REDIRECT
-        // This takes the user back to the fresh Overview page
-        window.location.href = 'dashboard.html';
+            localStorage.removeItem('mr_active_request_id');
+            window.location.href = 'dashboard.html';
         }        
     </script>
 </body>

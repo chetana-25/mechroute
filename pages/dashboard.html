@@ -171,109 +171,108 @@
         </div>
     </main>
 
+    <script src="../assets/js/api.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Load Profile
-            const firstName = localStorage.getItem('user_firstName') || "User";
-            const fleetEmail = localStorage.getItem('user_email') || "not registered";
-            document.getElementById('userNameDisplay').innerText = `Welcome, ${firstName}`;
-            document.getElementById('fleetEmailDisplay').innerText = fleetEmail;
+        let activeRequest = null;
 
-            updateStats();
-
-            // Start Polling the shared "source of truth" (active_job_status)
-            setInterval(checkJobStatus, 1500); 
-            checkJobStatus(); 
+        document.addEventListener('DOMContentLoaded', async () => {
+            await refreshDashboard();
+            setInterval(refreshDashboard, 2500);
         });
 
-        function updateStats() {
-            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            document.getElementById('totalServicesCount').innerText = logs.length;
+        async function refreshDashboard() {
+            try {
+                const dashboard = await window.MechRouteAPI.getDriverDashboard();
+                const user = dashboard.user;
+                activeRequest = dashboard.activeRequest;
 
-            let total = 0;
-            logs.forEach(entry => {
-                if (entry.price) {
-                    const priceValue = String(entry.price).replace(/[₹,]/g, '');
-                    total += (parseInt(priceValue) || 0);
-                }
-            });
-            document.getElementById('totalSpentDisplay').innerText = `₹${total.toLocaleString('en-IN')}`;
+                document.getElementById('userNameDisplay').innerText = `Welcome, ${user.firstName || user.displayName || 'User'}`;
+                document.getElementById('fleetEmailDisplay').innerText = user.email;
+                document.getElementById('totalServicesCount').innerText = dashboard.stats.totalServices;
+                document.getElementById('totalSpentDisplay').innerText = `₹${Number(dashboard.stats.totalSpent || 0).toLocaleString('en-IN')}`;
+
+                renderJobStatus(activeRequest);
+            } catch (error) {
+                document.getElementById('jobNotification').style.display = 'none';
+            }
         }
 
-        // ... (inside your checkJobStatus function in pages/dashboard.html)
-
-        function checkJobStatus() {
-            const jobData = localStorage.getItem('active_job_status');
+        function renderJobStatus(request) {
             const banner = document.getElementById('jobNotification');
             const title = document.getElementById('notificationTitle');
             const message = document.getElementById('notificationMessage');
-            
-            // UI elements to toggle
             const otpArea = document.getElementById('otpDisplayArea');
             const payArea = document.getElementById('paymentActionArea');
             const cancelBtn = document.getElementById('cancelBtn');
-    
-            if (!jobData) {
+
+            if (!request) {
                 banner.style.display = 'none';
                 return;
             }
 
-            const data = JSON.parse(jobData);
+            localStorage.setItem('mr_active_request_id', request.id);
             banner.style.display = 'flex';
 
-            // 1. Partner Accepted
-            if (data.status === 'accepted') {
-                title.innerText = "Service Confirmed!";
-                message.innerHTML = `Expert <b>${data.partnerName}</b> has accepted your request and is moving to your spot.`;
+            if (request.status === 'pending') {
+                title.innerText = 'Finding a Mechanic...';
+                message.innerText = 'Your request is live and waiting for the nearest partner to accept it.';
                 otpArea.style.display = 'none';
                 payArea.style.display = 'none';
                 cancelBtn.style.display = 'block';
-            } 
-    
-            // 2. Partner Arrived
-            else if (data.status === 'arrived') {
-                title.innerText = "Partner Arrived at Spot!";
-                message.innerText = "Your mechanic is here. Share this code to begin the service:";
+            } else if (request.status === 'accepted') {
+                title.innerText = 'Service Confirmed!';
+                message.innerHTML = `Expert <b>${request.partnerName || 'assigned partner'}</b> has accepted your request and is moving to your spot.`;
+                otpArea.style.display = 'none';
+                payArea.style.display = 'none';
+                cancelBtn.style.display = 'block';
+            } else if (request.status === 'arrived') {
+                title.innerText = 'Partner Arrived at Spot!';
+                message.innerText = 'Your mechanic is here. Share this code to begin the service:';
                 otpArea.style.display = 'block';
-                document.getElementById('otpValue').innerText = localStorage.getItem('active_otp');
+                document.getElementById('otpValue').innerText = request.otp || '----';
                 payArea.style.display = 'none';
                 cancelBtn.style.display = 'none';
-            }
-
-            // 3. Service Started (After OTP verification)
-            else if (data.status === 'in_progress') {
-                title.innerText = "Service In Progress...";
-                message.innerText = "The technician is currently working on your vehicle.";
+            } else if (request.status === 'in_progress') {
+                title.innerText = 'Service In Progress...';
+                message.innerText = 'The technician is currently working on your vehicle.';
                 otpArea.style.display = 'none';
                 payArea.style.display = 'none';
                 cancelBtn.style.display = 'none';
-            }
-
-            // 4. Service Finished (Partner clicked 'Finish')
-            else if (data.status === 'awaiting_payment') {
-                title.innerText = "Service Completed!";
-                message.innerHTML = `Work finished. Total bill: <b>${data.price}</b>. Please proceed to payment.`;
+            } else if (request.status === 'awaiting_payment') {
+                title.innerText = 'Service Completed!';
+                message.innerHTML = `Work finished. Total bill: <b>${request.price}</b>. Please proceed to payment.`;
                 otpArea.style.display = 'none';
-                payArea.style.display = 'block'; // This shows the 'Pay Now' button
+                payArea.style.display = 'block';
                 cancelBtn.style.display = 'none';
-                
-                // OPTIONAL: Uncomment the line below if you want to force redirect 
-                // as soon as the partner finishes the work:
-                // window.location.href = 'payment.html';
+            } else if (request.status === 'paid' || request.status === 'completed') {
+                title.innerText = 'Service Closed';
+                message.innerText = 'This request has already been paid and completed.';
+                otpArea.style.display = 'none';
+                payArea.style.display = 'none';
+                cancelBtn.style.display = 'none';
+            } else if (request.status === 'cancelled') {
+                title.innerText = 'Request Cancelled';
+                message.innerText = 'Your service request has been cancelled.';
+                otpArea.style.display = 'none';
+                payArea.style.display = 'none';
+                cancelBtn.style.display = 'none';
             }
         }
 
-        function cancelRequest() {
-            if(confirm("Cancel this service request? This cannot be undone.")) {
-                localStorage.removeItem('active_job_status');
-                localStorage.removeItem('active_otp');
-                location.reload();
+        async function cancelRequest() {
+            if (!activeRequest) return;
+            if (confirm('Cancel this service request? This cannot be undone.')) {
+                await window.MechRouteAPI.cancelDriverRequest(activeRequest.id, 'Cancelled from dashboard');
+                localStorage.removeItem('mr_active_request_id');
+                await refreshDashboard();
             }
         }
 
         function logout() {
+            window.MechRouteAPI.clearSession();
             localStorage.removeItem('user_firstName');
             localStorage.removeItem('user_email');
+            localStorage.removeItem('mr_active_request_id');
             window.location.href = '../driver_home.html';
         }
     </script>

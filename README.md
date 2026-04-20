@@ -34,11 +34,12 @@ MechRoute provides a location based platform that connects vehicle users with ne
 
 ## Note
 
-This is a frontend prototype developed as part of a college project.
+This project now includes a working Node.js + PostgreSQL backend.
 
 - GPS tracking is simulated  
 - Payment system is simulated  
-- Backend is not implemented  
+- User registration, login, requests, and partner workflows are backed by PostgreSQL  
+- Frontend API base and backend CORS are configurable for deployment  
 
 ## Future Enhancements
 

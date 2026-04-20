@@ -85,66 +85,90 @@
         </div>
     </main>
 
+    <script src="assets/js/api.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const sessionData = JSON.parse(localStorage.getItem('active_partner'));
-            if (sessionData) {
-                document.getElementById('partnerNameDisplay').innerText = `Welcome, ${sessionData.name}`;
-                document.getElementById('partnerEmailDisplay').innerText = sessionData.email;
-                document.getElementById('typeBadge').innerText = sessionData.type;
+        let currentJob = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const sessionData = JSON.parse(localStorage.getItem('active_partner') || 'null');
+            if (!sessionData) {
+                try {
+                    const me = await window.MechRouteAPI.request('/api/me');
+                    if (me?.user?.role === 'partner') {
+                        localStorage.setItem('active_partner', JSON.stringify({
+                            name: me.user.displayName,
+                            email: me.user.email,
+                            type: me.user.partnerType || 'Expert',
+                        }));
+                    }
+                } catch (error) {
+                    window.location.href = 'partner_login.html';
+                    return;
+                }
             }
-            syncUI();
-            setInterval(syncUI, 2000); 
+
+            await syncUI();
+            setInterval(syncUI, 2500);
         });
 
-        function syncUI() {
-            // Update Stats Display
-            const earnings = localStorage.getItem('total_earnings') || 0;
-            document.getElementById('todayEarnings').innerText = `₹${earnings}`;
-            
-            const currentJob = localStorage.getItem('active_job_status');
-            if (currentJob) {
-                const job = JSON.parse(currentJob);
-                document.getElementById('availableJobsSection').style.display = 'none';
-                document.getElementById('activeJobSection').style.display = 'block';
-                renderJobTerminal(job);
-            } else {
-                document.getElementById('availableJobsSection').style.display = 'block';
-                document.getElementById('activeJobSection').style.display = 'none';
-                loadAvailableJobs();
+        async function syncUI() {
+            try {
+                const [dashboard, jobsResponse] = await Promise.all([
+                    window.MechRouteAPI.getPartnerDashboard(),
+                    window.MechRouteAPI.getPartnerJobs(),
+                ]);
+
+                const user = dashboard.user;
+                document.getElementById('partnerNameDisplay').innerText = `Welcome, ${user.displayName || user.firstName || 'Partner'}`;
+                document.getElementById('partnerEmailDisplay').innerText = user.email;
+                document.getElementById('typeBadge').innerText = user.partnerType || 'Expert';
+                document.getElementById('todayEarnings').innerText = `₹${dashboard.stats.totalEarnings || 0}`;
+                document.getElementById('jobCount').innerText = dashboard.stats.completedJobs || 0;
+
+                currentJob = dashboard.activeJob;
+                const activeSection = document.getElementById('activeJobSection');
+                const availableSection = document.getElementById('availableJobsSection');
+
+                if (currentJob) {
+                    availableSection.style.display = 'none';
+                    activeSection.style.display = 'block';
+                    renderJobTerminal(currentJob);
+                } else {
+                    availableSection.style.display = 'block';
+                    activeSection.style.display = 'none';
+                    loadAvailableJobs(jobsResponse.jobs || []);
+                }
+            } catch (error) {
+                if (String(error.message || '').toLowerCase().includes('token')) {
+                    logout();
+                }
             }
         }
 
-        function loadAvailableJobs() {
-            const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
+        function loadAvailableJobs(jobs) {
             const container = document.getElementById('jobContainer');
-    
-            // Filter for jobs that haven't been accepted yet
-            const pendingJobs = logs.filter(j => j.status === "Pending");
+            const pendingJobs = jobs.filter((job) => job.status === 'pending');
 
             if (pendingJobs.length > 0) {
-                container.innerHTML = ""; // Clear the "Scanning..." text
-                pendingJobs.forEach((job, index) => {
+                container.innerHTML = '';
+                pendingJobs.forEach((job) => {
                     container.innerHTML += `
                         <div class="job-card">
                             <div>
                                 <h3>${job.service}</h3>
                                 <p>${job.price}</p>
                             </div>
-                            <button class="btn-accept" onclick="acceptJob(${index})">Accept</button>
+                            <button class="btn-accept" onclick="acceptJob('${job.id}')">Accept</button>
                         </div>`;
                 });
+            } else {
+                container.innerHTML = '<p>No pending requests right now.</p>';
             }
         }
-        function acceptJob(service, price, index) {
-            const partner = JSON.parse(localStorage.getItem('active_partner'));
-            const jobData = { status: 'accepted', partnerName: partner.name, service: service, price: price, timestamp: new Date().getTime() };
-            
-            let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            logs.splice(index, 1);
-            localStorage.setItem('fleet_logs', JSON.stringify(logs));
-            localStorage.setItem('active_job_status', JSON.stringify(jobData));
-            syncUI();
+
+        async function acceptJob(requestId) {
+            await window.MechRouteAPI.acceptPartnerJob(requestId);
+            await syncUI();
         }
 
         function renderJobTerminal(job) {
@@ -159,69 +183,56 @@
             const otpArea = document.getElementById('otpVerificationArea');
             const workArea = document.getElementById('workInProgressArea');
 
+            arriveBtn.style.display = 'none';
+            otpArea.style.display = 'none';
+            workArea.style.display = 'none';
+
             if (job.status === 'accepted') {
                 arriveBtn.style.display = 'block';
-                otpArea.style.display = 'none';
-                workArea.style.display = 'none';
+                arriveBtn.disabled = false;
+                arriveBtn.innerText = 'I Have Arrived at Spot';
+                arriveBtn.style.background = 'var(--sidebar-bg)';
             } else if (job.status === 'arrived') {
-                arriveBtn.style.display = 'none';
                 otpArea.style.display = 'block';
-                workArea.style.display = 'none';
             } else if (job.status === 'in_progress') {
-                arriveBtn.style.display = 'none';
-                otpArea.style.display = 'none';
                 workArea.style.display = 'block';
             } else if (job.status === 'awaiting_payment') {
-                arriveBtn.style.display = 'none';
-                otpArea.style.display = 'none';
                 workArea.style.display = 'block';
                 const btn = workArea.querySelector('button');
-                btn.innerText = "Waiting for Driver Payment...";
+                btn.innerText = 'Waiting for Driver Payment...';
                 btn.disabled = true;
-                btn.style.background = "#cbd5e1";
+                btn.style.background = '#cbd5e1';
             }
         }
 
-        function markArrival() {
-            const otp = Math.floor(1000 + Math.random() * 9000);
-            localStorage.setItem('active_otp', otp);
-            let job = JSON.parse(localStorage.getItem('active_job_status'));
-            job.status = 'arrived';
-            localStorage.setItem('active_job_status', JSON.stringify(job));
-            syncUI();
+        async function markArrival() {
+            if (!currentJob) return;
+            await window.MechRouteAPI.markPartnerArrival(currentJob.id);
+            await syncUI();
         }
 
-        function verifyDriverOTP() {
+        async function verifyDriverOTP() {
+            if (!currentJob) return;
             const entered = document.getElementById('otpInput').value;
-            const actual = localStorage.getItem('active_otp');
-            if (entered === String(actual)) {
-                let job = JSON.parse(localStorage.getItem('active_job_status'));
-                job.status = 'in_progress';
-                localStorage.setItem('active_job_status', JSON.stringify(job));
-                syncUI();
-            } else {
-                alert("Invalid Verification Code.");
+            try {
+                await window.MechRouteAPI.verifyPartnerOtp(currentJob.id, entered);
+                await syncUI();
+            } catch (error) {
+                alert(error.message);
             }
         }
 
-        function finishServiceAndBill() {
-            let job = JSON.parse(localStorage.getItem('active_job_status'));
-            
-            // EARNINGS LOGIC: Extract price number and add to total
-            const priceValue = parseInt(job.price.replace(/[^0-9]/g, ''));
-            const currentTotal = parseInt(localStorage.getItem('total_earnings') || 0);
-            localStorage.setItem('total_earnings', currentTotal + priceValue);
-
-            job.status = 'awaiting_payment';
-            localStorage.setItem('active_job_status', JSON.stringify(job));
-            
-            alert("Work Finished. Redirecting to Earnings...");
+        async function finishServiceAndBill() {
+            if (!currentJob) return;
+            await window.MechRouteAPI.completePartnerJob(currentJob.id);
+            alert('Work Finished. Redirecting to Earnings...');
             window.location.href = 'earnings.html';
         }
 
         function logout() {
+            window.MechRouteAPI.clearSession();
             localStorage.removeItem('active_partner');
-            window.location.href = 'partner_terminal.html';
+            window.location.href = 'partner_login.html';
         }
     </script>
 </body>

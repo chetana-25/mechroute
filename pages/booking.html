@@ -178,6 +178,7 @@
     </center>
 </div>
 
+<script src="../assets/js/api.js"></script>
 <script>
     let selectedData = null;
     const CONVENIENCE_FEE = 199; // Added automatically to the final bill
@@ -196,7 +197,7 @@
         };
     }
 
-    function confirmBooking() {
+    async function confirmBooking() {
         const dateInput = document.getElementById('serviceDate').value;
         const timeInput = document.getElementById('serviceTime').value;
 
@@ -211,31 +212,22 @@
 
         const scheduledTime = `${dateInput} at ${timeInput}`;
 
-        // 1. Create the standardized Job Object
-        const newJobRequest = {
-            id: "BK-" + Date.now(),
-            service: selectedData.name,
-            price: "₹" + selectedData.price, // Handled as string for UI consistency
-            status: "pending", // Allows Partner to see it
-            type: "Scheduled",
-            scheduledFor: scheduledTime,
-            timestamp: new Date().toLocaleString()
-        };
+        try {
+            const response = await window.MechRouteAPI.createRequest({
+                serviceMode: 'scheduled',
+                serviceName: selectedData.name,
+                serviceType: selectedData.type,
+                priceAmount: selectedData.price,
+                scheduledFor: new Date(`${dateInput}T${timeInput}:00`).toISOString(),
+                pickupLocation: 'Scheduled booking',
+            });
 
-        // 2. Add to Global Fleet Logs (So Partner can find it)
-        const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-        logs.push(newJobRequest);
-        localStorage.setItem('fleet_logs', JSON.stringify(logs));
-
-        // 3. Set as the ACTIVE job for the Driver
-        // This ensures the Driver's dashboard shows "Finding a Mechanic..."
-        localStorage.setItem('active_job_status', JSON.stringify(newJobRequest));
-
-        alert("Booking Confirmed! We are assigning a partner for your scheduled time.");
-    
-        // 4. Redirect to DASHBOARD (Not Payment!)
-        // The driver only goes to payment.html AFTER the mechanic marks it complete.
-        window.location.href = 'dashboard.html';
+            localStorage.setItem('mr_active_request_id', response.request.id);
+            alert('Booking Confirmed! We are assigning a partner for your scheduled time.');
+            window.location.href = 'dashboard.html';
+        } catch (error) {
+            alert(error.message);
+        }
     }
 </script>
 </body>

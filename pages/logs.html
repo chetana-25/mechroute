@@ -11,94 +11,98 @@
             --deep-slate: #0f172a;
             --soft-slate: #64748b;
             --bg-color: #fcfdfe;
+            --panel: #ffffff;
         }
 
-        body { 
-            background: var(--bg-color); 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            padding: 60px 8%; 
-            margin: 0; 
+        * { box-sizing: border-box; }
+
+        body {
+            background: var(--bg-color);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding: 60px 8%;
+            margin: 0;
             color: var(--deep-slate);
         }
 
         .log-container { max-width: 1000px; margin: 0 auto; }
 
-        .header-flex { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-end; 
-            margin-bottom: 50px; 
+        .header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 24px;
+            margin-bottom: 50px;
         }
 
-        .header-flex h1 { 
-            font-size: 2.8rem; 
-            font-weight: 800; 
-            letter-spacing: -2px; 
-            margin: 0; 
+        .header-flex h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin: 0;
         }
 
         .header-flex p { color: var(--soft-slate); font-weight: 500; margin-top: 8px; }
 
-        .dashboard-link { 
-            text-decoration: none; 
-            font-weight: 700; 
-            color: var(--deep-slate); 
-            border-bottom: 2px solid var(--brand-blue); 
-            padding-bottom: 4px; 
+        .dashboard-link {
+            text-decoration: none;
+            font-weight: 700;
+            color: var(--deep-slate);
+            border-bottom: 2px solid var(--brand-blue);
+            padding-bottom: 4px;
             transition: 0.3s;
+            white-space: nowrap;
         }
 
         .dashboard-link:hover { color: var(--brand-blue); }
 
-        /* TABLE STYLING */
         .log-table { width: 100%; border-collapse: separate; border-spacing: 0 16px; }
-        
-        .log-row { 
-            background: white; 
-            border-radius: 24px; 
+
+        .log-row {
+            background: var(--panel);
+            border-radius: 24px;
             transition: transform 0.2s ease;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
         }
 
         .log-row:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); }
 
-        td { 
-            padding: 28px; 
-            border-top: 1px solid #f1f5f9; 
-            border-bottom: 1px solid #f1f5f9; 
-            font-weight: 600; 
+        td {
+            padding: 28px;
+            border-top: 1px solid #f1f5f9;
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 600;
             font-size: 1rem;
+            vertical-align: middle;
         }
 
-        td:first-child { 
-            border-left: 1px solid #f1f5f9; 
-            border-radius: 24px 0 0 24px; 
-            color: var(--soft-slate); 
-            width: 25%; 
+        td:first-child {
+            border-left: 1px solid #f1f5f9;
+            border-radius: 24px 0 0 24px;
+            color: var(--soft-slate);
+            width: 25%;
         }
 
-        td:last-child { 
-            border-right: 1px solid #f1f5f9; 
-            border-radius: 0 24px 24px 0; 
-            text-align: right; 
+        td:last-child {
+            border-right: 1px solid #f1f5f9;
+            border-radius: 0 24px 24px 0;
+            text-align: right;
         }
 
-        /* TIER BADGES */
-        .badge { 
-            padding: 8px 16px; 
-            border-radius: 100px; 
-            font-size: 0.75rem; 
-            font-weight: 800; 
-            text-transform: uppercase; 
+        .badge {
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
             letter-spacing: 0.5px;
+            display: inline-block;
         }
 
-        .badge-best { background: #ecfdf5; color: #10b981; }        /* Green */
-        .badge-preventative { background: #eff6ff; color: #2563eb; }  /* Blue */
-        .badge-diagnostics { background: #fff7ed; color: #c2410c; }   /* Orange */
-        .badge-essentials { background: #f1f5f9; color: #64748b; }    /* Grey */
+        .badge-best { background: #ecfdf5; color: #10b981; }
+        .badge-preventative { background: #eff6ff; color: #2563eb; }
+        .badge-diagnostics { background: #fff7ed; color: #c2410c; }
+        .badge-essentials { background: #f1f5f9; color: #64748b; }
 
-        /* CANCEL BUTTON */
         .btn-cancel {
             background: #fff1f2;
             color: #e11d48;
@@ -114,94 +118,95 @@
 
         .btn-cancel:hover { background: #e11d48; color: white; }
 
-        .empty-state { 
-            text-align: center; 
-            padding: 100px; 
-            color: var(--soft-slate); 
-            font-weight: 600; 
-            background: white;
+        .empty-state {
+            text-align: center;
+            padding: 100px;
+            color: var(--soft-slate);
+            font-weight: 600;
+            background: var(--panel);
             border-radius: 24px;
             border: 2px dashed #e2e8f0;
+        }
+
+        @media (max-width: 720px) {
+            body { padding: 36px 18px; }
+            .header-flex { align-items: flex-start; flex-direction: column; }
+            .header-flex h1 { font-size: 2.2rem; }
+            td { padding: 18px; font-size: 0.92rem; }
+            td:first-child { width: auto; }
         }
     </style>
 </head>
 <body>
-
-<div class="log-container">
-    <div class="header-flex">
-        <div>
-            <h1>Service Ledger</h1>
-            <p>Verified maintenance history for your Fleet ID.</p>
+    <div class="log-container">
+        <div class="header-flex">
+            <div>
+                <h1>Service Ledger</h1>
+                <p>Verified maintenance history for your Fleet ID.</p>
+            </div>
+            <a href="dashboard.html" class="dashboard-link">Dashboard</a>
         </div>
-        <a href="dashboard.html" class="dashboard-link">Dashboard</a>
+
+        <table class="log-table" id="ledgerTable"></table>
     </div>
 
-    <table class="log-table" id="ledgerTable">
-        </table>
-</div>
+    <script src="../assets/js/api.js"></script>
+    <script>
+        function formatBadge(entry) {
+            const typeKey = String(entry.serviceType || entry.serviceMode || '').toUpperCase();
+            let badgeClass = 'badge-essentials';
+            let displayLabel = (entry.serviceType || entry.serviceMode || 'ESSENTIALS').toUpperCase();
 
-<script>
-    function loadLedger() {
-        const logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-        const table = document.getElementById('ledgerTable');
-        table.innerHTML = "";
-
-        if (logs.length === 0) {
-            table.innerHTML = "<tr><td colspan='4' class='empty-state'>No active service bookings found.</td></tr>";
-            return;
-        }
-
-        // Show latest bookings at the top
-        logs.slice().reverse().forEach((entry, index) => {
-            const originalIndex = logs.length - 1 - index;
-            
-            // Map types to the correct badge class and label
-            let badgeClass = "";
-            let displayLabel = entry.type;
-
-            // Handling case-insensitivity and old names
-            const typeKey = entry.type.toUpperCase();
-
-            if (typeKey.includes("BEST")) {
-                badgeClass = "badge-best";
-                displayLabel = "BEST VALUE";
-            } else if (typeKey.includes("PREVENTATIVE")) {
-                badgeClass = "badge-preventative";
-                displayLabel = "PREVENTATIVE";
-            } else if (typeKey.includes("DIAGNOSTIC") || typeKey.includes("ADVANCED")) {
-                badgeClass = "badge-diagnostics";
-                displayLabel = "DIAGNOSTICS";
-            } else {
-                badgeClass = "badge-essentials";
-                displayLabel = "ESSENTIALS";
+            if (typeKey.includes('BEST')) {
+                badgeClass = 'badge-best';
+                displayLabel = 'BEST VALUE';
+            } else if (typeKey.includes('PREVENT')) {
+                badgeClass = 'badge-preventative';
+                displayLabel = 'PREVENTATIVE';
+            } else if (typeKey.includes('DIAG') || typeKey.includes('ENGINE')) {
+                badgeClass = 'badge-diagnostics';
+                displayLabel = 'DIAGNOSTICS';
             }
 
-            table.innerHTML += `
-                <tr class="log-row">
-                    <td>${entry.date}</td>
-                    <td><span class="badge ${badgeClass}">${displayLabel}</span></td>
-                    <td style="color: var(--deep-slate);">${entry.service}</td>
-                    <td style="color: #166534; font-weight: 800;">
-                        ${entry.price}
-                        <button class="btn-cancel" onclick="removeEntry(${originalIndex})">Cancel</button>
-                    </td>
-                </tr>
-            `;
-        });
-    }
-
-    function removeEntry(index) {
-        if (confirm("Are you sure you want to cancel this scheduled service?")) {
-            let logs = JSON.parse(localStorage.getItem('fleet_logs')) || [];
-            logs.splice(index, 1);
-            localStorage.setItem('fleet_logs', JSON.stringify(logs));
-            loadLedger(); // Refresh table
+            return { badgeClass, displayLabel };
         }
-    }
 
-    // Load on start
-    window.onload = loadLedger;
-</script>
+        async function loadLedger() {
+            const response = await window.MechRouteAPI.getDriverRequests();
+            const logs = response.requests || [];
+            const table = document.getElementById('ledgerTable');
+            table.innerHTML = '';
 
+            if (logs.length === 0) {
+                table.innerHTML = "<tr><td colspan='4' class='empty-state'>No active service bookings found.</td></tr>";
+                return;
+            }
+
+            logs.slice().reverse().forEach((entry) => {
+                const badge = formatBadge(entry);
+                table.innerHTML += `
+                    <tr class="log-row">
+                        <td>${new Date(entry.createdAt || entry.scheduledFor || Date.now()).toLocaleString()}</td>
+                        <td><span class="badge ${badge.badgeClass}">${badge.displayLabel}</span></td>
+                        <td style="color: var(--deep-slate);">${entry.service}</td>
+                        <td style="color: #166534; font-weight: 800;">
+                            ${entry.price}
+                            ${entry.status === 'cancelled' || entry.status === 'paid' || entry.status === 'completed' ? '' : `<button class="btn-cancel" onclick="removeEntry('${entry.id}')">Cancel</button>`}
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function removeEntry(requestId) {
+            if (!confirm('Are you sure you want to cancel this service?')) return;
+            await window.MechRouteAPI.cancelDriverRequest(requestId, 'Cancelled from service history');
+            await loadLedger();
+        }
+
+        window.onload = () => loadLedger().catch(() => {
+            document.getElementById('ledgerTable').innerHTML = "<tr><td colspan='4' class='empty-state'>Unable to load service history.</td></tr>";
+        });
+    </script>
 </body>
 </html>

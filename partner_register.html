@@ -110,13 +110,17 @@
             <label id="cred-label">Credential Number</label>
             <input type="text" id="credentialID" placeholder="Enter License or ID" required>
 
-            <label>Contact Email</label>
-            <input type="email" id="partnerEmail" placeholder="you@example.com" required>
+            <label>Generated Email</label>
+            <input type="email" id="partnerEmail" placeholder="name.partner@mechroute.com" readonly required>
+
+            <label>Password</label>
+            <input type="password" id="partnerPass" placeholder="Create a secure password" required>
 
             <button type="submit" class="btn" id="submitBtn">Complete Setup</button>
         </form>
     </div>
 
+    <script src="assets/js/api.js"></script>
     <script src="assets/js/script.js"></script>
 
     <script>

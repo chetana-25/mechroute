@@ -31,37 +31,21 @@
     <div class="footer">Already have an ID? <a href="login.html">Login</a></div>
 </div>
 
+<script src="../assets/js/api.js"></script>
 <script>
-    document.getElementById('regForm').addEventListener('submit', function(e) {
+    document.getElementById('regForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         const fName = document.getElementById('fName').value.trim();
         const lName = document.getElementById('lName').value.trim();
         const pass = document.getElementById('pass').value;
 
-        // Generate the Official Fleet ID
-        const generatedID = `${fName.toLowerCase()}.${lName.toLowerCase()}@mechroute.com`;
-
-        const newUser = {
-            fleetID: generatedID,
-            password: pass,
-            firstName: fName,
-            lastName: lName
-        };
-
-        // Get existing users or start new list
-        let users = JSON.parse(localStorage.getItem('mechroute_users')) || [];
-        
-        // Prevent duplicate IDs
-        if(users.some(u => u.fleetID === generatedID)) {
-            alert("This name combination already has a Fleet ID!");
-            return;
+        try {
+            const result = await window.MechRouteAPI.registerDriver(fName, lName, pass);
+            alert(`SUCCESS!\nYour Official Fleet ID is: ${result.user.email}\nUse this ID and your password to login.`);
+            window.location.href = 'login.html';
+        } catch (error) {
+            alert(error.message);
         }
-
-        users.push(newUser);
-        localStorage.setItem('mechroute_users', JSON.stringify(users));
-
-        alert(`SUCCESS!\nYour Official Fleet ID is: ${generatedID}\nUse this ID and your password to login.`);
-        window.location.href = 'login.html';
     });
 </script>
 
